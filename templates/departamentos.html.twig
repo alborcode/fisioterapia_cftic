@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Mostrar Departamento{% endblock %}
+
+{% block body %}
+    <div id="content">
+        <div class="container py-4 py-xl-5">
+            <div class="row mb-5">
+                <div class="col-md-8 col-xl-6 text-center mx-auto">
+                    <h2>Mostrar Departamento</h2>                    
+                </div>
+            </div>
+            <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
+                <div class="col-xl-9">
+                    <div class="p-4">    
+                     
+                        <form name="formcombo" method="POST" action="{{ path('buscarDepartamento') }}">
+                        
+                            {# No hay boton pero en el onchange hago submit del formulario #}
+                            Departamento: <select onchange="formcombo.submit()" name="comboDepartamento" id="comboDepartamento">
+                                {% for Departamento in datosDepartamentos %}
+                                    {# Si existe objeto, Si esta seleccionado departamento.id (value) #}
+                                    {% if seleccionado is defined and Departamento.id == seleccionado %}
+                                        {# Se le pone atributo selected para que se quede seleccionado #}
+                                        <option value="{{ Departamento.Id }}" name="depart[]" selected>{{ Departamento.Dnombre }}</option>
+                                    {% else %}                                        
+                                        <option value="{{ Departamento.id }}">{{ Departamento.dnombre }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </form>
+
+                        {# Si esta definida la variable muestra los datos del registro seleccionado #}
+                        {% if datosDepart is defined %}
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Nombre</th>
+                                        <th>Localidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">{{ datosDepart.id }}</td>
+                                        <td>{{ datosDepart.dnombre }}</td>
+                                        <td>{{ datosDepart.loc }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>        
+{% endblock %}
