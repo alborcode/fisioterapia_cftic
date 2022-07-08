@@ -50,7 +50,7 @@ class UsuariosController extends AbstractController
                 'notice',
                 'Usuario conectado correctamente'
             );
-            
+            $datosUsuario->getTipousuario();
             //***** */
             switch ($datosUsuario->$em->getTipousuario()) {
                 // Si es Paciente se redirige a Pagina Inicial de Pacientes

@@ -71,7 +71,7 @@ class Facultativos
     private $foto;
 
     /**
-     * @var \Usuarios
+     * @var \Usuarios|null
      *
      * @ORM\ManyToOne(targetEntity="Usuarios")
      * @ORM\JoinColumns({
