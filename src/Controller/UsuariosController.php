@@ -3,10 +3,11 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-
 use Symfony\Component\Routing\Annotation\Route;
+
 use App\Entity\Usuarios;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -20,84 +21,78 @@ class UsuariosController extends AbstractController
         return $this->render('login.html.twig');
     }
 
-    // Buscar Datos Usuario
-    #[Route('/user', name: 'buscarUsuario')]
-    public function buscarUsuario(Request $request, EntityManagerInterface $em)
+    // Ruta de Operaciones
+    #[Route('/conexion', name: 'conexionApp')]
+    public function conexionApp(Request $request, EntityManagerInterface $em)
     { 
+        // Recuperamos valor de boton que se ha pulsado en login
+        $boton= $request->request->get('login');
         // Recupero los datos de usuario del formulario
-        $email = $request->request->get('txtEmail');
-        $password = $request->request->get('txtPassword');
-      
-        // Recupero los datos del usuario que se conecta de la BBDD
-        $datosUsuario = $em->getRepository(Usuarios::class)->findOneBy([
-            'Email' => $email,
-            'Password' => $password,
-        ]);
+        $email      = $request->request->get('txtEmail');
+        $password   = $request->request->get('txtPassword');
 
-        // Si no existen datos del usuario/password
-        if(!$datosUsuario) {
-            // Establece mensaje Flash
-            $this->addFlash(
-                'notice',
-                'Error datos de Usuario no existen'
-            );
-            // Redirige de Nuevo a Pagina de Login
-            return $this->redirectToRoute("login.html.twig");
+        // Controlo el value de login (todos los botones tienen mismo name)
+        // Si es conexion se busca usuario/contraseña en base de datos
+        if ($boton=='conexion'){
+            // Recupero los datos del usuario que se conecta de la BBDD
+            $query = $em->createQuery("SELECT u FROM App\Entity\Usuarios u WHERE u.email = :email AND u.password = :password");
+            $query->setParameter('email', $email);
+            $query->setParameter('password', $password);
+            $datosUsuario = $query->getResult();       
             
-        }else{
-            // Establece mensaje Flash
-            $this->addFlash(
-                'notice',
-                'Usuario conectado correctamente'
-            );
-            $datosUsuario->getTipousuario();
-            //***** */
-            switch ($datosUsuario->$em->getTipousuario()) {
-                // Si es Paciente se redirige a Pagina Inicial de Pacientes
-                case 'PACIENTE':
-                    return $this->redirectToRoute("paciente.html.twig");
-                    break;
-                // Si es Facultativo se redirige a Pagina Inicial de Pacientes
-                case 'FACULTATIVO':
-                    return $this->redirectToRoute("facultativo.html.twig");
-                    break;
-                // Si es Administrativo se redirige a Pagina Inicial de Pacientes
-                case 'ADMINISTRATIVO':
-                    return $this->redirectToRoute("administrativo.html.twig");
-                    break;
+            // Si no existen datos del usuario/password
+            if(!$datosUsuario) {
+                // Establece mensaje Error devolviendo control a ventana de Login
+                $mensaje = 'Error Usuario no existe';
+                return $this->render('login.html.twig', 
+                [
+                    'mensaje' => $mensaje
+                ]);
+            }else{
+                // Establece mensaje conexion correcta
+                $mensaje = 'Usuario conectado correctamente';
+                // Recuperamos el Tipo de Usuario de registro leido
+                $tipousuario = $datosUsuario->getTipousuario();
+                // Controlamos tipo de usuario
+                switch ($tipousuario) {
+                    // Si es Paciente se redirige a Pagina Inicial de Pacientes
+                    case 'PACIENTE':
+                        return $this->redirectToRoute("pacienteIni.html.twig");
+                        break;
+                    // Si es Facultativo se redirige a Pagina Inicial de Pacientes
+                    case 'FACULTATIVO':
+                        return $this->redirectToRoute("facultativoIni.html.twig");
+                        break;
+                    // Si es Administrativo se redirige a Pagina Inicial de Pacientes
+                    case 'ADMINISTRATIVO':
+                        return $this->redirectToRoute("administrativoIni.html.twig");
+                        break;
+                }
             }
+        }
+        // Si es registrar se llama a formulario de Alta de Paciente
+        if ($boton=='registrar'){
+            // Damos de Alta en tabla de Usuarios
+             
+            $usuario = new Usuarios();
+            $usuario->setEmail($email);
+            $usuario->setPassword($password);
+            $usuario->setTipousuario('PACIENTE');
+                     
+            $em->persist($usuario);
+            $em->flush();
+
+            // Recupero el id de usuario en variable para enviarla al alta de pacientes
+            $idusuario = $usuario -> getIdusuario();
+            $mensaje = 'Usuario dado de Alta';
+             
+            // Redirigimos conexion a Pagina Registro de Pacientes mandando el IdUsuario
+            return $this->render('paciente.html.twig', 
+            [
+                'idusuario' => $idusuario,
+                'mensaje'   => $mensaje
+            ]);
         }
     }
 
-    // Registrar nuevo Usuario
-    #[Route('/newuser', name: 'altaUsuario')]
-    public function altaUsuario(Request $request, EntityManagerInterface $em)
-    { 
-        // Recupero los datos de usuario del formulario
-        $email = $request->request->get('txtEmail');
-        $password = $request->request->get('txtPassword');
-
-        // Nueva instancia de Usuario      
-        $usuario = new Usuarios();
-        $usuario->setEmail($email);
-        $usuario->setPassword($password);
-        // Por defecto todos los usuarios se dan de alta como Pacientes (Los puede modificar el Administrativo)
-        $usuario->setTipousuario('PACIENTE');
-                
-        $em->persist($usuario);
-        $em->flush();
-
-        // Recuperamos el Id de Usuario dado de alta
-         $datosUsuario = $em->getRepository(Usuarios::class)->findOneBy([
-            'Email' => $email,
-            'Password' => $password,
-        ]);
-        
-        //****** */
-        // Redirigimos conexion a Pagina Inicial de Pacientes mandando el IdUsuario
-        return $this->redirectToRoute("paciente.html.twig",
-            ['idusuario' => $datosUsuario->getIdusuario()]
-        );
-            
-    }
 }

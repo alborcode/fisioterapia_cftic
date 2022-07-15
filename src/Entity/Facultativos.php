@@ -73,9 +73,9 @@ class Facultativos
     /**
      * @var \Usuarios|null
      *
-     * @ORM\ManyToOne(targetEntity="Usuarios")
+     * @ORM\OneToOne(targetEntity="Usuarios")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="IDUSUARIO", referencedColumnName="idUsuario")
+     *   @ORM\JoinColumn(name="IDUSUARIO", referencedColumnName="IDUSUARIO")
      * })
      */
     private $idusuario;

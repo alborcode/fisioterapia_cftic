@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Informe
  *
- * @ORM\Table(name="informe", indexes={@ORM\Index(name="idUsuario_Informe", columns={"IDPACIENTE"}), @ORM\Index(name="idFacultativo_Informe", columns={"IDFACULTATIVO"})})
+ * @ORM\Table(name="informe", indexes={@ORM\Index(name="IDFACULTATIVO_INFORME", columns={"IDFACULTATIVO"}), @ORM\Index(name="IDPACIENTE_INFORME", columns={"IDPACIENTE"})})
  * @ORM\Entity(repositoryClass="App\Repository\InformeRepository")
  */
 class Informe
@@ -43,7 +43,7 @@ class Informe
     private $detalle;
 
     /**
-     * @var \Pacientes
+     * @var \Pacientes|null
      *
      * @ORM\ManyToOne(targetEntity="Pacientes")
      * @ORM\JoinColumns({
@@ -53,7 +53,7 @@ class Informe
     private $idpaciente;
 
     /**
-     * @var \Facultativos
+     * @var \Facultativos|null
      *
      * @ORM\ManyToOne(targetEntity="Facultativos")
      * @ORM\JoinColumns({

@@ -34,7 +34,7 @@ class Rehabilitaciones
     private $detalle;
 
     /**
-     * @var \Informe
+     * @var \Informe|null
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
@@ -46,7 +46,7 @@ class Rehabilitaciones
     private $idinforme;
 
     /**
-     * @var \Aseguradoras
+     * @var \Aseguradoras|null
      *
      * @ORM\ManyToOne(targetEntity="Aseguradoras")
      * @ORM\JoinColumns({
