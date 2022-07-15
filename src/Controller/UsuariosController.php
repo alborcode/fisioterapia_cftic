@@ -35,10 +35,15 @@ class UsuariosController extends AbstractController
         // Si es conexion se busca usuario/contraseña en base de datos
         if ($boton=='conexion'){
             // Recupero los datos del usuario que se conecta de la BBDD
-            $query = $em->createQuery("SELECT u FROM App\Entity\Usuarios u WHERE u.email = :email AND u.password = :password");
-            $query->setParameter('email', $email);
-            $query->setParameter('password', $password);
-            $datosUsuario = $query->getResult();       
+            //$query = $em->createQuery("SELECT u FROM App\Entity\Usuarios u WHERE u.email = :email AND u.password = :password");
+            //$query->setParameter('email', $email);
+            //$query->setParameter('password', $password);
+            //$datosUsuario = $query->getResult();       
+            // Recupero los datos del usuario que se conecta de la BBDD
+            $datosUsuario = $em->getRepository(Usuarios::class)->findOneBy(array(
+                'email' => $email, 
+                'password' => $password
+            ));;
             
             // Si no existen datos del usuario/password
             if(!$datosUsuario) {
@@ -57,15 +62,24 @@ class UsuariosController extends AbstractController
                 switch ($tipousuario) {
                     // Si es Paciente se redirige a Pagina Inicial de Pacientes
                     case 'PACIENTE':
-                        return $this->redirectToRoute("pacienteIni.html.twig");
+                        return $this->render('pacienteIni.html.twig', 
+                        [
+                            'mensaje' => $mensaje
+                        ]);
                         break;
                     // Si es Facultativo se redirige a Pagina Inicial de Pacientes
                     case 'FACULTATIVO':
-                        return $this->redirectToRoute("facultativoIni.html.twig");
+                        return $this->render('facultativoIni.html.twig', 
+                        [
+                            'mensaje' => $mensaje
+                        ]);
                         break;
                     // Si es Administrativo se redirige a Pagina Inicial de Pacientes
                     case 'ADMINISTRATIVO':
-                        return $this->redirectToRoute("administrativoIni.html.twig");
+                        return $this->render('administrativoIni.html.twig', 
+                        [
+                            'mensaje' => $mensaje
+                        ]);
                         break;
                 }
             }
@@ -83,13 +97,13 @@ class UsuariosController extends AbstractController
             $em->flush();
 
             // Recupero el id de usuario en variable para enviarla al alta de pacientes
-            $idusuario = $usuario -> getIdusuario();
-            $mensaje = 'Usuario dado de Alta';
+            //$idusuario = $usuario -> getIdusuario();
+            $mensaje = 'Usuario dado de Alta, datos para dar de alta Paciente';
              
             // Redirigimos conexion a Pagina Registro de Pacientes mandando el IdUsuario
             return $this->render('paciente.html.twig', 
             [
-                'idusuario' => $idusuario,
+                'objetousuario' => $usuario,
                 'mensaje'   => $mensaje
             ]);
         }

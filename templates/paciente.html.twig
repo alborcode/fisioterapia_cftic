@@ -7,8 +7,8 @@
                     <div class="p-4">
                         <form method="POST" action="{{ path('altaPaciente') }}">
                             
-                            {# Campo oculto con el idusario #}
-                            <input type="hidden" value="{{ idusuario }}" name="txtIdusuario">
+                            {# Campos ocultos con el objeto Usuario #}
+                            <input type="hidden" value="{{ objetousuario }}" name="objetousuario">
 
                             <div class="form-group"> <!-- Nombre -->
                                 <label for="txtNombre" class="control-label">Nombre</label>
@@ -32,7 +32,7 @@
                                 <label for="txtCp" class="control-label">Codigo Postal</label>
                                 <input type="text" class="form-control" id="txtCp" name="txtCp" placeholder="#####">
                                 <label for="txtProvincia" class="control-label">Provincia</label>
-                                <select class="form-control" id="txtProvincia">
+                                <select class="form-control" name="comboProvincia" id="comboProvincia">
                                     <option value="A Coruña">A Coruña</option>
                                     <option value="Albacete">Albacete</option>
                                     <option value="Alicante">Alicante</option>
@@ -65,7 +65,7 @@
                                     <option value="León">León</option>
                                     <option value="Lleida">Lleida</option>
                                     <option value="Lugo">Lugo</option>
-                                    <option value="Madrid">Madrid</option>
+                                    <option value="Madrid" selected>Madrid</option>
                                     <option value="Málaga">Málaga</option>
                                     <option value="Melilla">Melilla</option>
                                     <option value="Murcia">Murcia</option>
