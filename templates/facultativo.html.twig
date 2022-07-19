@@ -2,45 +2,18 @@
 {% block body %}
     <div id="content">
         <div class="container py-4 py-xl-5">
+            <div class="row mb-5">
+                <div class="col-md-8 col-xl-6 text-center mx-auto">
+                    <h2>Arzuaga</h2>
+                    <img class="img-fluid" src="img/protos.jpg" style="text-align: center;" /> 
+                </div>
+            </div>
             <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
                 <div class="col-xl-9">
                     <div class="p-4">
-                        <form>
-
-                            <div class="form-group"> <!-- Nombre -->
-                                <label for="txtNombre" class="control-label">Nombre</label>
-                                <input type="text" class="form-control" id="txtNombre" name="txtNombre" placeholder="Nombre">
-                            </div>    
-
-                            <div class="form-group"> <!-- Apellidos -->
-                                <label for="txtApellido1" class="control-label">Apellidos</label>
-                                <input type="text" class="form-control" id="txtApellido1" name="txtApellido1" placeholder="Primer Apellido">
-                                <input type="text" class="form-control" id="txtApellido2" name="txtApellido2" placeholder="Segundo Apellido">
-                            </div>    
-
-                            <div class="form-group"> <!-- Especialidad -->
-                                <label for="txtEspecialidad" class="control-label">Especialidad</label>
-                                <select class="form-control" id="txtEspecialidad">
-                                    <option value="Fisioterapeuta">FISIOTERAPEUTA</option>
-                                    <option value="Osteopata">OSTEOPATA</option>
-                                    <option value="Rehabilitador">REHABILITADOR</option>
-                                </select>   
-                            </div>                    
-                            
-                            <div class="form-group"> <!-- Telefono -->
-                                <label for="txtTelefono" class="control-label">Telefono</label>
-                                <input type="text" class="form-control" id="txtTelefono" name="txtTelefono" placeholder="Telefono">
-                            </div>
-                            
-                            <div class="form-group"> <!-- Submit Button -->
-                                <button type="submit" class="btn btn-primary">Alta Facultativo</button>
-                            </div>     
-                        </form>
-
-                        {% if mensaje is defined %}
-                            <h2 style="color:red;">{{ mensaje }} </h2>   
-                        {% endif %}  
-
+                        <p>
+                            Menu de Facultativo
+                        </p>
                     </div>
                 </div>
             </div>

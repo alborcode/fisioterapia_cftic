@@ -24,12 +24,12 @@ class Vacaciones
     /**
      * @var string
      *
-     * @ORM\Column(name="VACACIONES", type="string", length=1, nullable=false)
+     * @ORM\Column(name="VACACIONES", type="string", length=1, nullable=false, options={"default"="N"})
      */
-    private $vacaciones;
+    private $vacaciones = 'N';
 
     /**
-     * @var \Facultativos|null
+     * @var \Facultativos
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")

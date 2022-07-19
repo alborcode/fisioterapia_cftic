@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Citas
  *
- * @ORM\Table(name="citas", indexes={@ORM\Index(name="IDFACULTATIVO_CITAS", columns={"IDFACULTATIVO"}), @ORM\Index(name="IDPACIENTE_CITAS", columns={"IDPACIENTE"})})
+ * @ORM\Table(name="citas", indexes={@ORM\Index(name="idUsuario_Citas", columns={"IDPACIENTE"}), @ORM\Index(name="idFacultativo_Citas", columns={"IDFACULTATIVO"})})
  * @ORM\Entity(repositoryClass="App\Repository\CitasRepository")
  */
 class Citas
@@ -38,22 +38,22 @@ class Citas
     /**
      * @var string
      *
-     * @ORM\Column(name="DISPONIBLE", type="string", length=1, nullable=false)
+     * @ORM\Column(name="DISPONIBLE", type="string", length=1, nullable=false, options={"default"="N"})
      */
-    private $disponible;
+    private $disponible = 'N';
 
     /**
-     * @var \Pacientes|null
+     * @var \Pacientes
      *
      * @ORM\ManyToOne(targetEntity="Pacientes")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="IDPACIENTE", referencedColumnName="IDPACIENTE")
+     *   @ORM\JoinColumn(name="IDPACIENTE", referencedColumnName="IdPaciente")
      * })
      */
     private $idpaciente;
 
     /**
-     * @var \Facultativos|null
+     * @var \Facultativos
      *
      * @ORM\ManyToOne(targetEntity="Facultativos")
      * @ORM\JoinColumns({

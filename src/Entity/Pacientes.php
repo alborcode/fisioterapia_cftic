@@ -78,11 +78,11 @@ class Pacientes
     private $telefono;
 
     /**
-     * @var \Usuarios|null
+     * @var \Usuarios
      *
-     * @ORM\OneToOne(targetEntity="Usuarios")
+     * @ORM\ManyToOne(targetEntity="Usuarios")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="IDUSUARIO", referencedColumnName="IDUSUARIO")
+     *   @ORM\JoinColumn(name="IDUSUARIO", referencedColumnName="idUsuario")
      * })
      */
     private $idusuario;
