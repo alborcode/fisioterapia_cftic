@@ -15,9 +15,13 @@ use Doctrine\ORM\EntityManagerInterface;
 class PacientesController extends AbstractController
 {
     // Formulario de Conexion
-    #[Route('/loginpaciente', name: 'loginpaciente')]
-    public function loginpaciente()
+    // #[Route('/loginpaciente', name: 'loginpaciente')]
+    #[Route('/login/{tipousuario}', name: 'loginperfil')]
+    //public function loginpaciente()
+    public function login(string $tipousuario = null)
     {
+        // Sustituye '-' por ' ' y pone primer caracter en mayusculas
+        // $title = u(str_replace('-', ' ', $tipousuario))->title(true);
         return $this->render('pacienteIni.html.twig');
     }
 
