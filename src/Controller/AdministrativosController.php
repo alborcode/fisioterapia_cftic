@@ -7,9 +7,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Usuarios;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
+///** * @Security("is_granted('ROLE_ADMINISTRATIVO'), statusCode=404, message="No tiene acceso a este recurso.") */  
 class FacultativosController extends AbstractController
 {
 
@@ -29,11 +32,11 @@ class FacultativosController extends AbstractController
          $password = $request->request->get('txtPassword');
  
          // Nueva instancia de Usuario      
-         $usuario = new Usuarios();
+         $usuario = new User();
          $usuario->setEmail($email);
          $usuario->setPassword($password);
          // Formulario para dar de Alta como usuario Administrativo
-         $usuario->setTipousuario('ADMINISTRATIVO');
+         // $usuario->setTipousuario('ADMINISTRATIVO');
                  
          $em->persist($usuario);
          $em->flush();

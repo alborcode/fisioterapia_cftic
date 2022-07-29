@@ -10,6 +10,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Facultativos;
 use Doctrine\ORM\EntityManagerInterface;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
+// Para control de acceso en controladores, Se utiliza anotacion a nivel de clase para proteger las acciones del controlador
+// /** * @Security("is_granted('ROLE_FACULTATIVO'), statusCode=404, message="No tiene acceso a este recurso.") */    
 class FacultativosController extends AbstractController
 {
 

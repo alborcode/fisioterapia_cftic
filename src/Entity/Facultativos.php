@@ -57,25 +57,11 @@ class Facultativos
     private $telefono;
 
     /**
-     * @var string
+     * @var \User|null
      *
-     * @ORM\Column(name="MIME", type="string", length=255, nullable=false)
-     */
-    private $mime;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="FOTO", type="blob", length=65535, nullable=false)
-     */
-    private $foto;
-
-    /**
-     * @var \Usuarios|null
-     *
-     * @ORM\ManyToOne(targetEntity="Usuarios")
+     * @ORM\OneToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="IDUSUARIO", referencedColumnName="idUsuario")
+     *   @ORM\JoinColumn(name="IDUSUARIO", referencedColumnName="id")
      * })
      */
     private $idusuario;
@@ -145,36 +131,12 @@ class Facultativos
         return $this;
     }
 
-    public function getMime(): ?string
-    {
-        return $this->mime;
-    }
-
-    public function setMime(string $mime): self
-    {
-        $this->mime = $mime;
-
-        return $this;
-    }
-
-    public function getFoto()
-    {
-        return $this->foto;
-    }
-
-    public function setFoto($foto): self
-    {
-        $this->foto = $foto;
-
-        return $this;
-    }
-
-    public function getIdusuario(): ?Usuarios
+    public function getIdusuario(): ?User
     {
         return $this->idusuario;
     }
 
-    public function setIdusuario(?Usuarios $idusuario): self
+    public function setIdusuario(?User $idusuario): self
     {
         $this->idusuario = $idusuario;
 

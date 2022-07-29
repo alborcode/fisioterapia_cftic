@@ -2,25 +2,17 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Turnos
  *
- * @ORM\Table(name="turnos", indexes={@ORM\Index(name="IDX_B855581853040D52", columns={"idFacultativo"})})
+ * @ORM\Table(name="turnos", indexes={@ORM\Index(name="IDX_B8555818F3D48060", columns={"IDFACULTATIVO"})})
  * @ORM\Entity(repositoryClass="App\Repository\TurnosRepository")
  */
 class Turnos
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="IDFACULTATIVO", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $idfacultativo;
-
     /**
      * @var \DateTime
      *
@@ -33,9 +25,9 @@ class Turnos
     /**
      * @var string
      *
-     * @ORM\Column(name="DISPONIBLE", type="string", length=1, nullable=false, options={"default"="S"})
+     * @ORM\Column(name="DISPONIBLE", type="string", length=1, nullable=false)
      */
-    private $disponible = 'S';
+    private $disponible;
 
     /**
      * @var \DateTime
@@ -52,19 +44,16 @@ class Turnos
     private $horafin;
 
     /**
-     * @var \Facultativos
+     * @var \Facultativos|null
      *
-     * @ORM\ManyToOne(targetEntity="Facultativos")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="Facultativos")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idFacultativo", referencedColumnName="idFACULTATIVO")
+     *   @ORM\JoinColumn(name="IDFACULTATIVO", referencedColumnName="IDFACULTATIVO")
      * })
      */
-    private $idfacultativo2;
-
-    public function getIdfacultativo(): ?int
-    {
-        return $this->idfacultativo;
-    }
+    private $idfacultativo;
 
     public function getFecha(): ?\DateTimeInterface
     {
@@ -107,14 +96,14 @@ class Turnos
         return $this;
     }
 
-    public function getIdfacultativo2(): ?Facultativos
+    public function getIdfacultativo(): ?Facultativos
     {
-        return $this->idfacultativo2;
+        return $this->idfacultativo;
     }
 
-    public function setIdfacultativo2(?Facultativos $idfacultativo2): self
+    public function setIdfacultativo(?Facultativos $idfacultativo): self
     {
-        $this->idfacultativo2 = $idfacultativo2;
+        $this->idfacultativo = $idfacultativo;
 
         return $this;
     }

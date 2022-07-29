@@ -2,15 +2,16 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Informe
+ * Informes
  *
- * @ORM\Table(name="informe", indexes={@ORM\Index(name="idUsuario_Informe", columns={"IDPACIENTE"}), @ORM\Index(name="idFacultativo_Informe", columns={"IDFACULTATIVO"})})
- * @ORM\Entity(repositoryClass="App\Repository\InformeRepository")
+ * @ORM\Table(name="informes", indexes={@ORM\Index(name="IDPACIENTE_INFORME", columns={"IDPACIENTE"}), @ORM\Index(name="IDFACULTATIVO_INFORMES", columns={"IDFACULTATIVO"})})
+ * @ORM\Entity(repositoryClass="App\Repository\InformesRepository")
  */
-class Informe
+class Informes
 {
     /**
      * @var int
@@ -43,7 +44,7 @@ class Informe
     private $detalle;
 
     /**
-     * @var \Pacientes
+     * @var \Pacientes|null
      *
      * @ORM\ManyToOne(targetEntity="Pacientes")
      * @ORM\JoinColumns({
@@ -53,7 +54,7 @@ class Informe
     private $idpaciente;
 
     /**
-     * @var \Facultativos
+     * @var \Facultativos|null
      *
      * @ORM\ManyToOne(targetEntity="Facultativos")
      * @ORM\JoinColumns({

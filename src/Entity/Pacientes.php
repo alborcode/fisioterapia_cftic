@@ -78,11 +78,11 @@ class Pacientes
     private $telefono;
 
     /**
-     * @var \Usuarios
+     * @var \User|null
      *
-     * @ORM\ManyToOne(targetEntity="Usuarios")
+     * @ORM\OneToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="IDUSUARIO", referencedColumnName="idUsuario")
+     *   @ORM\JoinColumn(name="IDUSUARIO", referencedColumnName="id")
      * })
      */
     private $idusuario;
@@ -188,12 +188,12 @@ class Pacientes
         return $this;
     }
 
-    public function getIdusuario(): ?Usuarios
+    public function getIdusuario(): ?User
     {
         return $this->idusuario;
     }
 
-    public function setIdusuario(?Usuarios $idusuario): self
+    public function setIdusuario(?User $idusuario): self
     {
         $this->idusuario = $idusuario;
 

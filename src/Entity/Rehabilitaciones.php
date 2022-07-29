@@ -34,11 +34,11 @@ class Rehabilitaciones
     private $detalle;
 
     /**
-     * @var \Informe
+     * @var \Informes|null
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Informe")
+     * @ORM\OneToOne(targetEntity="Informes")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="IDINFORME", referencedColumnName="IDINFORME")
      * })
@@ -46,7 +46,7 @@ class Rehabilitaciones
     private $idinforme;
 
     /**
-     * @var \Aseguradoras
+     * @var \Aseguradoras|null
      *
      * @ORM\ManyToOne(targetEntity="Aseguradoras")
      * @ORM\JoinColumns({
@@ -91,12 +91,12 @@ class Rehabilitaciones
         return $this;
     }
 
-    public function getIdinforme(): ?Informe
+    public function getIdinforme(): ?Informes
     {
         return $this->idinforme;
     }
 
-    public function setIdinforme(?Informe $idinforme): self
+    public function setIdinforme(?Informes $idinforme): self
     {
         $this->idinforme = $idinforme;
 

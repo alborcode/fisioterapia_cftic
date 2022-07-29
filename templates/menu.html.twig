@@ -7,6 +7,9 @@
             <li class="nav-item"><a class="nav-link active" href="/altaHospital">Alta</a></li>
             <li class="nav-item"><a class="nav-link" href="/borrarHospital">Baja</a></li>
             <li class="nav-item"><a class="nav-link" href="/modificarHospital">Modificacion</a></li>
+            {% if is_granted('ROLE_FACULTATIVO') %}
+                <a href="...">Delete</a>
+            {% endif %}
             <li class="nav-item"><a class="nav-link" href="/datosHospitales">Ver Datos</a></li>
         </ul>
         <hr class="sidebar-divider my-0" />

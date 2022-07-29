@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Citas
  *
- * @ORM\Table(name="citas", indexes={@ORM\Index(name="idUsuario_Citas", columns={"IDPACIENTE"}), @ORM\Index(name="idFacultativo_Citas", columns={"IDFACULTATIVO"})})
+ * @ORM\Table(name="citas", indexes={@ORM\Index(name="idFacultativo_Citas", columns={"IDFACULTATIVO"}), @ORM\Index(name="idUsuario_Citas", columns={"IDPACIENTE"})})
  * @ORM\Entity(repositoryClass="App\Repository\CitasRepository")
  */
 class Citas
@@ -38,22 +39,22 @@ class Citas
     /**
      * @var string
      *
-     * @ORM\Column(name="DISPONIBLE", type="string", length=1, nullable=false, options={"default"="N"})
+     * @ORM\Column(name="DISPONIBLE", type="string", length=1, nullable=false)
      */
-    private $disponible = 'N';
+    private $disponible;
 
     /**
-     * @var \Pacientes
+     * @var \Pacientes|null
      *
      * @ORM\ManyToOne(targetEntity="Pacientes")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="IDPACIENTE", referencedColumnName="IdPaciente")
+     *   @ORM\JoinColumn(name="IDPACIENTE", referencedColumnName="IDPACIENTE")
      * })
      */
     private $idpaciente;
 
     /**
-     * @var \Facultativos
+     * @var \Facultativos|null
      *
      * @ORM\ManyToOne(targetEntity="Facultativos")
      * @ORM\JoinColumns({
