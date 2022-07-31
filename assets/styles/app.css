@@ -1,3 +1,8 @@
+/* Importamos Bootstrap */
+@import '~bootstrap';
+/* Importamos Fontawesome */
+@import '~@fortawesome/fontawesome-free/css/all.css';
+
 body {
     background-color: lightgray;
 }
