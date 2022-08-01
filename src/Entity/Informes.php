@@ -44,6 +44,13 @@ class Informes
     private $detalle;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="INFORMEGUARDADO", type="string", length=100, nullable=false)
+     */
+    private $informeguardado;
+
+    /**
      * @var \Pacientes|null
      *
      * @ORM\ManyToOne(targetEntity="Pacientes")
@@ -127,6 +134,4 @@ class Informes
 
         return $this;
     }
-
-
 }
