@@ -2,56 +2,52 @@
 
 namespace App\Entity;
 
+use App\Repository\VacacionesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Vacaciones
- *
- * @ORM\Table(name="vacaciones", indexes={@ORM\Index(name="IDX_CAA83E94F3D48060", columns={"IDFACULTATIVO"})})
- * @ORM\Entity(repositoryClass="App\Repository\VacacionesRepository")
- */
+#[ORM\Entity(repositoryClass: VacacionesRepository::class)]
 class Vacaciones
 {
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="FECHA", type="date", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $fecha;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $idvacaciones = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="VACACIONES", type="string", length=1, nullable=false)
-     */
-    private $vacaciones;
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $fecha = null;
 
-    /**
-     * @var \Facultativos|null
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Facultativos")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="IDFACULTATIVO", referencedColumnName="IDFACULTATIVO")
-     * })
-     */
-    private $idfacultativo;
+    #[ORM\Column]
+    private ?bool $vacaciones = null;
+
+    // Se modifica JoinColumn para añadir el name ya que no es id se cambio
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false, name:"idfacultativo", referencedColumnName:"idfacultativo")]
+    private ?Facultativos $idfacultativo = null;
+
+    public function getIdvacaciones(): ?int
+    {
+        return $this->idvaciones;
+    }
 
     public function getFecha(): ?\DateTimeInterface
     {
         return $this->fecha;
     }
 
-    public function getVacaciones(): ?string
+    public function setFecha(\DateTimeInterface $fecha): self
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    public function isVacaciones(): ?bool
     {
         return $this->vacaciones;
     }
 
-    public function setVacaciones(string $vacaciones): self
+    public function setVacaciones(bool $vacaciones): self
     {
         $this->vacaciones = $vacaciones;
 
@@ -69,6 +65,4 @@ class Vacaciones
 
         return $this;
     }
-
-
 }

@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\User;
+use App\Entity\Usuarios;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -14,38 +14,15 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class RegistrationFormType extends AbstractType
 {
-    public function buildForm(
-        FormBuilderInterface $builder,
-        array $options
-    ): void {
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
         $builder
-            // se pueden agregar los campos y su tipo del siguiente modo
-            // ->add('prueba', Textype::class)
-            // ->add('boton', SubmitType::class)
-            // ->add('informeguardado', FileType::class, [
-            //  'label' => 'Informe',
-            // unmapped means that this field is not associated to any entity property
-            //  'mapped' => false,
-            // make it optional so you don't have to re-upload the PDF file every time you edit the Product details
-            //  'required => false
-            // 'constraints' => [
-            //    new File([
-            //        'maxSize' => '1024k',
-            //        'mimeTypes' => [
-            //            'application/pdf',
-            //            'application/x-pdf',
-            //        ],
-            //        'mimeTypesMessage' => 'Please upload a valid PDF document',
-            //    ])
-            //  ],
-            // ])
             ->add('email')
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
-                        // 'message' => 'You should agree to our terms.',
-                        'message' => 'Tiene que aceptar los Terminos.',
+                        'message' => 'You should agree to our terms.',
                     ]),
                 ],
             ])
@@ -56,25 +33,23 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank([
-                        // 'message' => 'Please enter a password',
-                        'message' => 'Por favor introduzca una Password',
+                        'message' => 'Please enter a password',
                     ]),
                     new Length([
                         'min' => 6,
-                        //'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        'minMessage' =>
-                            'Su password debe tene al menos {{ limit }} caracteres',
+                        'minMessage' => 'Your password should be at least {{ limit }} characters',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
                 ],
-            ]);
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => Usuarios::class,
         ]);
     }
 }

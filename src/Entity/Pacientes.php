@@ -2,90 +2,45 @@
 
 namespace App\Entity;
 
+use App\Repository\PacientesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Pacientes
- *
- * @ORM\Table(name="pacientes", indexes={@ORM\Index(name="IDUSUARIO_PACIENTES", columns={"IDUSUARIO"})})
- * @ORM\Entity(repositoryClass="App\Repository\PacientesRepository")
- */
+#[ORM\Entity(repositoryClass: PacientesRepository::class)]
 class Pacientes
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="IDPACIENTE", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $idpaciente;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $idpaciente = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="NOMBRE", type="string", length=40, nullable=false)
-     */
-    private $nombre;
+    #[ORM\Column(length: 40)]
+    private ?string $nombre = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="APELLIDO1", type="string", length=40, nullable=false)
-     */
-    private $apellido1;
+    #[ORM\Column(length: 40)]
+    private ?string $apellido1 = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="APELLIDO2", type="string", length=40, nullable=false)
-     */
-    private $apellido2;
+    #[ORM\Column(length: 40, nullable: true)]
+    private ?string $apellido2 = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="DIRECCION", type="string", length=40, nullable=false)
-     */
-    private $direccion;
+    #[ORM\Column(length: 15)]
+    private ?string $telefono = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="POBLACION", type="string", length=40, nullable=false)
-     */
-    private $poblacion;
+    #[ORM\Column(length: 80, nullable: true)]
+    private ?string $direccion = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="CP", type="integer", nullable=false)
-     */
-    private $cp;
+    #[ORM\Column(nullable: true)]
+    private ?int $codigopostal = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="PROVINCIA", type="string", length=40, nullable=false)
-     */
-    private $provincia;
+    #[ORM\Column(length: 60, nullable: true)]
+    private ?string $poblacion = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="TELEFONO", type="integer", nullable=false)
-     */
-    private $telefono;
+    #[ORM\Column(length: 60, nullable: true)]
+    private ?string $provincia = null;
 
-    /**
-     * @var \User|null
-     *
-     * @ORM\OneToOne(targetEntity="User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="IDUSUARIO", referencedColumnName="id")
-     * })
-     */
-    private $idusuario;
+    // Se modifica JoinColumn para añadir el name ya que no es id se cambio
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false, name:"idusuario", referencedColumnName:"idusuario")]
+    private ?Usuarios $idusuario = null;
 
     public function getIdpaciente(): ?int
     {
@@ -121,9 +76,21 @@ class Pacientes
         return $this->apellido2;
     }
 
-    public function setApellido2(string $apellido2): self
+    public function setApellido2(?string $apellido2): self
     {
         $this->apellido2 = $apellido2;
+
+        return $this;
+    }
+
+    public function getTelefono(): ?string
+    {
+        return $this->telefono;
+    }
+
+    public function setTelefono(string $telefono): self
+    {
+        $this->telefono = $telefono;
 
         return $this;
     }
@@ -133,9 +100,21 @@ class Pacientes
         return $this->direccion;
     }
 
-    public function setDireccion(string $direccion): self
+    public function setDireccion(?string $direccion): self
     {
         $this->direccion = $direccion;
+
+        return $this;
+    }
+
+    public function getCodigopostal(): ?int
+    {
+        return $this->codigopostal;
+    }
+
+    public function setCodigopostal(?int $codigopostal): self
+    {
+        $this->codigopostal = $codigopostal;
 
         return $this;
     }
@@ -145,21 +124,9 @@ class Pacientes
         return $this->poblacion;
     }
 
-    public function setPoblacion(string $poblacion): self
+    public function setPoblacion(?string $poblacion): self
     {
         $this->poblacion = $poblacion;
-
-        return $this;
-    }
-
-    public function getCp(): ?int
-    {
-        return $this->cp;
-    }
-
-    public function setCp(int $cp): self
-    {
-        $this->cp = $cp;
 
         return $this;
     }
@@ -169,36 +136,22 @@ class Pacientes
         return $this->provincia;
     }
 
-    public function setProvincia(string $provincia): self
+    public function setProvincia(?string $provincia): self
     {
         $this->provincia = $provincia;
 
         return $this;
     }
 
-    public function getTelefono(): ?int
-    {
-        return $this->telefono;
-    }
-
-    public function setTelefono(int $telefono): self
-    {
-        $this->telefono = $telefono;
-
-        return $this;
-    }
-
-    public function getIdusuario(): ?User
+    public function getIdusuario(): ?Usuarios
     {
         return $this->idusuario;
     }
 
-    public function setIdusuario(?User $idusuario): self
+    public function setIdusuario(Usuarios $idusuario): self
     {
         $this->idusuario = $idusuario;
 
         return $this;
     }
-
-
 }

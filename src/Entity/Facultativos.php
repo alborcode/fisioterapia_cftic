@@ -2,85 +2,40 @@
 
 namespace App\Entity;
 
+use App\Repository\FacultativosRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Facultativos
- *
- * @ORM\Table(name="facultativos", indexes={@ORM\Index(name="IDUSUARIO_FACULTATIVOS", columns={"IDUSUARIO"})})
- * @ORM\Entity(repositoryClass="App\Repository\FacultativosRepository")
- */
+#[ORM\Entity(repositoryClass: FacultativosRepository::class)]
 class Facultativos
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="IDFACULTATIVO", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $idfacultativo;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $idfacultativo = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="ESPECIALIDAD", type="string", length=10, nullable=false)
-     */
-    private $especialidad;
+    #[ORM\Column(length: 40)]
+    private ?string $nombre = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="NOMBRE", type="string", length=40, nullable=false)
-     */
-    private $nombre;
+    #[ORM\Column(length: 40)]
+    private ?string $apellido1 = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="APELLIDO1", type="string", length=40, nullable=false)
-     */
-    private $apellido1;
+    #[ORM\Column(length: 40, nullable: true)]
+    private ?string $apellido2 = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="APELLIDO2", type="string", length=40, nullable=false)
-     */
-    private $apellido2;
+    #[ORM\Column(length: 15)]
+    private ?string $telefono = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="TELEFONO", type="integer", nullable=false)
-     */
-    private $telefono;
+    #[ORM\Column(length: 20)]
+    private ?string $especialidad = null;
 
-    /**
-     * @var \User|null
-     *
-     * @ORM\OneToOne(targetEntity="User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="IDUSUARIO", referencedColumnName="id")
-     * })
-     */
-    private $idusuario;
+    // Se modifica JoinColumn para añadir el name ya que no es id se cambio
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false, name:"idusuario", referencedColumnName:"idusuario")]
+    private ?Usuarios $idusuario = null;
 
     public function getIdfacultativo(): ?int
     {
         return $this->idfacultativo;
-    }
-
-    public function getEspecialidad(): ?string
-    {
-        return $this->especialidad;
-    }
-
-    public function setEspecialidad(string $especialidad): self
-    {
-        $this->especialidad = $especialidad;
-
-        return $this;
     }
 
     public function getNombre(): ?string
@@ -112,36 +67,46 @@ class Facultativos
         return $this->apellido2;
     }
 
-    public function setApellido2(string $apellido2): self
+    public function setApellido2(?string $apellido2): self
     {
         $this->apellido2 = $apellido2;
 
         return $this;
     }
 
-    public function getTelefono(): ?int
+    public function getTelefono(): ?string
     {
         return $this->telefono;
     }
 
-    public function setTelefono(int $telefono): self
+    public function setTelefono(string $telefono): self
     {
         $this->telefono = $telefono;
 
         return $this;
     }
 
-    public function getIdusuario(): ?User
+    public function getEspecialidad(): ?string
+    {
+        return $this->especialidad;
+    }
+
+    public function setEspecialidad(string $especialidad): self
+    {
+        $this->especialidad = $especialidad;
+
+        return $this;
+    }
+
+    public function getIdusuario(): ?Usuarios
     {
         return $this->idusuario;
     }
 
-    public function setIdusuario(?User $idusuario): self
+    public function setIdusuario(Usuarios $idusuario): self
     {
         $this->idusuario = $idusuario;
 
         return $this;
     }
-
-
 }

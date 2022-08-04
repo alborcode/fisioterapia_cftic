@@ -2,58 +2,47 @@
 
 namespace App\Entity;
 
+use App\Repository\RehabilitacionesRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Rehabilitaciones
- *
- * @ORM\Table(name="rehabilitaciones", indexes={@ORM\Index(name="IDASEGURADORA_REHABILITACION", columns={"IDASEGURADORA"})})
- * @ORM\Entity(repositoryClass="App\Repository\RehabilitacionesRepository")
- */
+#[ORM\Entity(repositoryClass: RehabilitacionesRepository::class)]
 class Rehabilitaciones
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="SESIONESTOTALES", type="integer", nullable=false)
-     */
-    private $sesionestotales;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $idrehabilitacion = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="SESIONESRESTANTES", type="integer", nullable=false)
-     */
-    private $sesionesrestantes;
+    #[ORM\Column]
+    private ?int $sesionestotales = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="DETALLE", type="string", length=999, nullable=false)
-     */
-    private $detalle;
+    #[ORM\Column]
+    private ?int $sesionesrestantes = null;
 
-    /**
-     * @var \Informes|null
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Informes")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="IDINFORME", referencedColumnName="IDINFORME")
-     * })
-     */
-    private $idinforme;
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $fechainicio = null;
 
-    /**
-     * @var \Aseguradoras|null
-     *
-     * @ORM\ManyToOne(targetEntity="Aseguradoras")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="IDASEGURADORA", referencedColumnName="IDASEGURADORA")
-     * })
-     */
-    private $idaseguradora;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $ultimasesion = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $observaciones = null;
+
+    // Se modifica JoinColumn para añadir el name ya que no es id se cambio
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false, name:"idpaciente", referencedColumnName:"idpaciente")]
+    private ?Pacientes $idpaciente = null;
+
+    // Se modifica JoinColumn para añadir el name ya que no es id se cambio
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false, name:"idaseguradora", referencedColumnName:"idaseguradora")]
+    private ?Aseguradoras $idaseguradora = null;
+
+    public function getIdrehabilitacion(): ?int
+    {
+        return $this->idrehabilitacion;
+    }
 
     public function getSesionestotales(): ?int
     {
@@ -79,26 +68,50 @@ class Rehabilitaciones
         return $this;
     }
 
-    public function getDetalle(): ?string
+    public function getFechainicio(): ?\DateTimeInterface
     {
-        return $this->detalle;
+        return $this->fechainicio;
     }
 
-    public function setDetalle(string $detalle): self
+    public function setFechainicio(\DateTimeInterface $fechainicio): self
     {
-        $this->detalle = $detalle;
+        $this->fechainicio = $fechainicio;
 
         return $this;
     }
 
-    public function getIdinforme(): ?Informes
+    public function getUltimasesion(): ?\DateTimeInterface
     {
-        return $this->idinforme;
+        return $this->ultimasesion;
     }
 
-    public function setIdinforme(?Informes $idinforme): self
+    public function setUltimasesion(?\DateTimeInterface $ultimasesion): self
     {
-        $this->idinforme = $idinforme;
+        $this->ultimasesion = $ultimasesion;
+
+        return $this;
+    }
+
+    public function getObservaciones(): ?string
+    {
+        return $this->observaciones;
+    }
+
+    public function setObservaciones(?string $observaciones): self
+    {
+        $this->observaciones = $observaciones;
+
+        return $this;
+    }
+
+    public function getIdpaciente(): ?Pacientes
+    {
+        return $this->idpaciente;
+    }
+
+    public function setIdpaciente(?Pacientes $idpaciente): self
+    {
+        $this->idpaciente = $idpaciente;
 
         return $this;
     }
@@ -114,6 +127,4 @@ class Rehabilitaciones
 
         return $this;
     }
-
-
 }

@@ -2,73 +2,39 @@
 
 namespace App\Entity;
 
+use App\Repository\InformesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Informes
- *
- * @ORM\Table(name="informes", indexes={@ORM\Index(name="IDPACIENTE_INFORME", columns={"IDPACIENTE"}), @ORM\Index(name="IDFACULTATIVO_INFORMES", columns={"IDFACULTATIVO"})})
- * @ORM\Entity(repositoryClass="App\Repository\InformesRepository")
- */
+#[ORM\Entity(repositoryClass: InformesRepository::class)]
 class Informes
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="IDINFORME", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $idinforme;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $idinforme = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="FECHA", type="date", nullable=false)
-     */
-    private $fecha;
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $fecha = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="HORA", type="integer", nullable=false)
-     */
-    private $hora;
+    #[ORM\Column(length: 20)]
+    private ?string $tipoinforme = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="DETALLE", type="string", length=999, nullable=true)
-     */
-    private $detalle;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $detalle = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="INFORMEGUARDADO", type="string", length=100, nullable=false)
-     */
-    private $informeguardado;
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $anexo = null;
 
-    /**
-     * @var \Pacientes|null
-     *
-     * @ORM\ManyToOne(targetEntity="Pacientes")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="IDPACIENTE", referencedColumnName="IDPACIENTE")
-     * })
-     */
-    private $idpaciente;
+    // Se modifica JoinColumn para añadir el name ya que no es id se cambio
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false, name:"idfacultativo", referencedColumnName:"idfacultativo")]
+    private ?Facultativos $idfacultativo = null;
 
-    /**
-     * @var \Facultativos|null
-     *
-     * @ORM\ManyToOne(targetEntity="Facultativos")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="IDFACULTATIVO", referencedColumnName="IDFACULTATIVO")
-     * })
-     */
-    private $idfacultativo;
+    // Se modifica JoinColumn para añadir el name ya que no es id se cambio
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false, name:"idpaciente", referencedColumnName:"idpaciente")]
+    private ?Pacientes $idpaciente = null;
 
     public function getIdinforme(): ?int
     {
@@ -87,14 +53,14 @@ class Informes
         return $this;
     }
 
-    public function getHora(): ?int
+    public function getTipoinforme(): ?string
     {
-        return $this->hora;
+        return $this->tipoinforme;
     }
 
-    public function setHora(int $hora): self
+    public function setTipoinforme(string $tipoinforme): self
     {
-        $this->hora = $hora;
+        $this->tipoinforme = $tipoinforme;
 
         return $this;
     }
@@ -111,14 +77,14 @@ class Informes
         return $this;
     }
 
-    public function getIdpaciente(): ?Pacientes
+    public function getAnexo(): ?string
     {
-        return $this->idpaciente;
+        return $this->anexo;
     }
 
-    public function setIdpaciente(?Pacientes $idpaciente): self
+    public function setAnexo(?string $anexo): self
     {
-        $this->idpaciente = $idpaciente;
+        $this->anexo = $anexo;
 
         return $this;
     }
@@ -131,6 +97,18 @@ class Informes
     public function setIdfacultativo(?Facultativos $idfacultativo): self
     {
         $this->idfacultativo = $idfacultativo;
+
+        return $this;
+    }
+
+    public function getIdpaciente(): ?Pacientes
+    {
+        return $this->idpaciente;
+    }
+
+    public function setIdpaciente(?Pacientes $idpaciente): self
+    {
+        $this->idpaciente = $idpaciente;
 
         return $this;
     }

@@ -39,43 +39,28 @@ class FacultativosRepository extends ServiceEntityRepository
         }
     }
 
-    // Añado busqueda por Especialidad devolviendo solo nombre y apellidos
-    public function BuscarEspecialidad($especialidad)
-    {
-        return $this->getEntityManager()
-            ->createQuery(
-                '
-                SELECT facultativos.especialidad, facultativos.nombre, facultativos.apellido1, facultativos.apellido2
-                FROM App\Facultativos facultativos
-                WHERE facultativos.especialidad =:especialidad
-            '
-            )
-            ->setParameter('especialidad', $especialidad)
-            ->getResult();
-    }
+//    /**
+//     * @return Facultativos[] Returns an array of Facultativos objects
+//     */
+//    public function findByExampleField($value): array
+//    {
+//        return $this->createQueryBuilder('f')
+//            ->andWhere('f.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->orderBy('f.id', 'ASC')
+//            ->setMaxResults(10)
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//    }
 
-    //    /**
-    //     * @return Facultativos[] Returns an array of Facultativos objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('f.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Facultativos
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+//    public function findOneBySomeField($value): ?Facultativos
+//    {
+//        return $this->createQueryBuilder('f')
+//            ->andWhere('f.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getOneOrNullResult()
+//        ;
+//    }
 }

@@ -2,66 +2,36 @@
 
 namespace App\Entity;
 
+use App\Repository\CitasRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Citas
- *
- * @ORM\Table(name="citas", indexes={@ORM\Index(name="idFacultativo_Citas", columns={"IDFACULTATIVO"}), @ORM\Index(name="idUsuario_Citas", columns={"IDPACIENTE"})})
- * @ORM\Entity(repositoryClass="App\Repository\CitasRepository")
- */
+#[ORM\Entity(repositoryClass: CitasRepository::class)]
 class Citas
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="IDCITA", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $idcita;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $idcita = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="FECHA", type="date", nullable=false)
-     */
-    private $fecha;
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $fecha = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="HORA", type="time", nullable=false)
-     */
-    private $hora;
+    #[ORM\Column(type: Types::TIME_MUTABLE)]
+    private ?\DateTimeInterface $hora = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="DISPONIBLE", type="string", length=1, nullable=false)
-     */
-    private $disponible;
+    #[ORM\Column]
+    private ?bool $disponible = null;
 
-    /**
-     * @var \Pacientes|null
-     *
-     * @ORM\ManyToOne(targetEntity="Pacientes")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="IDPACIENTE", referencedColumnName="IDPACIENTE")
-     * })
-     */
-    private $idpaciente;
+    // Se modifica JoinColumn para añadir el name ya que no es id se cambio
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false, name:"idfacultativo", referencedColumnName:"idfacultativo")]
+    private ?Facultativos $idfacultativo = null;
 
-    /**
-     * @var \Facultativos|null
-     *
-     * @ORM\ManyToOne(targetEntity="Facultativos")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="IDFACULTATIVO", referencedColumnName="IDFACULTATIVO")
-     * })
-     */
-    private $idfacultativo;
+    // Se modifica JoinColumn para añadir el name ya que no es id se cambio
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false, name:"idpaciente", referencedColumnName:"idpaciente")]
+    private ?Pacientes $idpaciente = null;
 
     public function getIdcita(): ?int
     {
@@ -92,26 +62,14 @@ class Citas
         return $this;
     }
 
-    public function getDisponible(): ?string
+    public function isDisponible(): ?bool
     {
         return $this->disponible;
     }
 
-    public function setDisponible(string $disponible): self
+    public function setDisponible(bool $disponible): self
     {
         $this->disponible = $disponible;
-
-        return $this;
-    }
-
-    public function getIdpaciente(): ?Pacientes
-    {
-        return $this->idpaciente;
-    }
-
-    public function setIdpaciente(?Pacientes $idpaciente): self
-    {
-        $this->idpaciente = $idpaciente;
 
         return $this;
     }
@@ -128,5 +86,15 @@ class Citas
         return $this;
     }
 
+    public function getIdpaciente(): ?Pacientes
+    {
+        return $this->idpaciente;
+    }
 
+    public function setIdpaciente(?Pacientes $idpaciente): self
+    {
+        $this->idpaciente = $idpaciente;
+
+        return $this;
+    }
 }

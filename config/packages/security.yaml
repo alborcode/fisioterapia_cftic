@@ -7,7 +7,7 @@ security:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
-                class: App\Entity\User
+                class: App\Entity\Usuarios
                 property: email
     firewalls:
         dev:
@@ -16,7 +16,7 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            custom_authenticator: App\Security\AppCustomAuthenticator
+            custom_authenticator: App\Security\FisioterapiaAuthenticator
             logout:
                 path: app_logout
                 # where to redirect after logout
@@ -31,10 +31,11 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/profile, roles: ROLE_USER }
         # allow unauthenticated users to access the login form
         - { path: ^/login, roles: PUBLIC_ACCESS }
         # Busca primero Path, despues IP, Host y Methods
-        - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/profile, roles: ROLE_USER }
         # or require ROLE_ADMIN or IS_AUTHENTICATED_FULLY for /admin*
         # - { path: '^/admin', roles: [IS_AUTHENTICATED_FULLY, ROLE_ADMIN] }
@@ -42,6 +43,7 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN, ip: 127.0.0.1 }
         # - { path: ^/admin, roles: ROLE_ADMIN, host: symfony\.com$ }
         # - { path: ^/admin, roles: ROLE_ADMIN, methods: [POST, PUT] }
+
 
 when@test:
     security:

@@ -2,72 +2,51 @@
 
 namespace App\Entity;
 
+use App\Repository\TurnosRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Turnos
- *
- * @ORM\Table(name="turnos", indexes={@ORM\Index(name="IDX_B8555818F3D48060", columns={"IDFACULTATIVO"})})
- * @ORM\Entity(repositoryClass="App\Repository\TurnosRepository")
- */
+#[ORM\Entity(repositoryClass: TurnosRepository::class)]
 class Turnos
 {
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="FECHA", type="date", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $fecha;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $idturno = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="DISPONIBLE", type="string", length=1, nullable=false)
-     */
-    private $disponible;
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $fecha = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="HORAINICIO", type="time", nullable=false)
-     */
-    private $horainicio;
+    #[ORM\Column(type: Types::TIME_MUTABLE)]
+    private ?\DateTimeInterface $horainicio = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="HORAFIN", type="time", nullable=false)
-     */
-    private $horafin;
+    #[ORM\Column(type: Types::TIME_MUTABLE)]
+    private ?\DateTimeInterface $horafin = null;
 
-    /**
-     * @var \Facultativos|null
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Facultativos")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="IDFACULTATIVO", referencedColumnName="IDFACULTATIVO")
-     * })
-     */
-    private $idfacultativo;
+    #[ORM\Column(length: 10)]
+    private ?string $turno = null;
+
+    #[ORM\Column]
+    private ?bool $disponible = null;
+
+    // Se modifica JoinColumn para añadir el name ya que no es id se cambio
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false, name:"idfacultativo", referencedColumnName:"idfacultativo")]
+    private ?Facultativos $idfacultativo = null;
+
+    public function getIdturno(): ?int
+    {
+        return $this->idturno;
+    }
 
     public function getFecha(): ?\DateTimeInterface
     {
         return $this->fecha;
     }
 
-    public function getDisponible(): ?string
+    public function setFecha(\DateTimeInterface $fecha): self
     {
-        return $this->disponible;
-    }
-
-    public function setDisponible(string $disponible): self
-    {
-        $this->disponible = $disponible;
+        $this->fecha = $fecha;
 
         return $this;
     }
@@ -96,6 +75,30 @@ class Turnos
         return $this;
     }
 
+    public function getTurno(): ?string
+    {
+        return $this->turno;
+    }
+
+    public function setTurno(string $turno): self
+    {
+        $this->turno = $turno;
+
+        return $this;
+    }
+
+    public function isDisponible(): ?bool
+    {
+        return $this->disponible;
+    }
+
+    public function setDisponible(bool $disponible): self
+    {
+        $this->disponible = $disponible;
+
+        return $this;
+    }
+
     public function getIdfacultativo(): ?Facultativos
     {
         return $this->idfacultativo;
@@ -107,6 +110,4 @@ class Turnos
 
         return $this;
     }
-
-
 }
