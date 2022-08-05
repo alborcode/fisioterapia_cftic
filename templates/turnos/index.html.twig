@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Turnos index{% endblock %}
+
+{% block body %}
+    <h1>Turnos index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Idturno</th>
+                <th>Fecha</th>
+                <th>Horainicio</th>
+                <th>Horafin</th>
+                <th>Turno</th>
+                <th>Disponible</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for turno in turnos %}
+            <tr>
+                <td>{{ turno.idturno }}</td>
+                <td>{{ turno.fecha ? turno.fecha|date('Y-m-d') : '' }}</td>
+                <td>{{ turno.horainicio ? turno.horainicio|date('H:i:s') : '' }}</td>
+                <td>{{ turno.horafin ? turno.horafin|date('H:i:s') : '' }}</td>
+                <td>{{ turno.turno }}</td>
+                <td>{{ turno.disponible ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_turnos_show', {'idturno': turno.idturno}) }}">show</a>
+                    <a href="{{ path('app_turnos_edit', {'idturno': turno.idturno}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_turnos_new') }}">Create new</a>
+{% endblock %}

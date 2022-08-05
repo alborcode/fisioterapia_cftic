@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Rehabilitaciones{% endblock %}
+
+{% block body %}
+    <h1>Edit Rehabilitaciones</h1>
+
+    {{ include('rehabilitaciones/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_rehabilitaciones_index') }}">back to list</a>
+
+    {{ include('rehabilitaciones/_delete_form.html.twig') }}
+{% endblock %}

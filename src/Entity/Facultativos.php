@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\FacultativosRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: FacultativosRepository::class)]
 class Facultativos
@@ -14,9 +15,11 @@ class Facultativos
     private ?int $idfacultativo = null;
 
     #[ORM\Column(length: 40)]
+    #[Assert\NotBlank]
     private ?string $nombre = null;
 
     #[ORM\Column(length: 40)]
+    #[Assert\NotBlank]
     private ?string $apellido1 = null;
 
     #[ORM\Column(length: 40, nullable: true)]

@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Informes index{% endblock %}
+
+{% block body %}
+    <h1>Informes index</h1>
+
+    {# total items count #}
+    <div class="count">
+        {{ pagination.getTotalItemCount }}
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Idinforme</th>
+                {# <th>{{ knp_pagination_sortable(pagination, 'Id', 'a.id') }}</th>
+                <th{% if pagination.isSorted('a.Title') %} 
+                        class="sorted"
+                    {% endif %}>
+                    {{ knp_pagination_sortable(pagination, 'Title', 'a.title') }}
+                </th>
+                <th{% if pagination.isSorted(['a.date', 'a.time']) %} class="sorted"{% endif %}>
+                    {{ knp_pagination_sortable(pagination, 'Release', ['a.date', 'a.time']) }}
+                </th> #}
+                <th>Fecha</th>
+                <th>Tipoinforme</th>
+                <th>Detalle</th>
+                <th>Anexo</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {# {% for informe in pagination %} #}
+        {% for informe in informes %}
+            <tr>
+            {# <tr 
+                {% if loop.index is odd %}
+                    class="color"
+                {% endif %}>     #}
+                <td>{{ informe.idinforme }}</td>
+                <td>{{ informe.fecha ? informe.fecha|date('d-m-Y') : '' }}</td>
+                <td>{{ informe.tipoinforme }}</td>
+                <td>{{ informe.detalle }}</td>
+                <td>{{ informe.anexo }}</td>
+                <td>
+                    <a href="{{ path('app_informes_show', {'idinforme': informe.idinforme}) }}">show</a>
+                    <a href="{{ path('app_informes_edit', {'idinforme': informe.idinforme}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {# <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div> #}
+
+    <a href="{{ path('app_informes_new') }}">Create new</a>
+{% endblock %}

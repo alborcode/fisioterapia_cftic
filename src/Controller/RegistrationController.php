@@ -29,8 +29,13 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, FisioterapiaAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
-    {
+    public function register(
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        UserAuthenticatorInterface $userAuthenticator,
+        FisioterapiaAuthenticator $authenticator,
+        EntityManagerInterface $entityManager
+    ): Response {
         $user = new Usuarios();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -44,13 +49,19 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $user->setRoles(['ROLE-USER']);
+
             $entityManager->persist($user);
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            $this->emailVerifier->sendEmailConfirmation(
+                'app_verify_email',
+                $user,
                 (new TemplatedEmail())
-                    ->from(new Address('alborcode@gmail.com', 'Admin Fisioterapia'))
+                    ->from(
+                        new Address('alborcode@gmail.com', 'Admin Fisioterapia')
+                    )
                     ->to($user->getEmail())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
@@ -70,8 +81,11 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]
-    public function verifyUserEmail(Request $request, TranslatorInterface $translator, UsuariosRepository $usuariosRepository): Response
-    {
+    public function verifyUserEmail(
+        Request $request,
+        TranslatorInterface $translator,
+        UsuariosRepository $usuariosRepository
+    ): Response {
         $id = $request->get('id');
 
         if (null === $id) {
@@ -88,7 +102,14 @@ class RegistrationController extends AbstractController
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
+            $this->addFlash(
+                'verify_email_error',
+                $translator->trans(
+                    $exception->getReason(),
+                    [],
+                    'VerifyEmailBundle'
+                )
+            );
 
             return $this->redirectToRoute('app_register');
         }

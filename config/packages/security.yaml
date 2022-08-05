@@ -35,10 +35,12 @@ security:
         # - { path: ^/profile, roles: ROLE_USER }
         # allow unauthenticated users to access the login form
         - { path: ^/login, roles: PUBLIC_ACCESS }
+        # - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         # Busca primero Path, despues IP, Host y Methods
-        - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/dahsboard, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/turnos, roles: ROLE_ADMINISTRATIVO }
         # or require ROLE_ADMIN or IS_AUTHENTICATED_FULLY for /admin*
-        # - { path: '^/admin', roles: [IS_AUTHENTICATED_FULLY, ROLE_ADMIN] }
+        # - { path: ^/admin, roles: [IS_AUTHENTICATED_FULLY, ROLE_ADMIN] }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/admin, roles: ROLE_ADMIN, ip: 127.0.0.1 }
         # - { path: ^/admin, roles: ROLE_ADMIN, host: symfony\.com$ }

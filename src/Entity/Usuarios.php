@@ -18,6 +18,8 @@ class Usuarios implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $idusuario = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Email]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -112,5 +114,10 @@ class Usuarios implements UserInterface, PasswordAuthenticatedUserInterface
         $this->isVerified = $isVerified;
 
         return $this;
+    }
+
+    public function isIsVerified(): ?bool
+    {
+        return $this->isVerified;
     }
 }

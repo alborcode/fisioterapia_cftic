@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Facultativos index{% endblock %}
+
+{% block body %}
+    <h1>Facultativos index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Idfacultativo</th>
+                <th>Nombre</th>
+                <th>Apellido1</th>
+                <th>Apellido2</th>
+                <th>Telefono</th>
+                <th>Especialidad</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for facultativo in facultativos %}
+            <tr>
+                <td>{{ facultativo.idfacultativo }}</td>
+                <td>{{ facultativo.nombre }}</td>
+                <td>{{ facultativo.apellido1 }}</td>
+                <td>{{ facultativo.apellido2 }}</td>
+                <td>{{ facultativo.telefono }}</td>
+                <td>{{ facultativo.especialidad }}</td>
+                <td>
+                    <a href="{{ path('app_facultativos_show', {'idfacultativo': facultativo.idfacultativo}) }}">show</a>
+                    <a href="{{ path('app_facultativos_edit', {'idfacultativo': facultativo.idfacultativo}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_facultativos_new') }}">Create new</a>
+{% endblock %}

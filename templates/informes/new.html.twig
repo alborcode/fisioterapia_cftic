@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Informes{% endblock %}
+
+{% block body %}
+    <h1>Create new Informes</h1>
+    
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{message}}
+        </div>
+    {% endfor %}    
+
+    {{ include('informes/_form.html.twig') }}
+
+    <a href="{{ path('app_informes_index') }}">back to list</a>
+{% endblock %}

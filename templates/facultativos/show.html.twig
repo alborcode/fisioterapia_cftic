@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Facultativos{% endblock %}
+
+{% block body %}
+    <h1>Facultativos</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Idfacultativo</th>
+                <td>{{ facultativo.idfacultativo }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ facultativo.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Apellido1</th>
+                <td>{{ facultativo.apellido1 }}</td>
+            </tr>
+            <tr>
+                <th>Apellido2</th>
+                <td>{{ facultativo.apellido2 }}</td>
+            </tr>
+            <tr>
+                <th>Telefono</th>
+                <td>{{ facultativo.telefono }}</td>
+            </tr>
+            <tr>
+                <th>Especialidad</th>
+                <td>{{ facultativo.especialidad }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_facultativos_index') }}">back to list</a>
+
+    <a href="{{ path('app_facultativos_edit', {'idfacultativo': facultativo.idfacultativo}) }}">edit</a>
+
+    {{ include('facultativos/_delete_form.html.twig') }}
+{% endblock %}

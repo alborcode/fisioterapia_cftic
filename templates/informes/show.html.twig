@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Informes{% endblock %}
+
+{% block body %}
+    <h1>Informes</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Idinforme</th>
+                <td>{{ informe.idinforme }}</td>
+            </tr>
+            <tr>
+                <th>Fecha</th>
+                <td>{{ informe.fecha ? informe.fecha|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Tipoinforme</th>
+                <td>{{ informe.tipoinforme }}</td>
+            </tr>
+            <tr>
+                <th>Detalle</th>
+                <td>{{ informe.detalle }}</td>
+            </tr>
+            <tr>
+                <th>Anexo</th>
+                <td>{{ informe.anexo }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_informes_index') }}">back to list</a>
+
+    <a href="{{ path('app_informes_edit', {'idinforme': informe.idinforme}) }}">edit</a>
+
+    {{ include('informes/_delete_form.html.twig') }}
+{% endblock %}

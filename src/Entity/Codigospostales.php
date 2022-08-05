@@ -4,37 +4,32 @@ namespace App\Entity;
 
 use App\Repository\CodigospostalesRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CodigospostalesRepository::class)]
+//#[ORM\Entity(uniqueConstraints:{@UniqueConstraint(name="indiceunico", columns={"poblacion", "codigopostal"})]
 class Codigospostales
 {
-    // No hacemos autoincremental el CP ya que tiene un valor fijo
-    //     #[ORM\GeneratedValue]
     #[ORM\Id]
+    #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $idcp = null;
-
-    #[ORM\Column(length: 22)]
-    private ?string $provincia = null;
+    private ?int $id = null;
 
     #[ORM\Column(length: 47)]
     private ?string $poblacion = null;
 
-    public function getIdcp(): ?int
-    {
-        return $this->idcp;
-    }
+    #[ORM\Column(length: 5)]
+    private ?string $codigopostal = null;
 
-    public function getProvincia(): ?string
-    {
-        return $this->provincia;
-    }
+    #[ORM\Column(length: 22)]
+    private ?string $provincia = null;
 
-    public function setProvincia(string $provincia): self
-    {
-        $this->provincia = $provincia;
+    //#[ORM\Column(length: 47)]
+    //private ?string $poblacion = null;
 
-        return $this;
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function getPoblacion(): ?string
@@ -45,6 +40,30 @@ class Codigospostales
     public function setPoblacion(string $poblacion): self
     {
         $this->poblacion = $poblacion;
+
+        return $this;
+    }
+
+    public function getCodigopostal(): ?string
+    {
+        return $this->codigopostal;
+    }
+
+    public function setCodigopostal(string $poblacion): self
+    {
+        $this->codigopostal = $codigopostal;
+
+        return $this;
+    }
+
+    public function getProvincia(): ?string
+    {
+        return $this->provincia;
+    }
+
+    public function setProvincia(string $provincia): self
+    {
+        $this->provincia = $provincia;
 
         return $this;
     }

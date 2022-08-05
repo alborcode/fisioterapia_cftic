@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AseguradorasRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AseguradorasRepository::class)]
 class Aseguradoras
@@ -14,6 +15,7 @@ class Aseguradoras
     private ?int $idaseguradora = null;
 
     #[ORM\Column(length: 80)]
+    #[Assert\NotBlank]
     private ?string $nombre = null;
 
     #[ORM\Column(length: 15, nullable: true)]

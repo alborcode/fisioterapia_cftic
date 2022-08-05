@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Aseguradoras{% endblock %}
+
+{% block body %}
+    <h1>Edit Aseguradoras</h1>
+
+    {{ include('aseguradoras/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_aseguradoras_index') }}">back to list</a>
+
+    {{ include('aseguradoras/_delete_form.html.twig') }}
+{% endblock %}
