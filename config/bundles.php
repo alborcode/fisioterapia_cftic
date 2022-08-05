@@ -18,4 +18,8 @@ return [
     Symfony\UX\React\ReactBundle::class => ['all' => true],
     Knp\Bundle\PaginatorBundle\KnpPaginatorBundle::class => ['all' => true],
     EasyCorp\Bundle\EasyAdminBundle\EasyAdminBundle::class => ['all' => true],
+<<<<<<< HEAD
+=======
+    Symfony\UX\Chartjs\ChartjsBundle::class => ['all' => true],
+>>>>>>> 4edb3dd741958889b6290ef491a10f78e2af4a43
 ];

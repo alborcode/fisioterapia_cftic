@@ -36,9 +36,13 @@ security:
         # allow unauthenticated users to access the login form
         - { path: ^/login, roles: PUBLIC_ACCESS }
         # - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # Dashboard segun perfil
+        - { path: ^/superadmin, roles: ROLE_ADMINISTRATIVO }
+        - { path: ^/admin, roles: ROLE_FACULTATIVO }
+        - { path: ^/user, roles: ROLE_PACIENTE }
+        # - { path: ^/dahsboard, roles: IS_AUTHENTICATED_FULLY }
+        # - { path: ^/turnos, roles: ROLE_ADMINISTRATIVO }
         # Busca primero Path, despues IP, Host y Methods
-        - { path: ^/dahsboard, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/turnos, roles: ROLE_ADMINISTRATIVO }
         # or require ROLE_ADMIN or IS_AUTHENTICATED_FULLY for /admin*
         # - { path: ^/admin, roles: [IS_AUTHENTICATED_FULLY, ROLE_ADMIN] }
         # - { path: ^/admin, roles: ROLE_ADMIN }
