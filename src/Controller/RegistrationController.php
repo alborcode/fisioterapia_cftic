@@ -49,7 +49,7 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            $user->setRoles(['ROLE-USER']);
+            $user->setRoles(['ROLE_USER']);
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -60,7 +60,10 @@ class RegistrationController extends AbstractController
                 $user,
                 (new TemplatedEmail())
                     ->from(
-                        new Address('alborcode@gmail.com', 'Admin Fisioterapia')
+                        new Address(
+                            'clinicafisioterapiasalud@gmail.com',
+                            'Admin Fisioterapia'
+                        )
                     )
                     ->to($user->getEmail())
                     ->subject('Please Confirm your Email')
@@ -115,7 +118,7 @@ class RegistrationController extends AbstractController
         }
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'Your email address has been verified.');
+        $this->addFlash('success', 'Tu email ha sido verificado.');
 
         return $this->redirectToRoute('app_register');
     }

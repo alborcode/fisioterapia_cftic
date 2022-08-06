@@ -6,6 +6,7 @@ use App\Entity\Usuarios;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
@@ -19,12 +20,28 @@ class RegistrationFormType extends AbstractType
         array $options
     ): void {
         $builder
-            ->add('email', EmailType::class)
+            ->add('email', EmailType::class, [
+                'attr' => [
+                    'placeholder' => 'Email',
+                    'pattern' => '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$',
+                    'class' => 'form-control',
+                    'autofocus' => true,
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Por favor Introduzca un correo',
+                    ]),
+                ],
+            ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
+                'attr' => [
+                    'required' => true,
+                    'label' => 'Terminos de uso',
+                ],
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'Tiene que aprobar los terminos de uso.',
                     ]),
                 ],
             ])
@@ -32,15 +49,20 @@ class RegistrationFormType extends AbstractType
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
+                'attr' => [
+                    'placeholder' => 'Password',
+                    'autocomplete' => 'new-password',
+                    'class' => 'form-control',
+                    'required' => true,
+                ],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Por favor Introduzca una contraseña',
                     ]),
                     new Length([
                         'min' => 6,
                         'minMessage' =>
-                            'Your password should be at least {{ limit }} characters',
+                            'Su contraseña debe tener al menos {{ limit }} caracteres',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
