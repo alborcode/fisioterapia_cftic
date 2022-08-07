@@ -18,24 +18,30 @@ class DashboardController extends AbstractController
         // Deniega el acceso en caso de que no este validado
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        $rol = $this->getUser()->getRoles()[0];
+        $usuario = $this->getUser()->getIdusuario();
+        dump($rol);
+        dump($usuario);
+        // Por defecto para nuevas altas la pagina de inicio es la de Paciente
+        $paginainicio = 'dashboard/dashboardPaciente.html.twig';
+
         // Controla a que pagina redirigir segun el Rol del Usuario conectado
-        if ('ROLE_PACIENTE' === $this->getUser()->getRole()) {
-            return $this->render('dashboard/dashboardPaciente.html.twig', [
-                'controller_name' => 'DashboardController',
-            ]);
+        if ($rol == 'ROLE_PACIENTE') {
+            $paginainicio = 'dashboard/dashboardPaciente.html.twig';
+            dump($paginainicio);
         }
-        if ('ROLE_FACULTATIVO' === $this->getUser()->getRole()) {
-            return $this->render('dashboard/dashboardFacultativo.html.twig', [
-                'controller_name' => 'DashboardController',
-            ]);
+        if ($rol == 'ROLE_FACULTATIVO') {
+            $paginainicio = 'dashboard/dashboardFacultativo.html.twig';
+            dump($paginainicio);
         }
-        if ('ROLE_ADMINISTRATIVO' === $this->getUser()->getRole()) {
-            return $this->render(
-                'dashboard/dashboardAdministrativo.html.twig',
-                [
-                    'controller_name' => 'DashboardController',
-                ]
-            );
+        if ($rol == 'ROLE_ADMINISTRATIVO') {
+            $paginainicio = 'dashboard/dashboardAdministrativo.html.twig';
+            dump($paginainicio);
         }
+
+        // Devuelve pagina a la que ir
+        return $this->render($paginainicio, [
+            'usuario' => $usuario,
+        ]);
     }
 }

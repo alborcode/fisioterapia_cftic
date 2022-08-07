@@ -20,6 +20,7 @@
                             </div>
 
                             {% for flash_error in app.flashes('verify_email_error') %}
+                                {# <div {{ react_component('MyComponent', { 'fullName': app.user.fullName }) }}></div> #}
                                 <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
                             {% endfor %}
                             
@@ -27,13 +28,12 @@
                             {{ form_start(registrationForm) }}
                                 <div class="mb-1">
                                     {{ form_row(registrationForm.email, {label: ' '} ) }}
-                                    {# {{ form_row(registrationForm.email, {'attr': {'placeholder': 'Email'}}) }} #}
                                 </div>
                                 <div class="mb-1">
                                     {{ form_row(registrationForm.plainPassword, {label: ' '}) }}
                                 </div>
                                 <div class="mb-3">
-                                    {{ form_row(registrationForm.agreeTerms) }}
+                                    {{ form_row(registrationForm.agreeTerms, {label: 'Aceptar Uso Datos Personales '}) }}
                                 </div>
                                 <div class="mb-3">
                                     <button class="btn btn-primary shadow d-block w-100" type="submit">
@@ -41,7 +41,10 @@
                                     </button>
                                 </div>
                             {{ form_end(registrationForm) }}
-
+                            <div class="mb-3">
+                                    <h6> Si ya tiene una cuenta de click en<h6>
+                                    <a  href="{{ path('app_register') }}"> Conectarse </a>
+                            </div> 
                         </div>
                     </div>
                 </div>

@@ -34,7 +34,7 @@ class RegistrationController extends AbstractController
         UserPasswordHasherInterface $userPasswordHasher,
         UserAuthenticatorInterface $userAuthenticator,
         FisioterapiaAuthenticator $authenticator,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
     ): Response {
         $user = new Usuarios();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -49,7 +49,8 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            $user->setRoles(['ROLE_USER']);
+            // Rol usuario por Defecto
+            $user->setRoles(['ROLE_PACIENTE']);
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -61,12 +62,12 @@ class RegistrationController extends AbstractController
                 (new TemplatedEmail())
                     ->from(
                         new Address(
-                            'clinicafisioterapiasalud@gmail.com',
+                            'fisiosalud87@gmail.com',
                             'Admin Fisioterapia'
                         )
                     )
                     ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
+                    ->subject('Por favor confirma tu Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email

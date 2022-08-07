@@ -38,6 +38,7 @@ class RegistrationFormType extends AbstractType
                 'attr' => [
                     'required' => true,
                     'label' => 'Terminos de uso',
+                    'class' => 'my-3 mx-1',
                 ],
                 'constraints' => [
                     new IsTrue([

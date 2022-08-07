@@ -9,7 +9,7 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Hello {{ usuario }}! ✅</h1>
 
     This friendly message is coming from:
     <ul>
@@ -17,7 +17,7 @@
         <li>Your template at <code><a href="{{ '/Users/alberto/repositorios/github/symfony/fisioterapia_cftic/templates/dashboard/index.html.twig'|file_link(0) }}">templates/dashboard/index.html.twig</a></code></li>
     </ul>
 
-    {% if is_granted('ROLE_ADMIN')} %}
+    {% if is_granted('ROLE_ADMINISTRATIVO') %}
 
     {% endif %}
 </div>

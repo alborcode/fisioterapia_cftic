@@ -23,11 +23,13 @@
                             {# Formulario Login #}
                             <form method="post">
                                 {% if error %}
+                                    {# <div {{ react_component('MyComponent', { 'fullName': app.user.fullName }) }}></div> #}
                                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                                 {% endif %}
 
                                 {% if app.user %}
                                     <div class="mb-3">
+                                        {# <div {{ react_component('MyComponent', { 'fullName': app.user.fullName }) }}></div> #}
                                         Estas conectado como {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Cerrar Sesion</a>
                                     </div>
                                 {% endif %}
@@ -49,6 +51,10 @@
                                 {# <p class="text-muted">Olvidaste tu Password</p> #}
                             </form>
 
+                            <div class="mb-3">
+                                    <h6> Si no tiene una cuenta de click en<h6>
+                                    <a  href="{{ path('app_register') }}"> Registrarse </a>
+                            </div>    
                         </div>
                     </div>
                 </div>
