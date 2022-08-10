@@ -5,6 +5,7 @@
         "@symfony/stimulus-bridge": "^3.2.0",
         "@symfony/ux-autocomplete": "file:vendor/symfony/ux-autocomplete/assets",
         "@symfony/ux-chartjs": "file:vendor/symfony/ux-chartjs/Resources/assets",
+        "@symfony/ux-live-component": "file:vendor/symfony/ux-live-component/assets",
         "@symfony/ux-react": "file:vendor/symfony/ux-react/Resources/assets",
         "@symfony/ux-typed": "file:vendor/symfony/ux-typed/Resources/assets",
         "@symfony/webpack-encore": "^3.0.0",
@@ -36,7 +37,10 @@
         "@popperjs/core": "^2.11.5",
         "bootstrap-icons": "^1.9.1",
         "react": "^18.0",
+        "react-bootstrap": "^2.5.0",
         "react-toastify": "^9.0.8",
+        "sweetalert2": "^11.4.26",
+        "sweetalert2-react-content": "^5.0.2",
         "ux-react": "^0.0.1"
     }
 }

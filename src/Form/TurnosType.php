@@ -7,18 +7,73 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\IsTrue;
+
 class TurnosType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
+    public function buildForm(
+        FormBuilderInterface $builder,
+        array $options
+    ): void {
         $builder
-            ->add('fecha')
-            ->add('horainicio')
-            ->add('horafin')
-            ->add('turno')
-            ->add('disponible')
-            ->add('idfacultativo')
-        ;
+            ->add('fecha', DateType::class, [
+                'attr' => [
+                    'required' => true,
+                    'class' => 'form-control',
+                    'autofocus' => true,
+                ],
+            ])
+            ->add('horainicio', TimeType::class, [
+                'attr' => [
+                    'required' => true,
+                    'class' => 'form-control',
+                ],
+            ])
+            ->add('horafin', TimeType::class, [
+                'attr' => [
+                    'required' => true,
+                    'class' => 'form-control',
+                ],
+            ])
+            ->add('turno', ChoiceType::class, [
+                'choices' => [
+                    'Sin Especificar' => null,
+                    'Mañana' => true,
+                    'Tarde' => false,
+                ],
+                'attr' => [
+                    'required' => true,
+                    'placeholder' => 'Turno',
+                    'class' => 'form-control',
+                ],
+            ])
+            ->add('disponible', ChoiceType::class, [
+                'choices' => [
+                    'SI' => true,
+                    'NO' => false,
+                ],
+                'attr' => [
+                    'required' => true,
+                    'placeholder' => 'Marcar como Disponible',
+                    'class' => 'form-control',
+                ],
+            ]);
+        //->add('idfacultativo');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

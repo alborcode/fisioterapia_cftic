@@ -21,7 +21,20 @@
                             </div>
                             
                             {# Formulario Login #}
-                            <form method="post">
+                            <form method="post"
+                                novalidate
+                                data-action="live#action"
+                                data-action-name="prevent|saveRegistration"
+                                data-model="on(change)|*"
+                            >
+                                {# <div class="alert alert-{{ type }}">
+                                    {% if escape %}
+                                        {{ message }}
+                                    {% else %}
+                                        {{ message|raw }}
+                                    {% endif %}
+                                </div> #}
+
                                 {% if error %}
                                     {# <div {{ react_component('MyComponent', { 'fullName': app.user.fullName }) }}></div> #}
                                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>

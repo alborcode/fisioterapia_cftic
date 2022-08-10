@@ -16,18 +16,23 @@ class Turnos
     private ?int $idturno = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\Date]
     private ?\DateTimeInterface $fecha = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Assert\Time]
     private ?\DateTimeInterface $horainicio = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Assert\Time]
     private ?\DateTimeInterface $horafin = null;
 
     #[ORM\Column(length: 10)]
+    #[Assert\Choice(['MAÑANA', 'TARDE'])]
     private ?string $turno = null;
 
     #[ORM\Column]
+    #[Assert\Choice(['SI', 'NO'])]
     private ?bool $disponible = null;
 
     // Se modifica JoinColumn para añadir el name ya que no es id se cambio

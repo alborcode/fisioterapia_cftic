@@ -16,10 +16,22 @@ class Facultativos
 
     #[ORM\Column(length: 40)]
     #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 3,
+        max: 60,
+        minMessage: 'El nombre debe tener al menos {{ limit }} caracteres de longitud',
+        maxMessage: 'El nombre no puede tener más de {{ limit }} caracteres',
+    )]
     private ?string $nombre = null;
 
     #[ORM\Column(length: 40)]
     #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 3,
+        max: 60,
+        minMessage: 'El apellido debe tener al menos {{ limit }} caracteres de longitud',
+        maxMessage: 'El apellido no puede tener más de {{ limit }} caracteres',
+    )]
     private ?string $apellido1 = null;
 
     #[ORM\Column(length: 40, nullable: true)]
@@ -29,6 +41,7 @@ class Facultativos
     private ?string $telefono = null;
 
     #[ORM\Column(length: 20)]
+    #[Assert\Choice(choices: Especialidades::nombre, message: 'Elige una especialidad valida.')]
     private ?string $especialidad = null;
 
     // Se modifica JoinColumn para añadir el name ya que no es id se cambio

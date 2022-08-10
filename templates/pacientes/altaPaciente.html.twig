@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Alta Paciente{% endblock %}
+
+{% block body %}
+    <section class="py-5 mt-5">
+        <div class="container py-5">
+            <div class="row mb-4 mb-lg-5">
+                <div class="col-md-8 col-xl-6 text-center mx-auto">
+                    <p class="fw-bold text-success mb-2">Pacientes</p>
+                    <h2 class="fw-bold">Alta</h2>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 col-xl-4">
+                    <div class="card">
+                        <div class="card-body text-center d-flex flex-column align-items-center">
+                            {# <div class="bs-icon-xl bs-icon-circle bs-icon-primary shadow bs-icon my-4"> #}
+                            <div class="svg-wrapper bg-image shadow-1-strong rounded-lg my-4">
+                               <img class="img-responsive" src="img/svg/person.svg" style="text-align: center;" width="200%" height="200%"/> 
+                            </div>
+                            
+                            {# Formulario Alta Paciente #}
+                            <form method="post">
+                                {% if error %}
+                                    {# <div {{ react_component('MyComponent', { 'fullName': app.user.fullName }) }}></div> #}
+                                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                                {% endif %}
+
+                                {% if app.user %}
+                                    <div class="mb-3">
+                                        {# <div {{ react_component('MyComponent', { 'fullName': app.user.fullName }) }}></div> #}
+                                        Estas conectado como {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Cerrar Sesion</a>
+                                    </div>
+                                {% endif %}
+
+                                <div class="mb-3">
+                                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" autocomplete="email" required autofocus>
+                                </div>    
+                                <div class="mb-3">
+                                    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" autocomplete="current-password" required>
+                                </div>
+                                <div>
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                                </div>    
+                                <div class="mb-3">
+                                    <button class="btn btn-primary shadow d-block w-100" type="submit">
+                                        Login
+                                    </button>
+                                </div>
+                                {# <p class="text-muted">Olvidaste tu Password</p> #}
+                            </form>
+
+                            <div class="mb-3">
+                                    <h6> Si no tiene una cuenta de click en<h6>
+                                    <a  href="{{ path('app_register') }}"> Registrarse </a>
+                            </div>    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

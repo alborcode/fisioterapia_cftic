@@ -16,9 +16,11 @@ class Citas
     private ?int $idcita = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\Date]
     private ?\DateTimeInterface $fecha = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Assert\Time]
     private ?\DateTimeInterface $hora = null;
 
     #[ORM\Column]

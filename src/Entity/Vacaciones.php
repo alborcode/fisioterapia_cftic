@@ -16,9 +16,11 @@ class Vacaciones
     private ?int $idvacaciones = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\Date]
     private ?\DateTimeInterface $fecha = null;
 
     #[ORM\Column]
+    #[Assert\Choice(['SI', 'NO'])]
     private ?bool $vacaciones = null;
 
     // Se modifica JoinColumn para añadir el name ya que no es id se cambio

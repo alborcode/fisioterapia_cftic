@@ -19,6 +19,7 @@ class Informes
     private ?\DateTimeInterface $fecha = null;
 
     #[ORM\Column(length: 20)]
+    #[Assert\Choice(['SESION', 'URGENCIA'])]
     private ?string $tipoinforme = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

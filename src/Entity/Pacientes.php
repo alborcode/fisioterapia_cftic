@@ -16,10 +16,22 @@ class Pacientes
 
     #[ORM\Column(length: 40)]
     #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 3,
+        max: 60,
+        minMessage: 'El nombre debe tener al menos {{ limit }} caracteres de longitud',
+        maxMessage: 'El nombre no puede tener más de {{ limit }} caracteres',
+    )]
     private ?string $nombre = null;
 
     #[ORM\Column(length: 40)]
     #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 3,
+        max: 60,
+        minMessage: 'El apellido debe tener al menos {{ limit }} caracteres de longitud',
+        maxMessage: 'El apellido no puede tener más de {{ limit }} caracteres',
+    )]
     private ?string $apellido1 = null;
 
     #[ORM\Column(length: 40, nullable: true)]

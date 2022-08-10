@@ -1,0 +1,31 @@
+<nav id="mainNav" class="navbar navbar-light navbar-expand-md fixed-top navbar-shrink py-3">
+    <div class="container">
+    <ul class="nav nav-pills">
+        {# Menu de Pacientes #}
+        <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Pacientes</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ path('app_paciente_new', {idusuario: usuario}) }}">Alta Paciente</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{{ path('app_citas_new', {idusuario: usuario}) }}">Pedir Cita Paciente</a></li>
+                </ul>
+        </li>
+        {# Menu de Facultativos #}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Facultativos</a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{{ path('app_facultativo_new', {idusuario: usuario}) }}">Alta Facultativo</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{ path('app_turnos_index', {idusuario: usuario}) }}">Gestion Turnos/a></li>
+                <li><a class="dropdown-item" href="{{ path('app_vacaciones_index') }}">Gestion Vacaciones</a></li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{{ path('app_aseguradoras_index', {idusuario: usuario}) }}">Gestion Aseguradoras</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{{ path('app_logout') }}">Cerrar Sesion</a>
+        </li>
+    </ul>
+</nav>

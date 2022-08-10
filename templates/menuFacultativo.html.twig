@@ -1,0 +1,27 @@
+<nav id="mainNav" class="navbar navbar-light navbar-expand-md fixed-top navbar-shrink py-3">
+    <div class="container">
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{{ path('app_citas_new', {idusuario: usuario}) }}">Pedir Cita Paciente</a>
+        </li>
+        {# Menu de Informes #}
+        <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Informes</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ path('app_informes_index', {idusuario: usuario}) }}">Gestion Informes</a></li>
+                    <li><a class="dropdown-item" href="{{ path('app_rehabilitaciones_index', {idusuario: usuario}) }}">Gestion Rehabilitaciones</a></li>
+                </ul>
+        </li>
+        {# Menu de Perfil #}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Perfil</a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{{ path('app_perfil_index', {idusuario: usuario}) }}">Modificar Perfil</a></li>
+                <li><a class="dropdown-item" href="{{ path('app_vacaciones_index') }}">Gestion Vacaciones</a></li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{{ path('app_logout') }}">Cerrar Sesion</a>
+        </li>
+    </ul>
+</nav>

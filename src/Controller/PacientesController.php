@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Pacientes;
 use App\Form\PacientesType;
 use App\Repository\PacientesRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,66 +14,64 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/pacientes')]
 class PacientesController extends AbstractController
 {
-    #[Route('/', name: 'app_pacientes_index', methods: ['GET'])]
+    #[Route('/', name: 'altaPaciente', methods: ['GET'])]
     public function index(PacientesRepository $pacientesRepository): Response
     {
-        return $this->render('pacientes/index.html.twig', [
+        return $this->render('pacientes/altaPaciente.html.twig', [
             'pacientes' => $pacientesRepository->findAll(),
         ]);
     }
 
-    #[Route('/new', name: 'app_pacientes_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, PacientesRepository $pacientesRepository): Response
-    {
+    #[Route('/alta', name: 'insertarPaciente', methods: ['GET', 'POST'])]
+    public function insertarPaciente(
+        Request $request,
+        EntityManagerInterface $em
+    ) {
+        // Recupero los datos del Formulario
+        // $nombre = $request->request->get('txtNombre');
+        // $apellido1 = $request->request->get('txtApellido1');
+        // $apellido2 = $request->request->get('txtApellido2');
+        // $telefono = $request->request->get('txtTelefono');
+        // $direccion = $request->request->get('txtDireccion');
+        // $codigopostal = $request->request->get('txtCodigopostal');
+        // $poblacion = $request->request->get('txtpoblacion');
+        // $poblacion = $request->request->get('txtprovincia');
+
+        // $paciente = new Hospital();
+        // $paciente->setNombre($nombre);
+        // $paciente->setDireccion($direccion);
+        // $paciente->setTelefono($telefono);
+        // $paciente->setNumCamas($numcamas);
+        // $em->persist($hospital);
+        // $em->flush();
+
         $paciente = new Pacientes();
-        $form = $this->createForm(PacientesType::class, $paciente);
-        $form->handleRequest($request);
+        $formularioPaciente = $this->createForm(
+            PacientesType::class,
+            $paciente
+        );
+        $formularioPaciente->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $pacientesRepository->add($paciente, true);
+        // Se valida si el formulario es correcto para guardar los datos
+        if ($formularioPaciente->isSubmitted() && $form->isValid()) {
+            // Recupero el usuario que se paso a Vista
+            $usuario = $request->request->get('usuario');
+            // Guardo el usuario antes de guardar Paciente
+            $paciente->setIdusuario($usuario);
 
-            return $this->redirectToRoute('app_pacientes_index', [], Response::HTTP_SEE_OTHER);
+            $entityManager->persist($paciente);
+            $entityManager->flush();
+
+            return $userAuthenticator->authenticateUser(
+                $user,
+                $authenticator,
+                $request
+            );
         }
 
-        return $this->renderForm('pacientes/new.html.twig', [
-            'paciente' => $paciente,
-            'form' => $form,
+        // Envio a la vista mandando el formulario
+        return $this->render('pacientes/altaPaciente.html.twig', [
+            'formularioPaciente' => $formularioPaciente->createView(),
         ]);
-    }
-
-    #[Route('/{idpaciente}', name: 'app_pacientes_show', methods: ['GET'])]
-    public function show(Pacientes $paciente): Response
-    {
-        return $this->render('pacientes/show.html.twig', [
-            'paciente' => $paciente,
-        ]);
-    }
-
-    #[Route('/{idpaciente}/edit', name: 'app_pacientes_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Pacientes $paciente, PacientesRepository $pacientesRepository): Response
-    {
-        $form = $this->createForm(PacientesType::class, $paciente);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $pacientesRepository->add($paciente, true);
-
-            return $this->redirectToRoute('app_pacientes_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('pacientes/edit.html.twig', [
-            'paciente' => $paciente,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{idpaciente}', name: 'app_pacientes_delete', methods: ['POST'])]
-    public function delete(Request $request, Pacientes $paciente, PacientesRepository $pacientesRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$paciente->getIdpaciente(), $request->request->get('_token'))) {
-            $pacientesRepository->remove($paciente, true);
-        }
-
-        return $this->redirectToRoute('app_pacientes_index', [], Response::HTTP_SEE_OTHER);
     }
 }

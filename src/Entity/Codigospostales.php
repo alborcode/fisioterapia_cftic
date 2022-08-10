@@ -24,9 +24,6 @@ class Codigospostales
     #[ORM\Column(length: 22)]
     private ?string $provincia = null;
 
-    //#[ORM\Column(length: 47)]
-    //private ?string $poblacion = null;
-
     public function getId(): ?int
     {
         return $this->id;

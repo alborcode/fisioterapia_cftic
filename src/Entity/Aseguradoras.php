@@ -16,6 +16,12 @@ class Aseguradoras
 
     #[ORM\Column(length: 80)]
     #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 3,
+        max: 60,
+        minMessage: 'La aseguradora debe tener al menos {{ limit }} caracteres de longitud',
+        maxMessage: 'La aseguradora no puede tener más de {{ limit }} caracteres',
+    )]
     private ?string $nombre = null;
 
     #[ORM\Column(length: 15, nullable: true)]
@@ -24,8 +30,8 @@ class Aseguradoras
     #[ORM\Column(length: 80, nullable: true)]
     private ?string $direccion = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $codigopostal = null;
+    #[ORM\Column(length: 5, nullable: true)]
+    private ?string $codigopostal = null;
 
     #[ORM\Column(length: 80, nullable: true)]
     private ?string $poblacion = null;
@@ -34,6 +40,9 @@ class Aseguradoras
     private ?string $provincia = null;
 
     #[ORM\Column(length: 180, nullable: true)]
+    #[Assert\Email(
+        message: 'El Email {{ value }} no es un email valido.',
+    )]
     private ?string $email = null;
 
     public function getIdaseguradora(): ?int
@@ -77,12 +86,12 @@ class Aseguradoras
         return $this;
     }
 
-    public function getCodigopostal(): ?int
+    public function getCodigopostal(): ?string
     {
         return $this->codigopostal;
     }
 
-    public function setCodigopostal(?int $codigopostal): self
+    public function setCodigopostal(?string $codigopostal): self
     {
         $this->codigopostal = $codigopostal;
 

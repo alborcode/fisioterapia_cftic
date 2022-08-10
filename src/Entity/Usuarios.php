@@ -19,7 +19,9 @@ class Usuarios implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank]
-    #[Assert\Email]
+    #[Assert\Email(
+        message: 'El email {{ value }} no es un email valido.',
+    )]
     private ?string $email = null;
 
     #[ORM\Column]
