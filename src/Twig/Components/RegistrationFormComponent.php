@@ -1,38 +1,28 @@
 <?php
 
-use App\Form\RegistrationForm;
+namespace App\Twig\Components;
+
+use App\Form\RegistrationFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
-use Symfony\UX\LiveComponent\Attribute\LiveAction;
-use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
+/**
+ * Renders the registration form with automatic validation as you change fields.
+ *
+ * This is a LIVE component: try entering an invalid email address
+ * or a short password, then focus away from the field.
+ */
+#[AsLiveComponent('registration_form')]
 class RegistrationFormComponent extends AbstractController
 {
-    use ComponentWithFormTrait;
     use DefaultActionTrait;
-
-    #[LiveProp]
-    public bool $isSuccessful = false;
-
-    #[LiveProp]
-    public ?string $newUserEmail = null;
+    use ComponentWithFormTrait;
 
     protected function instantiateForm(): FormInterface
     {
-        return $this->createForm(RegistrationForm::class);
-    }
-
-    #[LiveAction]
-    public function saveRegistration()
-    {
-        $this->submitForm();
-
-        $this->newUserEmail = $this->getFormInstance()
-            ->get('email')
-            ->getData();
-        $this->isSuccessful = true;
+        return $this->createForm(RegistrationFormType::class);
     }
 }

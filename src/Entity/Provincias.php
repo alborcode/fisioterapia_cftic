@@ -8,33 +8,33 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ProvinciasRepository::class)]
 class Provincias
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
+
     #[ORM\Column]
     private ?int $idprovincia = null;
 
+    #[ORM\Id]
     #[ORM\Column(length: 60)]
     #[Assert\Length(
         min: 3,
         max: 60,
-        minMessage: 'El nombre debe tener al menos {{ limit }} caracteres de longitud',
-        maxMessage: 'El nombre no puede tener más de {{ limit }} caracteres',
+        minMessage: 'La Provincia debe tener al menos {{ limit }} caracteres de longitud',
+        maxMessage: 'La Provincia no puede tener más de {{ limit }} caracteres',
     )]
-    private ?string $nombre = null;
+    private ?string $provincia = null;
 
     public function getIdprovincia(): ?int
     {
         return $this->idprovincia;
     }
 
-    public function getNombre(): ?string
+    public function getProvincia(): ?string
     {
-        return $this->nombre;
+        return $this->provincia;
     }
 
-    public function setNombre(string $nombre): self
+    public function setProvincia(string $nombre): self
     {
-        $this->nombre = $nombre;
+        $this->provincia = $provincia;
 
         return $this;
     }

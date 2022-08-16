@@ -5,6 +5,10 @@ namespace App\Controller;
 use App\Entity\Facultativos;
 use App\Form\FacultativosType;
 use App\Repository\FacultativosRepository;
+use App\Entity\Usuarios;
+use App\Repository\UsuariosRepository;
+use Doctrine\ORM\EntityManagerInterface;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,66 +17,68 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/facultativos')]
 class FacultativosController extends AbstractController
 {
-    #[Route('/', name: 'app_facultativos_index', methods: ['GET'])]
-    public function index(FacultativosRepository $facultativosRepository): Response
-    {
-        return $this->render('facultativos/index.html.twig', [
-            'facultativos' => $facultativosRepository->findAll(),
-        ]);
-    }
+    #[Route('/alta', name: 'insertarFacultativo', methods: ['GET', 'POST'])]
+    public function insertarFacultativo(
+        Request $request,
+        PacientesRepository $pacientesRepository,
+        EntityManagerInterface $em
+    ) {
+        // Recupero las variables de sesion
+        $idusuario = $request->getSession()->get('idusuario');
+        $rol = $request->getSession()->get('rol');
+        // Imprimo las variables de Sesion usuario y rol
+        dump('$idusuario:' . $idusuario);
+        dump('$rol:' . $rol);
 
-    #[Route('/new', name: 'app_facultativos_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, FacultativosRepository $facultativosRepository): Response
-    {
         $facultativo = new Facultativos();
-        $form = $this->createForm(FacultativosType::class, $facultativo);
-        $form->handleRequest($request);
+        $formularioFacultativo = $this->createForm(
+            FacultativosType::class,
+            $facultativo
+        );
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $facultativosRepository->add($facultativo, true);
+        $formularioFacultativo->handleRequest($request);
 
-            return $this->redirectToRoute('app_facultativos_index', [], Response::HTTP_SEE_OTHER);
+        // Se valida si el formulario es correcto para guardar los datos
+        if (
+            $formularioFacultativo->isSubmitted() &&
+            $formularioFacultativo->isValid()
+        ) {
+            // Se accede al objeto usuario para guardarlo en Tabla Pacientes
+            $usuario = $em->getRepository(Usuarios::class)->find($idusuario);
+            dump($usuario);
+            // Guardo el usuario antes de guardar Paciente con el objeto usuario
+            $facultativo->setIdusuario($usuario);
+            dump($facultativo);
+
+            $em->persist($facultativo);
+            $em->flush();
+
+            dump($facultativo);
+            // Recupero el Id del Facultativo guardado
+            $idfacultativo = $facultativo->getIdfacultativo();
+
+            dump('$idfacultativo:' . $idfacultativo);
+            // Recupero Identificador de sesion (Token) del usuario de la peticion
+            $session = $request->getSession();
+            // Guardo el Id del Facultativo en Sesion
+            $session->set('idfacultativo', $idfacultativo);
+            dump('idusuario:' . $idusuario);
+            dump('rol:' . $rol);
+            dump('idfacultativo:' . $idfacultativo);
+
+            $mensaje =
+                'Se ha dado de alta el Facultativo con codigo ' .
+                $idfacultativo;
+
+            // Devuelvo control a Pagina Inicio de Facultativo mandando mensaje
+            return $this->render('dashboard/dashboardFacultativo.html.twig', [
+                'mensaje' => $mensaje,
+            ]);
         }
 
-        return $this->renderForm('facultativos/new.html.twig', [
-            'facultativo' => $facultativo,
-            'form' => $form,
+        // Envio a la vista mandando el formulario
+        return $this->render('pacientes/altaFacultativo.html.twig', [
+            'facultativoForm' => $formularioFacultativo->createView(),
         ]);
-    }
-
-    #[Route('/{idfacultativo}', name: 'app_facultativos_show', methods: ['GET'])]
-    public function show(Facultativos $facultativo): Response
-    {
-        return $this->render('facultativos/show.html.twig', [
-            'facultativo' => $facultativo,
-        ]);
-    }
-
-    #[Route('/{idfacultativo}/edit', name: 'app_facultativos_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Facultativos $facultativo, FacultativosRepository $facultativosRepository): Response
-    {
-        $form = $this->createForm(FacultativosType::class, $facultativo);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $facultativosRepository->add($facultativo, true);
-
-            return $this->redirectToRoute('app_facultativos_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('facultativos/edit.html.twig', [
-            'facultativo' => $facultativo,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{idfacultativo}', name: 'app_facultativos_delete', methods: ['POST'])]
-    public function delete(Request $request, Facultativos $facultativo, FacultativosRepository $facultativosRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$facultativo->getIdfacultativo(), $request->request->get('_token'))) {
-            $facultativosRepository->remove($facultativo, true);
-        }
-
-        return $this->redirectToRoute('app_facultativos_index', [], Response::HTTP_SEE_OTHER);
     }
 }

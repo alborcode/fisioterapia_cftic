@@ -3,9 +3,13 @@
 namespace App\Form;
 
 use App\Entity\Pacientes;
+use App\Entity\Provincias;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -34,9 +38,10 @@ class PacientesType extends AbstractType
             ->add('nombre', TextType::class, [
                 'attr' => [
                     'placeholder' => 'Nombre',
-                    'pattern' => '[a-zA-Zç]{3,40}',
+                    'pattern' => '[a-zA-Z-\'áéíóúüÁÉÍÓÚÜ]{3,40}',
                     'class' => 'form-control',
                     'autofocus' => true,
+                    'required' => true,
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -47,9 +52,10 @@ class PacientesType extends AbstractType
             ])
             ->add('apellido1', TextType::class, [
                 'attr' => [
-                    'placeholder' => 'Primer Apellido',
-                    'pattern' => '[a-zA-Z-\']{3,40}',
+                    'placeholder' => 'Apellido',
+                    'pattern' => '[a-zA-Z-\'áéíóúüÁÉÍÓÚÜ]{3,40}',
                     'class' => 'form-control',
+                    'required' => true,
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -60,7 +66,7 @@ class PacientesType extends AbstractType
             ])
             ->add('apellido2', TextType::class, [
                 'attr' => [
-                    'placeholder' => 'Segundo Apellido',
+                    'placeholder' => 'Apellido',
                     'class' => 'form-control',
                 ],
             ])
@@ -81,23 +87,33 @@ class PacientesType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Direccion',
                     'class' => 'form-control',
+                    'required' => false,
                 ],
             ])
             ->add('codigopostal', TextType::class, [
                 'attr' => [
                     'placeholder' => 'Codigo Postal',
                     'class' => 'form-control',
+                    'required' => false,
                 ],
             ])
             ->add('poblacion', TextType::class, [
                 'attr' => [
                     'placeholder' => 'Localidad',
                     'class' => 'form-control',
+                    'required' => false,
                 ],
             ])
-            ->add('provincia', TextType::class, [
+            ->add('provincia', EntityType::class, [
+                'class' => Provincias::class,
+                'choice_label' => 'provincia',
+                'choice_value' => 'provincia',
+                'data_class' => null,
+                'empty_data' => '',
+                //'required' => true,
                 'attr' => [
-                    'placeholder' => 'Provincia',
+                    'placeholder' => 'Seleccione Provincia',
+                    'required' => false,
                     'class' => 'form-control',
                 ],
             ]);

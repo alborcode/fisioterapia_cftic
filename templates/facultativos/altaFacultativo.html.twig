@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Alta Paciente{% endblock %}
+{% block title %}Alta Facultativo{% endblock %}
 
 {% block body %}
 
@@ -11,53 +11,42 @@
                     <div class="card">
                         <div class="card-body text-center d-flex flex-column align-items-center">
                             <div class="row mb-4 mb-lg-5">
-                                    <p class="fw-bold text-success mb-2">Pacientes</p>
-                                    <h2 class="fw-bold">Alta Datos Paciente</h2>
+                                    <p class="fw-bold text-success mb-2">Facultativo</p>
+                                    <h2 class="fw-bold">Alta Datos Facultativo</h2>
                             </div>
                             <div class="form-group">
-                                {# Formulario Alta Paciente #}
-                                {{ form_start(pacienteForm) }}
+                                {# Formulario Alta Facultativo #}
+                                {{ form_start(facultativoForm) }}
                                     <div class="row">       
                                     {# <div class="mb-1"> #}
                                         <div class="col-sm-4">
-                                            {{ form_row(pacienteForm.nombre) }}
+                                            {{ form_row(facultativoForm.nombre) }}
                                         </div>    
                                         <div class="col-sm-4">
-                                            {{ form_row(pacienteForm.apellido1, {label: 'Primer Apellido'} ) }}
+                                            {{ form_row(facultativoForm.apellido1, {label: 'Primer Apellido'} ) }}
                                         </div>
                                         <div class="col-sm-4">  
-                                            {{ form_row(pacienteForm.apellido2, {label: 'Segundo Apellido', required: false}) }}
+                                            {{ form_row(facultativoForm.apellido2, {label: 'Segundo Apellido', required: false}) }}
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-4">       
-                                            {{ form_row(pacienteForm.telefono, {label: 'Teléfono Contacto'}) }}
+                                            {{ form_row(facultativoForm.telefono, {label: 'Teléfono Contacto'}) }}
                                         </div>
                                     </div>
-                                    <div class="row"> 
-                                        <div class="col-sm-8">
-                                            {{ form_row(pacienteForm.direccion, {label: 'Dirección Paciente', required: false}) }}
-                                        </div> 
-                                        <div class="col-sm-4">      
-                                            {{ form_row(pacienteForm.codigopostal, {label: 'Código Postal', required: false}) }}
-                                        </div> 
-                                    </div>
                                     <div class="row">
-                                        <div class="col-sm-6"> 
-                                            {{ form_row(pacienteForm.poblacion, {label: 'Localidad', required: false}) }}
-                                        </div> 
                                         <div class="col-sm-6">
-                                            {{ form_row(pacienteForm.provincia, {label: 'Provincia', required: false}) }}
+                                            {{ form_row(facultativoForm.provincia, {label: 'Especialidad'}) }}
                                         </div> 
                                     </div>
                                     <div class="row">
                                         <div class="col">
                                             <button class="btn btn-primary shadow d-block w-100" type="submit">
-                                                Alta Paciente
+                                                Alta Facultativo
                                             </button>
                                         </div>    
                                     </div>
-                                {{ form_end(pacienteForm) }}
+                                {{ form_end(facultativoForm) }}
                             </div>
                         </div>
                     </div>

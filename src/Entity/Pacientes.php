@@ -49,8 +49,12 @@ class Pacientes
     #[ORM\Column(length: 60, nullable: true)]
     private ?string $poblacion = null;
 
-    #[ORM\Column(length: 60, nullable: true)]
-    private ?string $provincia = null;
+    // Se modifica para añadir JoinColumn de Nombre de Provincia
+    //#[ORM\Column(length: 60, nullable: true)]
+    //private ?string $provincia = null;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false, name:"provincia", referencedColumnName:"provincia")]
+    private ?Provincias $provincia = null;
 
     // Se modifica JoinColumn para añadir el name ya que no es id se cambio
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
@@ -146,12 +150,24 @@ class Pacientes
         return $this;
     }
 
-    public function getProvincia(): ?string
+    // public function getProvincia(): ?string
+    // {
+    //     return $this->provincia;
+    // }
+
+    // public function setProvincia(?string $provincia): self
+    // {
+    //     $this->provincia = $provincia;
+
+    //     return $this;
+    // }
+
+    public function getProvincia(): ?Provincias
     {
         return $this->provincia;
     }
 
-    public function setProvincia(?string $provincia): self
+    public function setProvincia(Provincias $provincia): self
     {
         $this->provincia = $provincia;
 

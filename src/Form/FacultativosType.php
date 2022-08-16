@@ -22,6 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -37,9 +38,10 @@ class FacultativosType extends AbstractType
             ->add('nombre', TextType::class, [
                 'attr' => [
                     'placeholder' => 'Nombre',
-                    'pattern' => '[a-zA-Zç]{3,40}',
+                    'pattern' => '[a-zA-Z-\'áéíóúüÁÉÍÓÚÜ]{3,40}',
                     'class' => 'form-control',
                     'autofocus' => true,
+                    'required' => true,
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -50,9 +52,10 @@ class FacultativosType extends AbstractType
             ])
             ->add('apellido1', TextType::class, [
                 'attr' => [
-                    'placeholder' => 'Primer Apellido',
-                    'pattern' => '[a-zA-Z-\']{3,40}',
+                    'placeholder' => 'Apellido',
+                    'pattern' => '[a-zA-Z-\'áéíóúüÁÉÍÓÚÜ]{3,40}',
                     'class' => 'form-control',
+                    'required' => true,
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -63,7 +66,7 @@ class FacultativosType extends AbstractType
             ])
             ->add('apellido2', TextType::class, [
                 'attr' => [
-                    'placeholder' => 'Segundo Apellido',
+                    'placeholder' => 'Apellido',
                     'class' => 'form-control',
                 ],
             ])
@@ -83,10 +86,12 @@ class FacultativosType extends AbstractType
             ->add('especialidad', EntityType::class, [
                 'class' => Especialidades::class,
                 'choice_label' => 'nombre',
+                'choice_value' => 'nombre',
+                'data_class' => null,
+                'empty_data' => '',
                 'attr' => [
+                    'placeholder' => 'Seleccione Especialidad',
                     'required' => true,
-                    'placeholder' => 'Especialidad',
-                    'pattern' => '[a-zA-Zç]{3,60}',
                     'class' => 'form-control',
                 ],
             ]);

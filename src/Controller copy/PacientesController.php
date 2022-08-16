@@ -22,7 +22,7 @@ class PacientesController extends AbstractController
         ]);
     }
 
-    #[Route('/alta', name: 'altaPaciente', methods: ['GET', 'POST'])]
+    #[Route('/alta2', name: 'altaPaciente2', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
         PacientesRepository $pacientesRepository

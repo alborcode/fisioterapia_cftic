@@ -22,33 +22,41 @@ class DashboardController extends AbstractController
         // Deniega el acceso en caso de que no este validado
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        // Se recupera el id del usuario y rol de UserInterface para poder acceder a Pacientes y Facultativos
         $rol = $this->getUser()->getRoles()[0];
-        $usuario = $this->getUser()->getIdusuario();
+        $idusuario = $this->getUser()->getIdusuario();
         dump($rol);
-        dump($usuario);
-        // Variables con valores por defecto
-        $paginainicio = 'dashboard/dashboardPaciente.html.twig';
-        $usuario = 0;
-        $paciente = 0;
-        $facultativo = 0;
+        dump($idusuario);
+
+        // Recupero Identificador de sesion (Token) del usuario de la peticion
+        $session = $request->getSession();
+        // Guardo Usuario en Session
+        $session->set('idusuario', $idusuario);
+        // Guardo Rol en Session
+        $session->set('rol', $rol);
 
         // Controla a que pagina redirigir segun el Rol del Usuario conectado
         if ($rol == 'ROLE_PACIENTE') {
             // Si es paciente se valida si ya se ha dado de alta buscando por usuario
-            $datos = $em
+            $paciente = $em
                 ->getRepository(Pacientes::class)
-                ->findByIdusuario($usuario);
+                ->findOneByIdusuario($idusuario);
+            dump($paciente);
             // Si no existe datos es que no hay un paciente dado de alta para ese usuario
-            if (!$datos) {
+            if (!$paciente) {
                 // Se envia a plantilla de Alta de Paciente mandando el codigo usuario
-                // return $this->render('pacientes/new.html.twig', [
+                // redirecttoRoute manda los parametros por Get y no por Post
+                // return $this->redirectToRoute('insertarPaciente', [
                 //     'usuario' => $usuario,
+                //     'rol' => $rol,
                 // ]);
-                return $this->render('pacientes/altaPaciente.html.twig');
+                return $this->redirectToRoute('insertarPaciente');
                 // Si no ya existe paciente y se carga pagina de inicio de Pacientes
             } else {
-                $paciente = $this->getIdpaciente()->getIdpaciente();
-                dump($paciente);
+                $idpaciente = $paciente->getIdpaciente();
+                dump($idpaciente);
+                // Guardo Paciente en Session
+                $session->set('idpaciente', $idpaciente);
                 $paginainicio = 'dashboard/dashboardPaciente.html.twig';
                 dump($paginainicio);
             }
@@ -58,9 +66,11 @@ class DashboardController extends AbstractController
             // Si es facultativo se recupera el identificador a partir del idusuario
             $datos = $em
                 ->getRepository(Facultativos::class)
-                ->findByIdusuario($usuario);
-            $facultativo = $this->getIdfacultativo()->getIdfacultativo();
+                ->findByIdusuario($idusuario);
+            $idfacultativo = $this->getIdfacultativo()->getIdfacultativo();
             dump($facultativo);
+            // Guardo Facultativo en Session
+            $session->set('idfacultativo', $idfacultativo);
             //Se carga pagina de inicio de Facultativos
             $paginainicio = 'dashboard/dashboardFacultativo.html.twig';
             dump($paginainicio);
@@ -73,11 +83,6 @@ class DashboardController extends AbstractController
         }
 
         // Devuelve pagina a la que ir tras login
-        return $this->render($paginainicio, [
-            'usuario' => $usuario,
-            'rol' => $rol,
-            'paciente' => $paciente,
-            'facultativo' => $facultativo,
-        ]);
+        return $this->render($paginainicio);
     }
 }

@@ -1,9 +1,9 @@
-<nav id="mainNav" class="navbar navbar-light navbar-expand-md fixed-top navbar-shrink py-3">
-    <div class="container">
-    <ul class="nav nav-pills">
-        {# Menu de Pacientes #}
+<nav id="mainNav" class="navbar navbar-light navbar-expand-md navbar-shrink py-3">
+    <div class="container-fluid">
+    <ul class="nav nav-pills nav-fill justify-content-center">
+    {# Menu de Pacientes #}
         <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Pacientes</a>
+                <a class="nav-link active dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Pacientes</a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="{{ path('app_paciente_new', {idusuario: usuario}) }}">Alta Paciente</a></li>
                     <li><hr class="dropdown-divider"></li>

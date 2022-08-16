@@ -1,13 +1,13 @@
-<nav id="mainNav" class="navbar navbar-light navbar-expand-md fixed-top navbar-shrink py-3">
-    <div class="container">
-    <ul class="nav nav-pills">
+<nav id="mainNav" class="navbar navbar-light navbar-expand-md navbar-shrink py-3">
+    <div class="container-fluid">
+    <ul class="nav nav-pills nav-fill justify-content-center">
         <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Citas</a>
+                <a class="nav-link active dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Citas</a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ path('app_citas_new', {idusuario: usuario}) }}">Pedir Cita</a></li>
-                    <li><a class="dropdown-item" href="{{ path('app_citas_index', {idusuario: usuario}) }}">Historial de Citas</a></li>
+                    <li><a class="dropdown-item" href="{{ path('app_citas_new') }}">Pedir Cita</a></li>
+                    <li><a class="dropdown-item" href="{{ path('app_citas_index') }}">Historial de Citas</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{{ path('app_citas_justificante', {idusuario: usuario}) }}">Imprimir Justificante</a></li>
+                    <li><a class="dropdown-item" href="{{ path('app_citas_justificante') }}">Imprimir Justificante</a></li>
                 </ul>
         </li>
 {#         <li class="nav-item">
@@ -18,6 +18,3 @@
         </li>
     </ul>
 </nav>
-{{ dump($usuario) }}
-{{ dump($paciente) }}
-{{ dump($rol) }}
