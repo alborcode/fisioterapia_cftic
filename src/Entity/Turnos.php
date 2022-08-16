@@ -15,9 +15,13 @@ class Turnos
     #[ORM\Column]
     private ?int $idturno = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Assert\Date]
-    private ?\DateTimeInterface $fecha = null;
+    // #[ORM\Column(type: Types::DATE_MUTABLE)]
+    // #[Assert\Date]
+    // private ?\DateTimeInterface $fecha = null;
+
+    #[ORM\Column(length: 10)]
+    #[Assert\Choice(['DOMINGO', 'LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'])]
+    private ?string $diasemana = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     #[Assert\Time]
@@ -31,9 +35,9 @@ class Turnos
     #[Assert\Choice(['MAÑANA', 'TARDE'])]
     private ?string $turno = null;
 
-    #[ORM\Column]
-    #[Assert\Choice(['SI', 'NO'])]
-    private ?bool $disponible = null;
+    // #[ORM\Column]
+    // #[Assert\Choice(['SI', 'NO'])]
+    // private ?bool $disponible = null;
 
     // Se modifica JoinColumn para añadir el name ya que no es id se cambio
     #[ORM\ManyToOne]
@@ -45,14 +49,26 @@ class Turnos
         return $this->idturno;
     }
 
-    public function getFecha(): ?\DateTimeInterface
+    // public function getDiasemana(): ?\DateTimeInterface
+    // {
+    //     return $this->fecha;
+    // }
+
+    // public function setDiasemana(\DateTimeInterface $fecha): self
+    // {
+    //     $this->fecha = $fecha;
+
+    //     return $this;
+    // }
+
+    public function getDiasemana(): ?string
     {
-        return $this->fecha;
+        return $this->diasemana;
     }
 
-    public function setFecha(\DateTimeInterface $fecha): self
+    public function setDiasemana(?string $diasemana): self
     {
-        $this->fecha = $fecha;
+        $this->diasemana = $diasemana;
 
         return $this;
     }

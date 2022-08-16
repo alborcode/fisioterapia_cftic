@@ -40,9 +40,13 @@ class Facultativos
     #[ORM\Column(length: 15)]
     private ?string $telefono = null;
 
-    #[ORM\Column(length: 20)]
-    #[Assert\Choice(choices: Especialidades::nombre, message: 'Elige una especialidad valida.')]
-    private ?string $especialidad = null;
+    // Se modifica para añadir JoinColumn de Especialidad
+    //#[ORM\Column(length: 20)]
+    //#[Assert\Choice(choices: Especialidades::nombre, message: 'Elige una especialidad valida.')]
+    //private ?string $especialidad = null;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false, name:"especialidad", referencedColumnName:"especialidad")]
+    private ?Especialidades $especialidad = null;
 
     // Se modifica JoinColumn para añadir el name ya que no es id se cambio
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
@@ -102,12 +106,24 @@ class Facultativos
         return $this;
     }
 
-    public function getEspecialidad(): ?string
+    // public function getEspecialidad(): ?string
+    // {
+    //     return $this->especialidad;
+    // }
+
+    // public function setEspecialidad(string $especialidad): self
+    // {
+    //     $this->especialidad = $especialidad;
+
+    //     return $this;
+    // }
+
+    public function getEspecialidad(): ?Especialidades
     {
         return $this->especialidad;
     }
 
-    public function setEspecialidad(string $especialidad): self
+    public function setEspecialidad(Especialidades $especialidad): self
     {
         $this->especialidad = $especialidad;
 

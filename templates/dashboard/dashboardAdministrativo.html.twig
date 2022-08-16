@@ -15,12 +15,12 @@
                                 {% include 'menuAdministrativo.html.twig' %}
                             </div>
                             <div class="row mb-4 mb-lg-5">
-                                    <p class="fw-bold text-success mb-2">Intranet Clinica Fisioterapia</p>
+                                    <p class="fw-bold text-success mb-2">Intranet - Menu Administrativo</p>
                                     <h6 class="fw-bold">Seleccione una opción del menu superior</h6>
                             </div>
 
                             {% if mensaje is defined %}
-                                <h1 style="color:blue;"> {{mensaje}} del {{ app.session.get('idusuario') }} tipo {{ app.session.get('rol') }} </h1>
+                                <h1 style="color:blue;"> {{mensaje}} </h1>
                             {% endif %}   
                             
                             <footer class="bg-primary-gradient">

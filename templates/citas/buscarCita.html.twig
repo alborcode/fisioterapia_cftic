@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Alta Facultativo{% endblock %}
+
+{% block body %}
+
+    <section class="py-5 mt-5">
+        <div class="container py-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 col-xl-12">
+                    <div class="card">
+                        <div class="card-body text-center d-flex flex-column align-items-center">
+                            <div class="row mb-4 mb-lg-5">
+                                    <p class="fw-bold text-success mb-2">Administrativo</p>
+                                    <h2 class="fw-bold">Cita - Seleccion Paciente</h2>
+                            </div>
+                            <div class="p-4">
+                                <form name="formcombo" method="POST" action="{{ path('buscarDepartamento') }}">
+                                    {# No hay boton pero en el onchange hago submit del formulario #}
+                                    Facultativo: 
+                                    <select onchange="formcombo.submit()" name="comboFacultativo" id="comboFacultativo">
+                                        {% for Facultativo in datosFacultativos %}                                      
+                                            <option value="{{ Facultativo.idfacultativo }}">{{ Facultativo.nombre }} {{ Facultativo.apellido1 }} {{ Facultativo.apellido2 }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </form>
+
+                                {# Si esta definida la variable muestra los datos enviados de Pacientes #}
+                                {% if datosPacientes is defined %}
+                                    {# Recorro Pacientes para mostrarlos en Tabla #}
+                                    <table class="table" border="1" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Acciones</th>
+                                                <th>Teléfono</th>
+                                                <th>Nombre</th>
+                                                <th>Primer Apellido</th>
+                                                <th>Segundo Apellido</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for Paciente in datosPacientes %}
+                                            <tr>
+                                                <td scope="row">
+                                                    <a href="{{ path('seleccionarCita', {idpaciente: Paciente.idpaciente }) }}">Seleccionar</a>
+                                                    <span> / </span>
+                                                </td>
+                                                <td>
+                                                    {{ Paciente.telefono }}
+                                                </td>
+                                                <td>
+                                                    {{ Paciente.nombre }}
+                                                </td>
+                                                <td>
+                                                    {{ Paciente.apellido1 }}
+                                                </td>
+                                                {% if Paciente.apellido2 != null %}
+                                                    <td>
+                                                        {{ Paciente.apellido2 }}
+                                                    </td>
+                                                {% endif %}
+                                                
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>   
+                                {% endif %}   
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+{% endblock %}

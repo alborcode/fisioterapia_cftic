@@ -37,9 +37,9 @@ security:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         # - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         # Dashboard segun perfil
-        - { path: ^/superadmin, roles: ROLE_ADMINISTRATIVO }
-        - { path: ^/admin, roles: ROLE_FACULTATIVO }
-        - { path: ^/user, roles: ROLE_PACIENTE }
+        - { path: ^/pacientes, roles: ROLE_PACIENTE }
+        - { path: ^/facultativos, roles: ROLE_FACULTATIVO }
+        - { path: ^/admin, roles: ROLE_ADMINISTRATIVO }
         # - { path: ^/dahsboard, roles: IS_AUTHENTICATED_FULLY }
         # - { path: ^/turnos, roles: ROLE_ADMINISTRATIVO }
         # Busca primero Path, despues IP, Host y Methods
@@ -66,5 +66,6 @@ when@test:
         # IS_AUTHENTICATED_REMEMBER (Todos los usuarios Logueados)
         role_hierarchy:
             ROLE_PACIENTE:          ROLE_USER  
-            ROLE_FACULTATIVO:       ROLE_ADMIN
-            ROLE_ADMINISTRATIVO:    [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]        
+            ROLE_FACULTATIVO:       ROLE_USER
+            ROLE_ADMINISTRATIVO:    ROLE_ADMIN        
+            # ROLE_ADMINISTRATIVO:    [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]    

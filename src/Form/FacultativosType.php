@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Facultativos;
+use App\Entity\Especialidades;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -85,8 +86,8 @@ class FacultativosType extends AbstractType
             ])
             ->add('especialidad', EntityType::class, [
                 'class' => Especialidades::class,
-                'choice_label' => 'nombre',
-                'choice_value' => 'nombre',
+                'choice_label' => 'especialidad',
+                'choice_value' => 'especialidad',
                 'data_class' => null,
                 'empty_data' => '',
                 'attr' => [
@@ -96,7 +97,11 @@ class FacultativosType extends AbstractType
                 ],
             ]);
         // ->add('idusuario');
-        // ->add('Save', SubmitType::class)
+        // ->add('Alta Paciente', SubmitType::class, [
+        //     'attr' => [
+        //         'class' => 'form-control',
+        //     ],
+        // ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

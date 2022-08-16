@@ -38,7 +38,7 @@ class VacacionesType extends AbstractType
                     'autofocus' => true,
                 ],
             ])
-            ->add('vacaciones', ChoiceType::class, [
+            ->add('dianotrabajado', ChoiceType::class, [
                 'choices' => [
                     'NO' => true,
                     'SI' => false,
@@ -46,6 +46,17 @@ class VacacionesType extends AbstractType
                 'attr' => [
                     'required' => true,
                     'placeholder' => 'Marcada como Vacaciones',
+                    'class' => 'form-control',
+                ],
+            ])
+            ->add('diadebaja', ChoiceType::class, [
+                'choices' => [
+                    'NO' => true,
+                    'SI' => false,
+                ],
+                'attr' => [
+                    'required' => true,
+                    'placeholder' => 'Marcada como Baja',
                     'class' => 'form-control',
                 ],
             ]);

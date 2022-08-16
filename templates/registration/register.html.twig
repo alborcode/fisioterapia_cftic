@@ -16,8 +16,9 @@
                     <div class="card">
                         <div class="card-body text-center d-flex flex-column align-items-center">
                             <div class="svg-wrapper bg-image shadow-1-strong rounded-lg my-4">
-                               <img class="img-responsive" src="img/svg/person-plus.svg" style="text-align: center;" width="200%" height="200%"/> 
+                               <img class="img-responsive" src="{{ asset ('img/svg/person-plus.svg') }}" style="text-align: center;" width="200%" height="200%"/> 
                             </div>
+                            
 
                             {% for flash_error in app.flashes('verify_email_error') %}
                                 {# <div {{ react_component('MyComponent', { 'fullName': app.user.fullName }) }}></div> #}
@@ -43,7 +44,7 @@
                             {{ form_end(registrationForm) }}
                             <div class="mb-3">
                                     <h6> Si ya tiene una cuenta de click en<h6>
-                                    <a  href="{{ path('app_register') }}"> Conectarse </a>
+                                    <a  href="{{ path('app_login') }}"> Conectarse </a>
                             </div> 
                             
                         </div>

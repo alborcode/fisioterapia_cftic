@@ -21,7 +21,11 @@ class Vacaciones
 
     #[ORM\Column]
     #[Assert\Choice(['SI', 'NO'])]
-    private ?bool $vacaciones = null;
+    private ?bool $dianotrabajado = null;
+
+    #[ORM\Column]
+    #[Assert\Choice(['SI', 'NO'])]
+    private ?bool $diadebaja = null;
 
     // Se modifica JoinColumn para añadir el name ya que no es id se cambio
     #[ORM\ManyToOne]
@@ -45,14 +49,26 @@ class Vacaciones
         return $this;
     }
 
-    public function isVacaciones(): ?bool
+    public function isDianotrabajado(): ?bool
     {
-        return $this->vacaciones;
+        return $this->dianotrabajado;
     }
 
-    public function setVacaciones(bool $vacaciones): self
+    public function setDianotrabajado(bool $dianotrabajado): self
     {
-        $this->vacaciones = $vacaciones;
+        $this->dianotrabajado = $dianotrabajado;
+
+        return $this;
+    }
+
+    public function isDiadebaja(): ?bool
+    {
+        return $this->diadebaja;
+    }
+
+    public function setDiadebaja(bool $diadebaja): self
+    {
+        $this->diadebaja = $diadebaja;
 
         return $this;
     }

@@ -4,11 +4,12 @@ namespace App\Entity;
 
 use App\Repository\ProvinciasRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProvinciasRepository::class)]
 class Provincias
 {
-
+    #[ORM\Id]
     #[ORM\Column]
     private ?int $idprovincia = null;
 
@@ -32,7 +33,7 @@ class Provincias
         return $this->provincia;
     }
 
-    public function setProvincia(string $nombre): self
+    public function setProvincia(string $provincia): self
     {
         $this->provincia = $provincia;
 
