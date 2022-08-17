@@ -3,9 +3,13 @@
 namespace App\Form;
 
 use App\Entity\Pacientes;
+use App\Entity\Provincias;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -19,6 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -31,12 +36,42 @@ class PerfilPacienteType extends AbstractType
         array $options
     ): void {
         $builder
+            ->add('idusuario', NumberType::class, [
+                'attr' => [
+                    'pattern' => '[0-9]{1,11}',
+                    'class' => 'form-control',
+                    'required' => false,
+                    'disabled' => true,
+                ],
+            ])
+            ->add('email', EmailType::class, [
+                'attr' => [
+                    'placeholder' => 'Email',
+                    'pattern' => '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$',
+                    'class' => 'form-control',
+                    'autofocus' => true,
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Por favor Introduzca un correo',
+                    ]),
+                    new Length(['min' => 3]),
+                ],
+            ])
+            ->add('idpaciente', NumberType::class, [
+                'attr' => [
+                    'pattern' => '[0-9]{1,11}',
+                    'class' => 'form-control',
+                    'required' => false,
+                    'disabled' => true,
+                ],
+            ])
             ->add('nombre', TextType::class, [
                 'attr' => [
                     'placeholder' => 'Nombre',
-                    'pattern' => '[a-zA-Zç]{3,40}',
+                    'pattern' => '[a-zA-Z-\'áéíóúüÁÉÍÓÚÜ]{3,40}',
                     'class' => 'form-control',
-                    'autofocus' => true,
+                    'required' => true,
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -47,9 +82,10 @@ class PerfilPacienteType extends AbstractType
             ])
             ->add('apellido1', TextType::class, [
                 'attr' => [
-                    'placeholder' => 'Primer Apellido',
-                    'pattern' => '[a-zA-Z-\']{3,40}',
+                    'placeholder' => 'Apellido',
+                    'pattern' => '[a-zA-Z-\'áéíóúüÁÉÍÓÚÜ]{3,40}',
                     'class' => 'form-control',
+                    'required' => true,
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -60,7 +96,7 @@ class PerfilPacienteType extends AbstractType
             ])
             ->add('apellido2', TextType::class, [
                 'attr' => [
-                    'placeholder' => 'Segundo Apellido',
+                    'placeholder' => 'Apellido',
                     'class' => 'form-control',
                 ],
             ])
@@ -81,33 +117,42 @@ class PerfilPacienteType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Direccion',
                     'class' => 'form-control',
+                    'required' => false,
                 ],
             ])
             ->add('codigopostal', TextType::class, [
                 'attr' => [
                     'placeholder' => 'Codigo Postal',
                     'class' => 'form-control',
+                    'required' => false,
                 ],
             ])
             ->add('poblacion', TextType::class, [
                 'attr' => [
                     'placeholder' => 'Localidad',
                     'class' => 'form-control',
+                    'required' => false,
                 ],
             ])
-            ->add('provincia', TextType::class, [
+            ->add('provincia', EntityType::class, [
+                'class' => Provincias::class,
+                'choice_label' => 'provincia',
+                'choice_value' => 'provincia',
+                'data_class' => null,
+                'empty_data' => '',
+                //'required' => true,
                 'attr' => [
-                    'placeholder' => 'Provincia',
+                    'placeholder' => 'Seleccione Provincia',
+                    'required' => false,
                     'class' => 'form-control',
                 ],
             ]);
-        //->add('idusuario');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Pacientes::class,
+            // Configure your form options here
         ]);
     }
 }

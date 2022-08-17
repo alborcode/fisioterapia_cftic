@@ -309,45 +309,36 @@ class AdministrativoController extends AbstractController
         ]);
     }
 
-    //********************************************************************
-    // Busqueda de Paciente para Alta de Cita a traves de Administrativo *
-    //********************************************************************
-    // Muestra Combo para Seleccionar Administrativo cargado con datos BBDD
-    // Mostrar cuadro busqueda para filtrar y con todos los Pacientes para Seleccionar
-    #[Route('/buscarpacientefacultativo', name: 'buscarPacienteFacultativo', methods: ['GET', 'POST'])]
-    public function buscarPacienteFacultativo(
+    //**********************************************************
+    // Modificar Perfil de Paciente a traves de Administrativo *
+    //**********************************************************
+    #[Route('/buscarperfilpaciente', name: 'buscarPerfilPaciente', methods: ['GET', 'POST'])]
+    public function buscarPerfilPaciente(
         Request $request,
         PacientesRepository $pacientesRepository,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em
     ) {
         // Recupero todos los Pacientes
         $pacientes = $em->getRepository(Pacientes::class)->findAll();
-        // Recupero todos los Facultativos
-        $facultativos = $em->getRepository(Facultativos::class)->findAll();
 
-        return $this->render('citas/buscarCita.html.twig', [
+        return $this->render('pacientes/mostrarPerfil.html.twig', [
             'datosPacientes' => $pacientes,
-            'datosFacultativos' => $facultativos,
         ]);
     }
 
     // Mostrar Datos de Pacientes segun busqueda introducida por Apellido con Like
-    #[Route('/busquedapacienteapellido', name: 'busquedaPacienteApellido', methods: ['GET', 'POST'])]
-    public function busquedaPacienteApellido(
+    #[Route('/buscarperfilpacienteapellido', name: 'buscarPerfilPacienteApellido', methods: ['GET', 'POST'])]
+    public function buscarPerfilPacienteApellido(
         Request $request,
         PacientesRepository $pacientesRepository,
         EntityManagerInterface $em
     ) {
-        // Recupero todos los Facultativos
-        $facultativos = $em->getRepository(Facultativos::class)->findAll();
-
         // Se recoge con get el parametro que hemos mandado en la caja de texto request al ser post
         $datobusqueda = $request->request->get('txtApellido');
         dump($datobusqueda);
 
         $query = $em->createQuery(
-            'SELECT e FROM App\Entity\Pacientes p WHERE p.apellido1 like :parametro'
+            'SELECT p FROM App\Entity\Pacientes p WHERE p.apellido1 like :parametro'
         );
         // Concateno la variable a buscar y el % del Like
         $query->setParameter('parametro', $datobusqueda . '%');
@@ -356,22 +347,18 @@ class AdministrativoController extends AbstractController
         $pacientes = $query->getResult();
         dump($datos);
 
-        return $this->render('citas/mostrarPaciente.html.twig', [
+        return $this->render('pacientes/mostrarPerfil.html.twig', [
             'datosPacientes' => $pacientes,
-            'datosFacultativos' => $facultativos,
         ]);
     }
 
     // Mostrar Datos de Pacientes segun busqueda unica por telefono
-    #[Route('/busquedapacientetelefono', name: 'busquedaPacienteTelefono')]
-    public function busquedaPacienteTelefono(
+    #[Route('/buscarperfilpacientetelefono', name: 'buscarPerfilPacienteTelefono')]
+    public function buscarPerfilPacienteTelefono(
         Request $request,
         PacientesRepository $pacientesRepository,
         EntityManagerInterface $em
     ) {
-        // Recupero todos los Facultativos
-        $facultativos = $em->getRepository(Facultativos::class)->findAll();
-
         // Se recoge con get el parametro que hemos mandado en la caja de texto request al ser post, query si es get
         $datoget = $request->request->get('txtTelefono');
         // Select de Pacientes con Where mandado por parametro (por inyeccion SQL no ponemos $datoget)
@@ -383,33 +370,265 @@ class AdministrativoController extends AbstractController
         // Al hacer el getresult ejecuta la Query y obtiene los resultados
         $pacientes = $query->getResult();
 
-        return $this->render('citas/mostrarPaciente.html.twig', [
+        return $this->render('pacientes/mostrarPerfil.html.twig', [
             'datosPacientes' => $pacientes,
+        ]);
+    }
+
+    // Formulario para modificar Perfil y Datos de Pacientes
+    #[Route('/modificarpaciente', name: 'modificarPacienteAdmin', methods: ['GET', 'POST'])]
+    public function modificarPacienteAdmin(
+        Request $request,
+        PacientesRepository $pacientesRepository,
+        EntityManagerInterface $em
+    ) {
+        // Recupero el Usuario que me llega con Get (por seguridad deberia ser con Post no con Get)
+        $idusuario = $request->query->get('idusuario');
+        //$idusuario = $request->request->get('idusuario');
+        dump($idusuario);
+
+        // Recupero datos de usuario para enviar los Values a Formulario
+        $usuariomodificar = $em
+            ->getRepository(Usuarios::class)
+            ->findOneByIdusuario($idusuario);
+        dump($usuariomodificar);
+        // Recupero datos de paciente para enviar los Values a Formulario
+        $pacientemodificar = $em
+            ->getRepository(Pacientes::class)
+            ->findOneByIdusuario($idusuario);
+        dump($pacientemodificar);
+
+        $paciente = new Pacientes();
+        $formularioPerfilPaciente = $this->createForm(
+            PerfilPacienteType::class,
+            $paciente
+        );
+
+        $formularioPerfilPaciente->handleRequest($request);
+
+        // Se valida si el formulario es correcto para guardar los datos
+        if (
+            $formularioPerfilPaciente->isSubmitted() &&
+            $formularioPerfilPaciente->isValid()
+        ) {
+            dump($formularioPerfilPaciente);
+            // Recogemos los campos del Formulario en Array para tratarlos
+            $dataformulario = $form->getData();
+            dump($dataformulario);
+            //$email = $request->request->get('email');
+            $email = $request->query->get('email');
+            $nombre = $request->query->get('nombre');
+            $apellido1 = $request->query->get('apellido1');
+            $apellido2 = $request->query->get('apellido2');
+            $telefono = $request->query->get('telefono');
+            $codigopostal = $request->query->get('codigopostal');
+            $poblacion = $request->query->get('poblacion');
+            $provincia = $request->query->get('provincia');
+
+            // Modifico el Email con el recibido en formulario
+            $usuariomodificar->setEmail($email);
+            dump($usuariomodificar);
+            // Modificamos los valores con los datos del Formulario, el ID no se puede modificar es clave
+            // $pacientemodificar->setIdpaciente($idpaciente);
+            $pacientemodificar->setNombre($nombre);
+            $pacientemodificar->setApellido1($apellido1);
+            $pacientemodificar->setApellido2($apellido2);
+            $pacientemodificar->setTelefono($telefono);
+            $pacientemodificar->setCodigoPostal($codigopostal);
+            $pacientemodificar->setPoblacion($poblacion);
+            $pacientemodificar->setProvincia($provincia);
+            // Guardo el usuario antes de guardar Paciente con el objeto usuario
+            $pacientemodificar->setIdusuario($usuario);
+            dump($pacientemodificar);
+
+            // Modificamos el Usuario
+            $em->persist($usuariomodificar);
+            $em->flush();
+
+            // Modificamos el Paciente
+            $em->persist($pacientemodificar);
+            $em->flush();
+
+            // Construimos mensaje de modificacion correcta
+            $mensaje = 'Se ha modificado los Datos del Paciente ' . $idpaciente;
+
+            // Devuelvo control a Pagina Inicio de Administrador mandando mensaje
+            return $this->render(
+                'dashboard/dashboardAdministrativo.html.twig',
+                [
+                    'mensaje' => $mensaje,
+                ]
+            );
+        }
+
+        // Envio a la vista de Datos Perfil Paciente mandando el formulario
+        return $this->render('pacientes/modificarPerfil.html.twig', [
+            'perfilPacienteForm' => $formularioPerfilPaciente->createView(),
+            'datosUsuario' => $usuariomodificar,
+            'datosPaciente' => $pacientemodificar,
+        ]);
+    }
+
+    //*************************************************************
+    // Modificar Perfil de Facultativo a traves de Administrativo *
+    //*************************************************************
+    #[Route('/buscarperfilfacultativo', name: 'buscarPerfilFacultativo', methods: ['GET', 'POST'])]
+    public function buscarPerfilFacultativo(
+        Request $request,
+        FacultativosRepository $facultativosRepository,
+        EntityManagerInterface $em
+    ) {
+        // Recupero todos los Facultativos
+        $facultativos = $em->getRepository(Facultativos::class)->findAll();
+
+        return $this->render('facultativos/mostrarPerfil.html.twig', [
             'datosFacultativos' => $facultativos,
         ]);
     }
 
-    //**********************************************************************************
-    // Busqueda de Cita por Administrativo una vez seleccionado Facultativo y Paciente *
-    //**********************************************************************************
-    // Mostrar cuadro busqueda para filtrar y con todos los Pacientes para Seleccionar
-    #[Route('/seleccioncita', name: 'seleccionarCita', methods: ['GET', 'POST'])]
-    public function seleccionarCita(
+    // Mostrar Datos de Facultativos segun busqueda introducida por Apellido con Like
+    #[Route('/buscarperfilfacultativoapellido', name: 'buscarPerfilFacultativoApellido', methods: ['GET', 'POST'])]
+    public function buscarPerfilFacultativoApellido(
         Request $request,
-        PacientesRepository $pacientesRepository,
         FacultativosRepository $facultativosRepository,
-        CitasRepository $citasRepository,
         EntityManagerInterface $em
     ) {
-        // Se recoge con get el paciente que hemos mandado
-        $paciente = $request->query->get('paciente');
-        // Se recoge con get el facultativo que hemos mandado
-        $paciente = $request->query->get('facultativo');
-        // Recupero las citas libres de ese Facultativo.
+        // Se recoge con get el parametro que hemos mandado en la caja de texto request al ser post
+        $datobusqueda = $request->request->get('txtApellido');
+        dump($datobusqueda);
 
-        return $this->render('citas/buscarCita.html.twig', [
-            'paciente' => $paciente,
-            'facultativo' => $facultativo,
+        $query = $em->createQuery(
+            'SELECT f FROM App\Entity\Facultativos f WHERE f.apellido1 like :parametro'
+        );
+        // Concateno la variable a buscar y el % del Like
+        $query->setParameter('parametro', $datobusqueda . '%');
+        dump($query);
+
+        $facultativos = $query->getResult();
+        dump($datos);
+
+        return $this->render('facultativos/mostrarPerfil.html.twig', [
+            'datosFacultativos' => $facultativos,
+        ]);
+    }
+
+    // Mostrar Datos de Facultativos segun busqueda unica por telefono
+    #[Route('/buscarperfilfacultativotelefono', name: 'buscarPerfilFacultativoTelefono')]
+    public function buscarPerfilFacultativoTelefono(
+        Request $request,
+        PacientesRepository $pacientesRepository,
+        EntityManagerInterface $em
+    ) {
+        // Se recoge con get el parametro que hemos mandado en la caja de texto request al ser post, query si es get
+        $datoget = $request->request->get('txtTelefono');
+        // Select de Pacientes con Where mandado por parametro (por inyeccion SQL no ponemos $datoget)
+        $query = $em->createQuery(
+            'SELECT f FROM App\Entity\Facultativos f WHERE f.telefono = :dato'
+        );
+        // Asigno valor del parametro dato
+        $query->setParameter('dato', $datoget);
+        // Al hacer el getresult ejecuta la Query y obtiene los resultados
+        $facultativos = $query->getResult();
+
+        return $this->render('facultativos/mostrarPerfil.html.twig', [
+            'datosFacultativos' => $facultativos,
+        ]);
+    }
+
+    // Formulario para modificar Perfil y Datos de Facultativos
+    #[Route('/modificarfacultativo', name: 'modificarFacultativoAdmin', methods: ['GET', 'POST'])]
+    public function modificarFacultativoAdmin(
+        Request $request,
+        FacultativosRepository $facultativosRepository,
+        EntityManagerInterface $em
+    ) {
+        // Recupero el Usuario que me llega con Get (por seguridad deberia ser con Post no con Get)
+        $idusuario = $request->query->get('idusuario');
+        //$idusuario = $request->request->get('idusuario');
+        dump($idusuario);
+
+        // Recupero datos de usuario para enviar los Values a Formulario
+        $usuariomodificar = $em
+            ->getRepository(Usuarios::class)
+            ->findOneByIdusuario($idusuario);
+        dump($usuariomodificar);
+        // Recupero datos de paciente para enviar los Values a Formulario
+        $facultativomodificar = $em
+            ->getRepository(Facultativos::class)
+            ->findOneByIdusuario($idusuario);
+        dump($facultativomodificar);
+        // Recupero el idfacultativo del acceso realizado por usuario
+        $idfacultativo = $datosfacultativo->getIdfacultativo();
+
+        $facultativo = new Facultativos();
+        $formularioPerfilFacultativo = $this->createForm(
+            PerfilFacultativoType::class,
+            $facultativo
+        );
+
+        $formularioPerfilFacultativo->handleRequest($request);
+
+        // Se valida si el formulario es correcto para guardar los datos
+        if (
+            $formularioPerfilFacultativo->isSubmitted() &&
+            $formularioPerfilFacultativo->isValid()
+        ) {
+            dump($formularioPerfilFacultativo);
+            // Recogemos los campos del Formulario en Array para tratarlos
+            $dataformulario = $formularioPerfilFacultativo->getData();
+            dump($dataformulario);
+            //$email = $request->request->get('email');
+            $email = $request->query->get('email');
+            $nombre = $request->query->get('nombre');
+            $apellido1 = $request->query->get('apellido1');
+            $apellido2 = $request->query->get('apellido2');
+            $telefono = $request->query->get('telefono');
+            $codigopostal = $request->query->get('codigopostal');
+            $poblacion = $request->query->get('poblacion');
+            $provincia = $request->query->get('provincia');
+
+            // Modifico el Email con el recibido en formulario
+            $usuariomodificar->setEmail($email);
+            dump($usuariomodificar);
+
+            // Modificamos los valores con los datos del Formulario, el ID no se puede modificar es clave
+            // $pacientemodificar->setIdpaciente($idpaciente);
+            $facultativomodificar->setNombre($nombre);
+            $facultativomodificar->setApellido1($apellido1);
+            $facultativomodificar->setApellido2($apellido2);
+            $facultativomodificar->setTelefono($telefono);
+            $facultativomodificar->setCodigoPostal($codigopostal);
+            $facultativomodificar->setPoblacion($poblacion);
+            $facultativomodificar->setProvincia($provincia);
+            // Guardo el usuario antes de guardar Paciente con el objeto usuario
+            $facultativomodificar->setIdusuario($usuario);
+            dump($facultativomodificar);
+
+            // Modificamos el Usuario
+            $em->persist($usuariomodificar);
+            $em->flush();
+
+            // Modificamos el Facultativo
+            $em->persist($facultativomodificar);
+            $em->flush();
+
+            // Construimos mensaje de modificacion correcta
+            $mensaje = 'Se ha modificado los Datos del Paciente ' . $idpaciente;
+
+            // Devuelvo control a Pagina Inicio de Administrador mandando mensaje
+            return $this->render(
+                'dashboard/dashboardAdministrativo.html.twig',
+                [
+                    'mensaje' => $mensaje,
+                ]
+            );
+        }
+
+        // Envio a la vista de Datos Perfil Paciente mandando el formulario
+        return $this->render('pacientes/modificarPerfil.html.twig', [
+            'perfilPacienteForm' => $formularioPerfilPaciente->createView(),
+            'datosUsuario' => $usuariomodificar,
+            'datosPaciente' => $facultativomodificar,
         ]);
     }
 }

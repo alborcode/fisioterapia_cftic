@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Facultativos;
+use App\Entity\Especialidades;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,24 +23,55 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\IsTrue;
 
-class PerfilFacultativoType extends AbstractType
+class PerfilPacienteType extends AbstractType
 {
     public function buildForm(
         FormBuilderInterface $builder,
         array $options
     ): void {
         $builder
+            ->add('idusuario', NumberType::class, [
+                'attr' => [
+                    'pattern' => '[0-9]{1,11}',
+                    'class' => 'form-control',
+                    'required' => false,
+                    'disabled' => true,
+                ],
+            ])
+            ->add('email', EmailType::class, [
+                'attr' => [
+                    'placeholder' => 'Email',
+                    'pattern' => '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$',
+                    'class' => 'form-control',
+                    'autofocus' => true,
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Por favor Introduzca un correo',
+                    ]),
+                    new Length(['min' => 3]),
+                ],
+            ])
+            ->add('idfacultativo', NumberType::class, [
+                'attr' => [
+                    'pattern' => '[0-9]{1,11}',
+                    'class' => 'form-control',
+                    'required' => false,
+                    'disabled' => true,
+                ],
+            ])
             ->add('nombre', TextType::class, [
                 'attr' => [
                     'placeholder' => 'Nombre',
-                    'pattern' => '[a-zA-Zç]{3,40}',
+                    'pattern' => '[a-zA-Z-\'áéíóúüÁÉÍÓÚÜ]{3,40}',
                     'class' => 'form-control',
-                    'autofocus' => true,
+                    'required' => true,
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -50,9 +82,10 @@ class PerfilFacultativoType extends AbstractType
             ])
             ->add('apellido1', TextType::class, [
                 'attr' => [
-                    'placeholder' => 'Primer Apellido',
-                    'pattern' => '[a-zA-Z-\']{3,40}',
+                    'placeholder' => 'Apellido',
+                    'pattern' => '[a-zA-Z-\'áéíóúüÁÉÍÓÚÜ]{3,40}',
                     'class' => 'form-control',
+                    'required' => true,
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -63,7 +96,7 @@ class PerfilFacultativoType extends AbstractType
             ])
             ->add('apellido2', TextType::class, [
                 'attr' => [
-                    'placeholder' => 'Segundo Apellido',
+                    'placeholder' => 'Apellido',
                     'class' => 'form-control',
                 ],
             ])
@@ -82,21 +115,22 @@ class PerfilFacultativoType extends AbstractType
             ])
             ->add('especialidad', EntityType::class, [
                 'class' => Especialidades::class,
-                'choice_label' => 'nombre',
+                'choice_label' => 'especialidad',
+                'choice_value' => 'especialidad',
+                'data_class' => null,
+                'empty_data' => '',
                 'attr' => [
+                    'placeholder' => 'Seleccione Especialidad',
                     'required' => true,
-                    'placeholder' => 'Especialidad',
-                    'pattern' => '[a-zA-Zç]{3,60}',
                     'class' => 'form-control',
                 ],
             ]);
-        //->add('idusuario');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Facultativos::class,
+            // Configure your form options here
         ]);
     }
 }
