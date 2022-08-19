@@ -39,28 +39,49 @@ class RehabilitacionesRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Rehabilitaciones[] Returns an array of Rehabilitaciones objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('r')
-//            ->andWhere('r.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('r.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    // Se añade funcion para recuperar ultima Sesion de Rehabilitacion de un Paciente
+    public function findMaxSesionPaciente()
+    {
+        return $this->createQueryBuilder('s')
+            ->select('MAX(s.idrehabilitacion)')
+            ->andWhere('s.idpaciente = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 
-//    public function findOneBySomeField($value): ?Rehabilitaciones
-//    {
-//        return $this->createQueryBuilder('r')
-//            ->andWhere('r.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    // Se añade funcion para recuperar Todas las Sesiones de Rehabilitacion de un Paciente
+    public function findAllSesionesPaciente()
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.idpaciente = :val')
+            ->setParameter('val', $value)
+            ->orderBy('r.idrehabilitacion', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+    //    /**
+    //     * @return Rehabilitaciones[] Returns an array of Rehabilitaciones objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('r')
+    //            ->andWhere('r.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('r.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?Rehabilitaciones
+    //    {
+    //        return $this->createQueryBuilder('r')
+    //            ->andWhere('r.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

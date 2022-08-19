@@ -45,7 +45,7 @@ class PacientesController extends AbstractController
 
         $facultativo = new Facultativo();
         $formularioPerfilFacultativo = $this->createForm(
-            PerfilFacultativoType::class,
+            //PerfilFacultativoType::class,
             $facultativo
         );
 

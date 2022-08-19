@@ -142,7 +142,7 @@ class PacientesController extends AbstractController
 
         $paciente = new Pacientes();
         $formularioPerfilPaciente = $this->createForm(
-            PerfilPacienteType::class,
+            //PerfilPacienteType::class,
             $paciente
         );
 

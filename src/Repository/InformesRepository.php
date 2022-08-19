@@ -39,28 +39,41 @@ class InformesRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Informes[] Returns an array of Informes objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('i.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    // Se añade funcion para hacer Join de Informes de Pacientes
+    public function findAllInformesPaciente()
+    {
+        return $this->createQueryBuilder('i')
+            ->innerJoin('i.informes', 'p')
+            ->join('Informes', 'Pacientes')
+            //->addSelect('cabinet')
+            //->andWhere('g.fechaAbonoCliente IS NULL AND g.abonoClienteRetenido=0 AND g.resolucionIncidenciaCliente!=3 AND g.delegacion=u.delegacion')
+            ->orderBy('g.idPaciente', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?Informes
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    /**
+    //     * @return Informes[] Returns an array of Informes objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('i')
+    //            ->andWhere('i.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('i.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?Informes
+    //    {
+    //        return $this->createQueryBuilder('i')
+    //            ->andWhere('i.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

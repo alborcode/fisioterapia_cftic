@@ -58,10 +58,7 @@ class TurnosController extends AbstractController
     ) {
         // Creo entidad Turnos
         $turnos = new Turnos();
-        $formularioTurnos = $this->createForm(
-            RegistrationFormType::class,
-            $turnos
-        );
+        $formularioTurnos = $this->createForm(TurnosType::class, $turnos);
         $formularioTurnos->handleRequest($request);
 
         // Se recoge con get el facultativo que hemos mandado

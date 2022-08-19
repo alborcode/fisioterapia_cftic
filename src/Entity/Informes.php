@@ -79,18 +79,6 @@ class Informes
         return $this;
     }
 
-    public function getAnexo(): ?string
-    {
-        return $this->anexo;
-    }
-
-    public function setAnexo(?string $anexo): self
-    {
-        $this->anexo = $anexo;
-
-        return $this;
-    }
-
     public function getIdfacultativo(): ?Facultativos
     {
         return $this->idfacultativo;

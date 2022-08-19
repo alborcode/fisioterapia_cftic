@@ -27,9 +27,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 #[Route('/admin')]
-class AdministrativoController extends AbstractController
+class CitasAdminController extends AbstractController
 {
-    //*** PENDIENTE  */ 
+    //*** PENDIENTE  */
     //********************************************************************
     // Busqueda de Paciente para Alta de Cita a traves de Administrativo *
     //********************************************************************

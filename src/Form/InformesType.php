@@ -52,20 +52,20 @@ class InformesType extends AbstractType
                     'pattern' => '[a-zA-Z0-9ç-]{0,2000}',
                     'class' => 'form-control',
                 ],
-            ])
-            ->add('anexo', FileType::class, [
-                'label' => 'Brochure (PDF file)',
-                'required' => false,
-                'mapped' => false, // Se realizara control manual antes de guardar
-                'constraints' => [
-                    new File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => ['application/pdf', 'application/x-pdf'],
-                        'mimeTypesMessage' =>
-                            'Please upload a valid PDF document',
-                    ]),
-                ],
             ]);
+        // ->add('anexo', FileType::class, [
+        //     'label' => 'Brochure (PDF file)',
+        //     'required' => false,
+        //     'mapped' => false, // Se realizara control manual antes de guardar
+        //     'constraints' => [
+        //         new File([
+        //             'maxSize' => '1024k',
+        //             'mimeTypes' => ['application/pdf', 'application/x-pdf'],
+        //             'mimeTypesMessage' =>
+        //                 'Please upload a valid PDF document',
+        //         ]),
+        //     ],
+        // ]);
         //->add('idfacultativo')
         //->add('idpaciente');
     }

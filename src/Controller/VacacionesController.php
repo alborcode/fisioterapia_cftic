@@ -59,7 +59,7 @@ class VacacionesController extends AbstractController
         // Creo entidad Vacacciones
         $vacaciones = new Vacaciones();
         $formularioVacaciones = $this->createForm(
-            RegistrationFormType::class,
+            VacacionesType::class,
             $vacaciones
         );
         $formularioVacaciones->handleRequest($request);

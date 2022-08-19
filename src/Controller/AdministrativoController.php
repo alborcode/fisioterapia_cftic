@@ -41,23 +41,29 @@ class AdministrativoController extends AbstractController
         EntityManagerInterface $em
     ): Response {
         // Creo entidad Usuario
-        $user = new Usuarios();
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
+        $usuario = new Usuarios();
+        $formularioUsuario = $this->createForm(
+            RegistrationFormType::class,
+            $usuario
+        );
+        $formularioUsuario->handleRequest($request);
 
         // Si el formulario de Registro es valido se da de Alta usuario
-        if ($form->isSubmitted() && $form->isValid()) {
+        if (
+            $formularioUsuario->isSubmitted() &&
+            $formularioUsuario->isValid()
+        ) {
             // Se codifica Password
-            $user->setPassword(
+            $usuario->setPassword(
                 $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
+                    $usuario,
+                    $formularioUsuario->get('plainPassword')->getData()
                 )
             );
 
             // Se modifican variables de Entidad. Rol usuario Paciente y cuenta verificada
-            $user->setRoles(['ROLE_PACIENTE']);
-            $user->setIsVerified(true);
+            $usuario->setRoles(['ROLE_PACIENTE']);
+            $usuario->setIsVerified(true);
 
             $em->persist($user);
             $em->flush();
@@ -154,23 +160,30 @@ class AdministrativoController extends AbstractController
         EntityManagerInterface $em
     ): Response {
         // Creo entidad Usuario
-        $user = new Usuarios();
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
+        $usuario = new Usuarios();
+        $formularioUsuario = $this->createForm(
+            RegistrationFormType::class,
+            $usuario
+        );
+
+        $formularioUsuario->handleRequest($request);
 
         // Si el formulario de Registro es valido se da de Alta usuario
-        if ($form->isSubmitted() && $form->isValid()) {
+        if (
+            $formularioUsuario->isSubmitted() &&
+            $formularioUsuario->isValid()
+        ) {
             // Se codifica Password
-            $user->setPassword(
+            $usuario->setPassword(
                 $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
+                    $usuario,
+                    $formularioUsuario->get('plainPassword')->getData()
                 )
             );
 
             // Se modifican variables de Entidad. Rol usuario Paciente y cuenta verificada
-            $user->setRoles(['ROLE_FACULTATIVO']);
-            $user->setIsVerified(true);
+            $usuario->setRoles(['ROLE_FACULTATIVO']);
+            $usuario->setIsVerified(true);
 
             $em->persist($user);
             $em->flush();
@@ -318,6 +331,20 @@ class AdministrativoController extends AbstractController
         PacientesRepository $pacientesRepository,
         EntityManagerInterface $em
     ) {
+        // $em = $this->getDoctrine()->getManager();
+        // $query = $em->getRepository(Pacientes::class)>findAll();
+
+        // $pagination = $paginator->paginate(
+        //     $query /* query NOT result */,
+        //     $request->query->getInt('page', 1) /*page number*/,
+        //     10 /*limit per page*/
+        // );
+
+        // // parameters to template
+        // return $this->render('pacientes/mostrarPerfil.html.twig', [
+        //     'datosPacientes' => $pagination,
+        // ]);
+
         // Recupero todos los Pacientes
         $pacientes = $em->getRepository(Pacientes::class)->findAll();
 
@@ -400,7 +427,7 @@ class AdministrativoController extends AbstractController
 
         $paciente = new Pacientes();
         $formularioPerfilPaciente = $this->createForm(
-            PerfilPacienteType::class,
+            //PerfilPacienteType::class,
             $paciente
         );
 
@@ -413,7 +440,7 @@ class AdministrativoController extends AbstractController
         ) {
             dump($formularioPerfilPaciente);
             // Recogemos los campos del Formulario en Array para tratarlos
-            $dataformulario = $form->getData();
+            $dataformulario = $formularioPerfilPaciente->getData();
             dump($dataformulario);
             //$email = $request->request->get('email');
             $email = $request->query->get('email');
@@ -562,7 +589,7 @@ class AdministrativoController extends AbstractController
 
         $facultativo = new Facultativos();
         $formularioPerfilFacultativo = $this->createForm(
-            PerfilFacultativoType::class,
+            //PerfilFacultativoType::class,
             $facultativo
         );
 
