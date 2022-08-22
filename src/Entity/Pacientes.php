@@ -53,7 +53,7 @@ class Pacientes
     //#[ORM\Column(length: 60, nullable: true)]
     //private ?string $provincia = null;
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false, name:"provincia", referencedColumnName:"provincia")]
+    #[ORM\JoinColumn(nullable: false, name:"provincia", referencedColumnName:"idprovincia")]
     private ?Provincias $provincia = null;
 
     // Se modifica JoinColumn para añadir el name ya que no es id se cambio

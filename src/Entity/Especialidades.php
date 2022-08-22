@@ -9,11 +9,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: EspecialidadesRepository::class)]
 class Especialidades
 {
-
+    #[ORM\Id]
     #[ORM\Column]
     private ?int $idespecialidad = null;
 
-    #[ORM\Id]
     #[ORM\Column(length: 60)]
     #[Assert\Length(
         min: 3,

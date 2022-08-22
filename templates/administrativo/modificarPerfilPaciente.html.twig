@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modificar Paciente{% endblock %}
+
+{% block body %}
+
+    <section class="py-5 mt-5">
+        <div class="container py-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 col-xl-12">
+                    <div class="card">
+                        <div class="card-body text-center d-flex flex-column align-items-center">
+                            <div class="row mb-4 mb-lg-5">
+                                    <p class="fw-bold text-success mb-2">Intranet - Menu Administrativo</p>
+                                    <h3 class="fw-bold">Modificar Perfil Paciente</h3>
+                            </div>
+                            <div class="row mb-4 mb-lg-2">
+                                {# Incluimos Boton Volver #}
+                                {% include 'menuVolver.html.twig' %}
+                            </div>
+                            <div class="form-group">
+                                {# Formulario Modificar Perfil Paciente #}
+                                <form method="POST" action="{{ path('modificarPacienteAdmin', { idusuario: datosUsuario.idusuario, idpaciente: datosPaciente.idpaciente }) }}">
+                                    <div class="row mb-2 mb-lg-5">
+                                        <div class="col-sm-3">
+                                            Codigo Usuario
+                                            <input type="number" name="txtIdusuario" value="{{datosUsuario.idusuario}}" class="form-control" id="txtIdusuario" readonly="readonly" disabled="disabled">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            Email
+                                            <input type="email" name="txtEmail" value="{{datosUsuario.email}}" class="form-control" id="txtEmail" pattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$" autofocus="true">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            Código Paciente
+                                            <input type="number" name="txtIdpaciente" value="{{datosPaciente.idpaciente}}" readonly="readonly" disabled="disabled" class="form-control" id="txtIdpaciente">
+                                        </div>
+                                    </div>    
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-4">
+                                            Nombre
+                                            <input type="text" name="txtNombre" value="{{datosPaciente.nombre}}" class="form-control" id="txtNombre">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            Primer Apellido
+                                            <input type="text" name="txtApellido1" value="{{datosPaciente.apellido1}}" class="form-control" id="txtApellido1">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            Segundo Apellido
+                                            <input type="text" name="txtApellido2" value="{{datosPaciente.apellido2}}" class="form-control" id="txtApellido2">
+                                        </div>
+                                    </div>  
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-4">
+                                            Teléfono
+                                            <input type="tel" name="txtTelefono" value="{{datosPaciente.telefono}}" class="form-control" id="txtTelefono" pattern="(\+34|0034|34)?[ -]*(6|7|8|9)[ -]*([0-9][ -]*){8}">
+                                        </div>
+                                    </div> 
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-8">
+                                            Dirección
+                                            <input type="text" name="txtDireccion" value="{{datosPaciente.direccion}}" class="form-control" id="txtDireccion">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            Código Postal
+                                            <input type="text" name="txtCodigopostal" value="{{datosPaciente.codigopostal}}" class="form-control" id="txtCodigopostal">
+                                        </div>
+                                    </div>     
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-6">
+                                            Localidad
+                                            <input type="text" name="txtLocalidad" value="{{datosPaciente.poblacion}}" class="form-control" id="txtLocalidad">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            {# <input type="text" name="txtProvincia" value="{{datosPaciente.provincia}}" placeholder="Provincia" label="Provincia" class="form-control" id="txtProvincia"> #}
+                                            Provincia    
+                                            <select name="comboProvincia" class="form-control" id="comboProvincia">
+                                                {% for Provincia in datosProvincias %}
+                                                    {% if Provincia == datosPaciente.provincia %}
+                                                        {# Se le pone atributo selected para que se quede seleccionado #}
+                                                        <option value="{{ Provincia.idprovincia }}" selected> {{ Provincia.provincia }}</option>
+                                                    {% else %}                                        
+                                                        <option value="{{ Provincia.idprovincia }}"> {{ Provincia.provincia }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>      
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col">
+                                            <button class="btn btn-primary shadow d-block w-100" type="submit">
+                                                Modificar Datos Paciente
+                                            </button>
+                                        </div>    
+                                    </div>                          
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+{% endblock %}

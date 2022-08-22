@@ -45,7 +45,7 @@ class Facultativos
     //#[Assert\Choice(choices: Especialidades::nombre, message: 'Elige una especialidad valida.')]
     //private ?string $especialidad = null;
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false, name:"especialidad", referencedColumnName:"especialidad")]
+    #[ORM\JoinColumn(nullable: false, name:"especialidad", referencedColumnName:"idespecialidad")]
     private ?Especialidades $especialidad = null;
 
     // Se modifica JoinColumn para añadir el name ya que no es id se cambio

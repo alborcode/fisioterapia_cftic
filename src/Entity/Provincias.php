@@ -13,7 +13,6 @@ class Provincias
     #[ORM\Column]
     private ?int $idprovincia = null;
 
-    #[ORM\Id]
     #[ORM\Column(length: 60)]
     #[Assert\Length(
         min: 3,
@@ -38,5 +37,11 @@ class Provincias
         $this->provincia = $provincia;
 
         return $this;
+    }
+
+    // Añadimos funcion __toString para mostrar el nombre dado que sino da error 
+    public function __toString()
+    {
+        return $this->provincia;
     }
 }

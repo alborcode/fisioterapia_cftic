@@ -37,9 +37,9 @@ security:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         # - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         # Dashboard segun perfil
-        - { path: ^/pacientes, roles: ROLE_PACIENTE }
-        - { path: ^/facultativos, roles: ROLE_FACULTATIVO }
-        - { path: ^/admin, roles: ROLE_ADMINISTRATIVO }
+        - { path: ^/pacientes, roles: [ROLE_PACIENTE, ROLE_FACULTATIVO, ROLE_ADMINISTRATIVO] }
+        - { path: ^/facultativos, roles: [ROLE_FACULTATIVO, ROLE_ADMINISTRATIVO] }
+        - { path: ^/administrativo, roles: ROLE_ADMINISTRATIVO }
         # - { path: ^/dahsboard, roles: IS_AUTHENTICATED_FULLY }
         # - { path: ^/turnos, roles: ROLE_ADMINISTRATIVO }
         # Busca primero Path, despues IP, Host y Methods

@@ -137,7 +137,7 @@ class PerfilPacienteType extends AbstractType
             ->add('provincia', EntityType::class, [
                 'class' => Provincias::class,
                 'choice_label' => 'provincia',
-                'choice_value' => 'provincia',
+                'choice_value' => 'idprovincia',
                 'data_class' => null,
                 'empty_data' => '',
                 //'required' => true,

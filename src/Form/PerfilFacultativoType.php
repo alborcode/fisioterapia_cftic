@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\IsTrue;
 
-class PerfilPacienteType extends AbstractType
+class PerfilFacultativoType extends AbstractType
 {
     public function buildForm(
         FormBuilderInterface $builder,

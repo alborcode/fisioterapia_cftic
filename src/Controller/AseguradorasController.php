@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/aseguradoras')]
-class InformesController extends AbstractController
+class AseguradorasController extends AbstractController
 {
     //*******************************
     // Alta de Datos de Aseguradora *
@@ -26,7 +26,7 @@ class InformesController extends AbstractController
         // Creo objeto Aseguradora
         $aseguradora = new Aseguradoras();
         $formularioAseguradora = $this->createForm(
-            AseguradorasFormType::class,
+            AseguradorasType::class,
             $aseguradora
         );
 
@@ -62,7 +62,7 @@ class InformesController extends AbstractController
 
         // Envio al Formulario de Aseguradora mandando el formulario
         return $this->render('aseguradoras/altaAseguradora.html.twig', [
-            'perfilAseguradoraForm' => $formularioAseguradora->createView(),
+            'aseguradoraForm' => $formularioAseguradora->createView(),
         ]);
     }
 
@@ -80,7 +80,7 @@ class InformesController extends AbstractController
         $aseguradoras = $em->getRepository(Aseguradoras::class)->findAll();
         dump($aseguradoras);
 
-        return $this->render('administrativos/mostrarAseguradoras.html.twig', [
+        return $this->render('aseguradoras/mostrarAseguradoras.html.twig', [
             'datosAseguradoras' => $aseguradoras,
         ]);
     }
@@ -106,12 +106,9 @@ class InformesController extends AbstractController
         $aseguradoras = $query->getResult();
         dump($datos);
 
-        return $this->render(
-            'facultativos/mostrarPacientesMInforme.html.twig',
-            [
-                'datosAseguradoras' => $aseguradoras,
-            ]
-        );
+        return $this->render('aseguradoras/mostrarAseguradoras.html.twig', [
+            'datosAseguradoras' => $aseguradoras,
+        ]);
     }
 
     // Modificar Datos de Aseguradoras
@@ -134,7 +131,7 @@ class InformesController extends AbstractController
         // Creo objeto Aseguradora
         $aseguradora = new Aseguradoras();
         $formularioAseguradora = $this->createForm(
-            AseguradorasFormType::class,
+            AseguradorasType::class,
             $aseguradora
         );
 
@@ -151,9 +148,16 @@ class InformesController extends AbstractController
             $em->persist($aseguradora);
             $em->flush();
 
+            //Recupero nombre de Aseguradora modificado para el mensaje
+            $nombreaseguradora = $aseguradora->getNombre();
+            dump($nombreaseguradora);
+
             // Construimos mensaje de modificacion correcta
             $mensaje =
-                'Se ha modificado la aseguradora con codigo ' . $idaseguradora;
+                'Se ha modificado la aseguradora ' .
+                $nombreaseguradora .
+                ' con codigo ' .
+                $idaseguradora;
 
             // Devuelvo control a Pagina Inicio de Administrativo mandando mensaje
             return $this->render(
@@ -165,8 +169,8 @@ class InformesController extends AbstractController
         }
 
         // Envio al Formulario de Aseguradoras mandando el formulario
-        return $this->render('informes/altaInforme.html.twig', [
-            'perfilPacienteForm' => $formularioPerfilPaciente->createView(),
+        return $this->render('aseguradoras/altaAseguradora.html.twig', [
+            'aseguradoraForm' => $formularioAseguradora->createView(),
         ]);
     }
 }

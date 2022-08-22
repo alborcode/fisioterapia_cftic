@@ -5,7 +5,11 @@ namespace App\Controller;
 use App\Entity\Pacientes;
 use App\Form\PacientesType;
 use App\Repository\PacientesRepository;
+use App\Entity\Facultativos;
+use App\Form\FacultativosType;
+use App\Repository\FacultativosRepository;
 use App\Entity\Usuarios;
+use App\Form\RegistrationFormType;
 use App\Repository\UsuariosRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -14,8 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/pacientes')]
-class PacientesController extends AbstractController
+#[Route('/facultativos')]
+class FacultativosController extends AbstractController
 {
     //**********************************************************
     // Modificar Perfil de Facultativos a traves de Formulario *

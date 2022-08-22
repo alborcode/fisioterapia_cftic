@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Alta Paciente{% endblock %}
+
+{% block body %}
+
+    <section class="py-5 mt-5">
+        <div class="container py-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 col-xl-12">
+                    <div class="card">
+                        <div class="card-body text-center d-flex flex-column align-items-center">
+                            <div class="row mb-4 mb-lg-5">
+                                    <p class="fw-bold text-success mb-2">Pacientes</p>
+                                    <h2 class="fw-bold">Modificar Perfil Paciente</h2>
+                            </div>
+                            <div class="form-group">
+                                {# Formulario Busqueda Paciente #}
+                                {{ form_start(busquedaPacienteForm) }}
+                                    <div class="row">          
+                                        <div class="col-sm-4">
+                                            {{ form_row(busquedaPacienteForm.apellido1, {label: 'Apellido', value: {{datosPaciente.apellido1}} }) }}
+                                        </div>
+                                        <div class="col-sm-4">       
+                                            {{ form_row(busquedaPacienteForm.telefono, {label: 'Teléfono', value: {{datosPaciente.telefono}} }) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <button class="btn btn-primary shadow d-block w-100" type="submit">
+                                                Buscar Paciente
+                                            </button>
+                                        </div>    
+                                    </div>
+                                {{ form_end(busquedaPacienteForm) }}
+                            </div>
+                            <HR/>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Telefono</th>
+                                        <th>Codigo Sala</th>
+                                        <th>Apellido</th>
+                                        <th>Funcion</th>
+                                        <th>Salario</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {# Si esta definida la variable muestra los datos de los pacientes #}
+                                    {% for Paciente in datosPacientes %}    
+                                        <tr>
+                                            <td scope="row">{{ Paciente.Nombre | capitalize}} {{ Paciente.Apellido1 | capitalize}} {{ Paciente.Apellido2 | capitalize}}</td>
+                                            <td>{{ Paciente.Telefono}}</td>
+                                            <td>
+                                                <a href="{{ path('modificarPacienteAdmin', {idpaciente: Paciente.idpaciente }) }}">Editar</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+{% endblock %}
