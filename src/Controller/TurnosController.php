@@ -26,107 +26,453 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 #[Route('/turnos')]
 class TurnosController extends AbstractController
 {
-    //************************************************************
-    // Alta de Turno de Facultativo por parte del Administrativo *
-    //************************************************************
-    // Mostrara la vista con todos los facultativos para seleccionar el que se quiere gestionar
-    #[Route('/nuevoturno', name: 'seleccionTurno', methods: ['GET', 'POST'])]
-    public function seleccionTurno(
+    //*************************************************************************
+    // Alta/Modificacion de Turno de Facultativo por parte del Administrativo *
+    //*************************************************************************
+    #[Route('/buscarturnosfacultativo', name: 'buscarTurnosFacultativo', methods: ['GET', 'POST'])]
+    public function buscarTurnosFacultativo(
         Request $request,
         FacultativosRepository $facultativosRepository,
-        TurnosRepository $turnosRepository,
         EntityManagerInterface $em
-    ): Response {
+    ) {
+        // $em = $this->getDoctrine()->getManager();
+        // $query = $em->getRepository(Pacientes::class)>findAll();
+
+        // $pagination = $paginator->paginate(
+        //     $query /* query NOT result */,
+        //     $request->query->getInt('page', 1) /*page number*/,
+        //     10 /*limit per page*/
+        // );
+
+        // // parameters to template
+        // return $this->render('pacientes/mostrarPerfil.html.twig', [
+        //     'datosPacientes' => $pagination,
+        // ]);
+
         // Recupero todos los Facultativos
         $facultativos = $em->getRepository(Facultativos::class)->findAll();
 
-        return $this->render('turnos/altaTurno.html.twig', [
+        // Se envia a pagina enviando los datos de los facultativos
+        return $this->render('turnos/busquedaFacultativo.html.twig', [
             'datosFacultativos' => $facultativos,
         ]);
     }
 
-    //*********************************************************************
-    // Alta de Turnos por Administrativo una vez seleccionado Facultativo *
-    //*********************************************************************
-    // Mostrar datos facultativo cuadro seleccion turno (mañana o tarde) y boton de Alta
-    #[Route('/altaturno', name: 'altaTurno', methods: ['GET', 'POST'])]
-    public function altaTurno(
+    // Buscar Turnos Facultativo por Apellido
+    #[Route('/buscarturnosfacultativoApellido', name: 'buscarTurnosFacultativoApellido', methods: ['GET', 'POST'])]
+    public function buscarTurnosFacultativoApellido(
+        Request $request,
+        PacientesRepository $pacientesRepository,
+        EntityManagerInterface $em
+    ) {
+        // $em = $this->getDoctrine()->getManager();
+        // $query = $em->getRepository(Pacientes::class)>findAll();
+
+        // $pagination = $paginator->paginate(
+        //     $query /* query NOT result */,
+        //     $request->query->getInt('page', 1) /*page number*/,
+        //     10 /*limit per page*/
+        // );
+
+        // // parameters to template
+        // return $this->render('pacientes/mostrarPerfil.html.twig', [
+        //     'datosPacientes' => $pagination,
+        // ]);
+
+        // Recogemos datos de formulario con Get dado que es una busqueda
+        // $busquedaapellido = $request->request->get('txtApellido');
+        $busquedaapellido = $request->query->get('txtApellido');
+        dump($busquedaapellido);
+
+        // Si se ha rellenado la busqueda por Apellido
+        if ($busquedaapellido) {
+            $query = $em->createQuery(
+                'SELECT f FROM App\Entity\Facultativos f WHERE f.apellido1 like :parametro'
+            );
+            // Concateno la variable a buscar y el % del Like
+            $query->setParameter('parametro', $busquedaapellido . '%');
+            dump($query);
+            // Al hacer el getresult ejecuta la Query y obtiene los resultados
+            $facultativos = $query->getResult();
+            dump($facultativos);
+        } else {
+            // Si no se relleno se recuperan todos los Pacientes
+            $facultativos = $em->getRepository(Facultativos::class)->findAll();
+        }
+
+        return $this->render('turnos/busquedaFacultativo.html.twig', [
+            'datosFacultativos' => $facultativos,
+        ]);
+    }
+
+    // Buscar Turnos Facultativo por Telefono
+    #[Route('/buscarturnosfacultativoTelefono', name: 'buscarTurnosFacultativoTelefono', methods: ['GET', 'POST'])]
+    public function buscarTurnosFacultativoTelefono(
+        Request $request,
+        FacultativosRepository $facultativosRepository,
+        EntityManagerInterface $em
+    ) {
+        // $em = $this->getDoctrine()->getManager();
+        // $query = $em->getRepository(Pacientes::class)>findAll();
+
+        // $pagination = $paginator->paginate(
+        //     $query /* query NOT result */,
+        //     $request->query->getInt('page', 1) /*page number*/,
+        //     10 /*limit per page*/
+        // );
+
+        // // parameters to template
+        // return $this->render('pacientes/mostrarPerfil.html.twig', [
+        //     'datosPacientes' => $pagination,
+        // ]);
+
+        /// Recogemos datos de formulario con Get dado que es una busqueda
+        //$busquedatelefono = $request->request->get('txtTelefono');
+        $busquedatelefono = $request->query->get('txtTelefono');
+        dump($busquedatelefono);
+
+        // Si se ha rellenado busqueda telefono
+        if ($busquedatelefono) {
+            // Select de Pacientes con Where mandado por parametro
+            $query = $em->createQuery(
+                'SELECT f FROM App\Entity\Facultativos f WHERE f.telefono = :dato'
+            );
+            // Asigno valor del parametro dato
+            $query->setParameter('dato', $busquedatelefono);
+            // Al hacer el getresult ejecuta la Query y obtiene los resultados
+            $facultativos = $query->getResult();
+            dump($facultativos);
+        } else {
+            // Si no se relleno se recuperan todos los Pacientes
+            $facultativos = $em->getRepository(Facultativos::class)->findAll();
+        }
+
+        // Enviamos a la pagina con los datos de Pacientes recuperados
+        return $this->render('turnos/busquedaFacultativo.html.twig', [
+            'datosFacultativos' => $facultativos,
+        ]);
+    }
+
+    // Formulario para mostrar Turnos si existen Datos de Facultativos y Formulario para añadir/modificar
+    #[Route('/mostrarturnosfacultativo', name: 'mostrarTurnosFacultativoAdmin', methods: ['GET', 'POST'])]
+    public function mostrarTurnosFacultativoAdmin(
+        Request $request,
+        FacultativosRepository $facultativosRepository,
+        EntityManagerInterface $em
+    ) {
+        // Recupero el Facultativo que me llega
+        // $idfacultativo = $request->request->get('idfacultativo');
+        $idfacultativo = $request->query->get('idfacultativo');
+        dump($idfacultativo);
+
+        // Recupero datos de facultativo para enviar los Values a Formulario
+        $facultativo = $em
+            ->getRepository(Facultativos::class)
+            ->findOneByIdfacultativo($idfacultativo);
+        dump($facultativo);
+
+        // Recupero datos de turnos de facultativo para enviar los Values a Formulario
+        $turnosfacultativo = $em
+            ->getRepository(Turnos::class)
+            ->findOneByIdfacultativo($idfacultativo);
+        dump($turnosfacultativo);
+
+        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
+        $especialidades = $em->getRepository(Especialidades::class)->findAll();
+        dump($especialidades);
+
+        // Envio a la vista de Datos Turnos Facultativo y Datos de Facultativo
+        return $this->render('turnos/modificarTurnosFacultativo.html.twig', [
+            'datosFacultativo' => $facultativo,
+            'datosEspecialidades' => $especialidades,
+            'datosTurnos' => $turnosfacultativo,
+        ]);
+    }
+
+    // Recogemos Datos Formulario para modificar Turnos si ya existen o Darlos de Alta si no existen
+    #[Route('/modificarfacultativo', name: 'modificarFacultativoAdmin', methods: ['GET', 'POST'])]
+    public function modificarFacultativoAdmin(
         Request $request,
         FacultativosRepository $facultativosRepository,
         TurnosRepository $turnosRepository,
         EntityManagerInterface $em
     ) {
-        // Creo entidad Turnos
-        $turnos = new Turnos();
-        $formularioTurnos = $this->createForm(TurnosType::class, $turnos);
-        $formularioTurnos->handleRequest($request);
-
-        // Se recoge con get el facultativo que hemos mandado
+        // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idfacultativo = $request->query->get('idfacultativo');
+        dump($idfacultativo);
+
+        // Recogemos datos de formulario con Post de cada uno de los turnos de los dias de la semana
+        $turnolunes = $request->request->get('txtTurnolunes');
+        $horainiciolunes = $request->request->get('txtHorainiciolunes');
+        $horafinlunes = $request->request->get('txtHorafinlunes');
+        dump($turnolunes . ' De ' . horainiciolunes . ' a ' . horafinlunes);
+
+        $turnomartes = $request->request->get('txtTurnomartes');
+        $horainiciomartes = $request->request->get('txtHorainiciomartes');
+        $horafinmartes = $request->request->get('txtHorafinmartes');
+        dump($turnomartes . ' De ' . horainiciomartes . ' a ' . horafinmartes);
+
+        $turnomiercoles = $request->request->get('txtTurnomiercoles');
+        $horainiciomiercoles = $request->request->get('txtHorainiciomiercoles');
+        $horafinmiercoles = $request->request->get('txtHorafinmiercoles');
+        dump(
+            $turnomiercoles .
+                ' De ' .
+                horainiciomiercoles .
+                ' a ' .
+                horafinmiercoles
+        );
+
+        $turnojueves = $request->request->get('txtTurnojueves');
+        $horainiciojueves = $request->request->get('txtHorainiciojueves');
+        $horafinjueves = $request->request->get('txtHorafinjueves');
+        dump($turnojueves . ' De ' . horainiciojueves . ' a ' . horafinjueves);
+
+        $turnoviernes = $request->request->get('txtTurnoviernes');
+        $horainicioviernes = $request->request->get('txtHorainicioviernes');
+        $horafinviernes = $request->request->get('txtHorafinviernes');
+        dump(
+            $turnoviernes . ' De ' . horainicioviernes . ' a ' . horafinviernes
+        );
+
+        // Accedemos al objeto Facultativo para guardarlo por cada uno de los registros de turno
+        $facultativo = $em
+            ->getRepository(Facultativo::class)
+            ->findOneByIdfacultativo($idfacultativo);
         dump($facultativo);
 
-        // Se valida si el formulario es correcto para guardar los datos
-        if ($formularioTurnos->isSubmitted() && $formularioTurnos->isValid()) {
-            // Recogemos los campos del Formulario en Array para tratarlos
-            //$data = $form->getData();
-            // Controlamos según se haya elegido Mañana o Tarde las horas de inicio y fin
-            $turno = $request->request->get('name');
-            if ($turno == 'MAÑANA') {
-                $horainicio = '09:00';
-                $horafin = '14:00';
-                $turnos->setHorainicio($horainicio);
-                $turnos->setHorafin($horafin);
-            } else {
-                $horainicio = '15:00';
-                $horafin = '20:00';
-                $turnos->setHorainicio($horainicio);
-                $turnos->setHorafin($horafin);
-            }
-
-            // Se recupera objeto facultativo con el idfacultativo
-            $facultativo = $em
-                ->getRepository(Facultativos::class)
-                ->findOneByIdfacultativo($idfacultativo);
-            dump($facultativo);
-            // Guardo el facultativo antes de guardar Turno con el objeto facultativo
-            $turnos->setIdfacultativo($facultativo);
-
-            // Guardamos en Base de Datos
-            $em->persist($turnos);
+        // Accedemos para ver si existen Turnos para el día para el Facultativo (LUNES)
+        $turnosfacultativo = $em->getRepository(Turnos::class)->findOneBy([
+            'idfacultativo' => idfacultativo,
+            'diasemana' => 'LUNES',
+        ]);
+        // Si existen los Turnos del facultativo se modificaran (Se recupera un registro por dia)
+        if ($turnosfacultativo) {
+            // Actualizo campos para actualizar el Lunes
+            $turnosfacultativo->setDiasemana('LUNES');
+            $turnosfacultativo->setTurno($turnolunes);
+            $turnosfacultativo->setHorainicio($horainiciolunes);
+            $turnosfacultativo->setHorafin($horafinlunes);
+            $turnosfacultativo->setIdfacultativo($facultativo);
+            dump($turnosfacultativo);
+            // Modifico registro en la tabla de Turnos
+            $em->persist($turnosfacultativo);
             $em->flush();
-
-            // Recupero el Dia de la semana guardado para mostrarlo en mensaje
-            $diasemana = $turnos->getDiasemana();
-            dump($diasemana);
-            // Recupero el Turno guardado para mostrarlo en mensaje
-            $turno = $turnos->getTurno();
-            dump($turno);
-
-            $mensaje =
-                'Se ha dado de alta el' .
-                $diasemana .
+            $mensajelunes =
+                'Se ha modificado el Lunes' .
                 ' del turno de ' .
-                $turno .
+                $turnolunes .
                 ' para el facultativo ' .
                 $idfacultativo;
-
-            // Devuelvo control a Pagina Inicio de Administrador mandando mensaje
-            return $this->render(
-                'dashboard/dashboardAdministrativo.html.twig',
-                [
-                    'mensaje' => $mensaje,
-                ]
-            );
+            // Si no existen los Turnos del Facultativo se dan de alta (uno por dia recuperados en Formulario)
+        } else {
+            // Declaro variable de clase entidad Turno
+            $nuevoturno = new Turnos();
+            // Añado valores a cada uno de los campos para el registro del Lunes
+            $nuevoturno->setDiasemana('LUNES');
+            $nuevoturno->setTurno($turnolunes);
+            $nuevoturno->setHorainicio($horainiciolunes);
+            $nuevoturno->setHorafin($horafinlunes);
+            $nuevoturno->setIdfacultativo($facultativo);
+            dump($nuevoturno);
+            // Inserto registro en la tabla de Turnos
+            $em->persist($nuevoturno);
+            $em->flush();
+            $mensajelunes =
+                'Se ha dado de alta el Lunes' .
+                ' del turno de ' .
+                $turnolunes .
+                ' para el facultativo ' .
+                $idfacultativo;
         }
 
-        // Recupero todos los Turnos del Facultativo
-        $turnosdealta = $em->getRepository(Turnos::class)->findAll();
+        // Accedemos para ver si existen Turnos para el día para el Facultativo (MARTES)
+        $turnosfacultativo = $em->getRepository(Turnos::class)->findOneBy([
+            'idfacultativo' => idfacultativo,
+            'diasemana' => 'MARTES',
+        ]);
+        // Si existen los Turnos del facultativo se modificaran (Se recupera un registro por dia)
+        if ($turnosfacultativo) {
+            // Actualizo campos para actualizar el Martes
+            $turnosfacultativo->setDiasemana('MARTES');
+            $turnosfacultativo->setTurno($turnomartes);
+            $turnosfacultativo->setHorainicio($horainiciomartes);
+            $turnosfacultativo->setHorafin($horafinmartes);
+            $turnosfacultativo->setIdfacultativo($facultativo);
+            dump($turnosfacultativo);
+            // Modifico registro en la tabla de Turnos
+            $em->persist($turnosfacultativo);
+            $em->flush();
+            $mensajemartes =
+                'Se ha modificado el Martes' .
+                ' del turno de ' .
+                $turnomartes .
+                ' para el facultativo ' .
+                $idfacultativo;
+            // Si no existen los Turnos del Facultativo se dan de alta (uno por dia recuperados en Formulario)
+        } else {
+            // Declaro variable de clase entidad Turno
+            $nuevoturno = new Turnos();
+            // Añado valores a cada uno de los campos para el registro del Martes
+            $nuevoturno->setDiasemana('MARTES');
+            $nuevoturno->setTurno($turnomartes);
+            $nuevoturno->setHorainicio($horainiciomartes);
+            $nuevoturno->setHorafin($horafinmartes);
+            $nuevoturno->setIdfacultativo($facultativo);
+            dump($nuevoturno);
+            // Inserto registro en la tabla de Turnos
+            $em->persist($nuevoturno);
+            $em->flush();
+            $mensajemartes =
+                'Se ha dado de alta el Martes' .
+                ' del turno de ' .
+                $turnomartes .
+                ' para el facultativo ' .
+                $idfacultativo;
+        }
 
-        // Envio a la vista de Datos Administrativo mandando el formulario y los turnos de alta
-        return $this->render('turnos/altaTurno.html.twig', [
-            'turnosForm' => $formularioTurnos->createView(),
-            'datosTurnos' => $turnosdealta,
-            'datosFacultativo' => $facultativo,
+        // Accedemos para ver si existen Turnos para el día para el Facultativo (MIERCOLES)
+        $turnosfacultativo = $em->getRepository(Turnos::class)->findOneBy([
+            'idfacultativo' => idfacultativo,
+            'diasemana' => 'MIERCOLES',
+        ]);
+        // Si existen los Turnos del facultativo se modificaran (Se recupera un registro por dia)
+        if ($turnosfacultativo) {
+            // Actualizo campos para actualizar el Miercoles
+            $turnosfacultativo->setDiasemana('MIERCOLES');
+            $turnosfacultativo->setTurno($turnomiercoles);
+            $turnosfacultativo->setHorainicio($horainiciomiercoles);
+            $turnosfacultativo->setHorafin($horafinmiercoles);
+            $turnosfacultativo->setIdfacultativo($facultativo);
+            dump($turnosfacultativo);
+            // Modifico registro en la tabla de Turnos
+            $em->persist($turnosfacultativo);
+            $em->flush();
+            $mensajemiercoles =
+                'Se ha modificado el Miercoles' .
+                ' del turno de ' .
+                $turnomiercoles .
+                ' para el facultativo ' .
+                $idfacultativo;
+            // Si no existen los Turnos del Facultativo se dan de alta (uno por dia recuperados en Formulario)
+        } else {
+            // Declaro variable de clase entidad Turno
+            $nuevoturno = new Turnos();
+            // Añado valores a cada uno de los campos para el registro del Miercoles
+            $nuevoturno->setDiasemana('MIERCOLES');
+            $nuevoturno->setTurno($turnomiercoles);
+            $nuevoturno->setHorainicio($horainiciomiercoles);
+            $nuevoturno->setHorafin($horafinmiercoles);
+            $nuevoturno->setIdfacultativo($facultativo);
+            dump($nuevoturno);
+            // Inserto registro en la tabla de Turnos
+            $em->persist($nuevoturno);
+            $em->flush();
+            $mensajemiercoles =
+                'Se ha dado de alta el Miercoles' .
+                ' del turno de ' .
+                $turnomiercoles .
+                ' para el facultativo ' .
+                $idfacultativo;
+        }
+
+        // Accedemos para ver si existen Turnos para el día para el Facultativo (JUEVES)
+        $turnosfacultativo = $em->getRepository(Turnos::class)->findOneBy([
+            'idfacultativo' => idfacultativo,
+            'diasemana' => 'JUEVES',
+        ]);
+        // Si existen los Turnos del facultativo se modificaran (Se recupera un registro por dia)
+        if ($turnosfacultativo) {
+            // Actualizo campos para actualizar el Jueves
+            $turnosfacultativo->setDiasemana('JUEVES');
+            $turnosfacultativo->setTurno($turnojueves);
+            $turnosfacultativo->setHorainicio($horainiciojueves);
+            $turnosfacultativo->setHorafin($horafinjueves);
+            $turnosfacultativo->setIdfacultativo($facultativo);
+            dump($turnosfacultativo);
+            // Modifico registro en la tabla de Turnos
+            $em->persist($turnosfacultativo);
+            $em->flush();
+            $mensajejueves =
+                'Se ha modificado el Jueves' .
+                ' del turno de ' .
+                $turnojueves .
+                ' para el facultativo ' .
+                $idfacultativo;
+            // Si no existen los Turnos del Facultativo se dan de alta (uno por dia recuperados en Formulario)
+        } else {
+            // Declaro variable de clase entidad Turno
+            $nuevoturno = new Turnos();
+            // Añado valores a cada uno de los campos para el registro del Jueves
+            $nuevoturno->setDiasemana('JUEVES');
+            $nuevoturno->setTurno($turnojueves);
+            $nuevoturno->setHorainicio($horainiciojueves);
+            $nuevoturno->setHorafin($horafinjueves);
+            $nuevoturno->setIdfacultativo($facultativo);
+            dump($nuevoturno);
+            // Inserto registro en la tabla de Turnos
+            $em->persist($nuevoturno);
+            $em->flush();
+            $mensajejueves =
+                'Se ha dado de alta el Jueves' .
+                ' del turno de ' .
+                $turnojueves .
+                ' para el facultativo ' .
+                $idfacultativo;
+        }
+
+        // Accedemos para ver si existen Turnos para el día para el Facultativo (JUEVES)
+        $turnosfacultativo = $em->getRepository(Turnos::class)->findOneBy([
+            'idfacultativo' => idfacultativo,
+            'diasemana' => 'JUEVES',
+        ]);
+        // Si existen los Turnos del facultativo se modificaran (Se recupera un registro por dia)
+        if ($turnosfacultativo) {
+            // Actualizo campos para actualizar el Viernes
+            $turnosfacultativo->setDiasemana('VIERNES');
+            $turnosfacultativo->setTurno($turnoviernes);
+            $turnosfacultativo->setHorainicio($horainicioviernes);
+            $turnosfacultativo->setHorafin($horafinviernes);
+            $turnosfacultativo->setIdfacultativo($facultativo);
+            dump($turnosfacultativo);
+            // Modifico registro en la tabla de Turnos
+            $em->persist($turnosfacultativo);
+            $em->flush();
+            $mensajeviernes =
+                'Se ha modificado el Viernes' .
+                ' del turno de ' .
+                $turnoviernes .
+                ' para el facultativo ' .
+                $idfacultativo;
+            // Si no existen los Turnos del Facultativo se dan de alta (uno por dia recuperados en Formulario)
+        } else {
+            // Declaro variable de clase entidad Turno
+            $nuevoturno = new Turnos();
+            // Añado valores a cada uno de los campos para el registro del Viernes
+            $nuevoturno->setDiasemana('VIERNES');
+            $nuevoturno->setTurno($turnoviernes);
+            $nuevoturno->setHorainicio($horainicioviernes);
+            $nuevoturno->setHorafin($horafinviernes);
+            $nuevoturno->setIdfacultativo($facultativo);
+            dump($nuevoturno);
+            // Inserto registro en la tabla de Turnos
+            $em->persist($nuevoturno);
+            $em->flush();
+            $mensajeviernes =
+                'Se ha dado de alta el Viernes' .
+                ' del turno de ' .
+                $turnoviernes .
+                ' para el facultativo ' .
+                $idfacultativo;
+        }
+
+        // Devuelvo control a Pagina Inicio de Administrador mandando mensajes por cada dia
+        return $this->render('dashboard/dashboardAdministrativo.html.twig', [
+            'mensaje1' => $mensajelunes,
+            'mensaje2' => $mensajemartes,
+            'mensaje3' => $mensajemiercoles,
+            'mensaje4' => $mensajejueves,
+            'mensaje5' => $mensajeviernes,
         ]);
     }
 }

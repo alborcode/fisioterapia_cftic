@@ -761,7 +761,7 @@ class AdministrativoController extends AbstractController
             ->findOneByIdusuario($idusuario);
         dump($usuariomodificar);
 
-        // Recupero todas las Provincias para combo Seleccion (Recupera Array)
+        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
         dump($especialidades);
 

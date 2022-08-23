@@ -1,0 +1,201 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modificar Turnos Facultativo{% endblock %}
+
+{% block body %}
+
+    <section class="py-5 mt-5">
+        <div class="container py-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 col-xl-12">
+                    <div class="card">
+                        <div class="card-body text-center d-flex flex-column align-items-center">
+                            <div class="row mb-4 mb-lg-5">
+                                    <p class="fw-bold text-success mb-2">Intranet - Menu Administrativo</p>
+                                    <h3 class="fw-bold">Modificar Turnos Facultativo</h3>
+                            </div>
+                            <div class="row mb-4 mb-lg-2">
+                                {# Incluimos Boton Volver #}
+                                {% include 'menuVolver.html.twig' %}
+                            </div>
+                            <div class="form-group">
+                                {# Formulario Modificar Perfil Paciente #}
+                                <form method="POST" action="{{ path('modificarFacultativoAdmin', { idfacultativo: datosFacultativo.idfacultativo }) }}">
+                                    <div class="row mb-2 mb-lg-5">
+                                        <div class="col-sm-3">
+                                            Código Facultativo
+                                            <input type="number" name="txtIdfacultativo" value="{{datosFacultativo.idfacultativo}}" readonly="readonly" disabled="disabled" class="form-control" id="txtIdfacultativo">
+                                        </div>
+                                    </div>    
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-4">
+                                            Nombre
+                                            <input type="text" name="txtNombre" value="{{datosFacultativo.nombre}}" readonly="readonly" disabled="disabled" class="form-control" id="txtNombre">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            Primer Apellido
+                                            <input type="text" name="txtApellido1" value="{{datosFacultativo.apellido1}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido1">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            Segundo Apellido
+                                            <input type="text" name="txtApellido2" value="{{datosFacultativo.apellido2}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido2">
+                                        </div>
+                                    </div>  
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-4">
+                                            Teléfono
+                                            <input type="tel" name="txtTelefono" value="{{datosFacultativo.telefono}}" readonly="readonly" disabled="disabled" class="form-control" id="txtTelefono" pattern="(\+34|0034|34)?[ -]*(6|7|8|9)[ -]*([0-9][ -]*){8}">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            Especialidad    
+                                            <select name="comboEspecialidad" class="form-control" id="comboEspecialidad" readonly="readonly" disabled="disabled">
+                                                {% for Especialidad in datosEspecialidades %}
+                                                    {% if Especialidad == datosFacultativo.especialidad %}
+                                                        {# Se le pone atributo selected para que se quede seleccionado #}
+                                                        <option value="{{ Especialidad.idespecialidad }}" selected> {{ Especialidad.especialidad }}</option>
+                                                    {% else %}                                        
+                                                        <option value="{{ Especialidad.idespecialidad }}"> {{ Especialidad.especialidad }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    {# Parte del Formulario a tratar #}
+                                    <div class="row mb-2 mb-lg-2">
+                                        {# Si existen los turnos se cargan en los values #}
+                                        {% if datosTurnos is defined %}
+                                            <div class="row mb-2 mb-lg-2">
+                                                {% for Turno in datosTurnos %}
+                                                <div class="col-sm-2">
+                                                    <input type="text" name="txt{{Turno.diasemana}}" value="{{Turno.diasemana}}" class="form-control" id="txt{{Turno.diasemana}}"> 
+                                                </div>
+                                                <div class="col-sm-2">    
+                                                    <input type="text" name="txtTurno{{Turno.diasemana}}" value="{{Turno.turno}}" class="form-control" id="txtTurno{{Turno.diasemana}}">
+                                                </div>
+                                                <div class="col-sm-2">        
+                                                    <input type="time" name="txtHorainicio{{Turno.diasemana}}" value="{{Turno.horainicio}}" class="form-control" id="txtHorainicio{{Turno.diasemana}}">  
+                                                </div>
+                                                <div class="col-sm-2">      
+                                                    <input type="time" name="txtHorafin{{Turno.diasemana}}" value="{{Turno.horafin}}" class="form-control" id="txtHorafin{{Turno.diasemana}}"> 
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        {# Si no existen los turnos se muestran los formularios vacios #}    
+                                        {% else %}
+                                            {# Turno Lunes #} 
+                                            <div class="row mb-2 mb-lg-2">
+                                                <div class="col-sm-2">
+                                                    <input type="text" name="txtLunes" class="form-control" id="txtLunes">
+                                                </div>
+                                                <div class="col-sm-2">    
+                                                    <input type="text" name="txtTurnolunes" class="form-control" id="txtTurnolunes">
+                                                </div>
+                                                <div class="col-sm-2">        
+                                                    <input type="time" name="txtHorainiciolunes" class="form-control" id="txtHorainiciolunes">  
+                                                </div>
+                                                <div class="col-sm-2">      
+                                                    <input type="time" name="txtHorafinlunes" class="form-control" id="txtHorafinlunes"> 
+                                                </div>
+                                            </div>
+                                            {# Turno Martes #} 
+                                            <div class="row mb-2 mb-lg-2">
+                                                <div class="col-sm-2">
+                                                    <input type="text" name="txtMartes" class="form-control" id="txtMartes">
+                                                </div>
+                                                <div class="col-sm-2">    
+                                                    <input type="text" name="txtTurnoMartes" class="form-control" id="txtTurnoMartes">
+                                                </div>
+                                                <div class="col-sm-2">        
+                                                    <input type="time" name="txtHorainicioMartes" class="form-control" id="txtHorainicioMartes">  
+                                                </div>
+                                                <div class="col-sm-2">      
+                                                    <input type="time" name="txtHorafinMartes" class="form-control" id="txtHorafinMartes"> 
+                                                </div>
+                                            </div>
+                                            {# Turno Miercoles #} 
+                                            <div class="row mb-2 mb-lg-2">
+                                                <div class="col-sm-2">
+                                                    <input type="text" name="txtMiercoles" class="form-control" id="txtMiercoles">
+                                                </div>
+                                                <div class="col-sm-2">    
+                                                    <input type="text" name="txtTurnoMiercoles" class="form-control" id="txtTurnoMiercoles">
+                                                </div>
+                                                <div class="col-sm-2">        
+                                                    <input type="time" name="txtHorainicioMiercoles" class="form-control" id="txtHorainicioMiercoles">  
+                                                </div>
+                                                <div class="col-sm-2">      
+                                                    <input type="time" name="txtHorafinMiercoles" class="form-control" id="txtHorafinMiercoles"> 
+                                                </div>
+                                            </div>
+                                            {# Turno Jueves #} 
+                                            <div class="row mb-2 mb-lg-2">
+                                                <div class="col-sm-2">
+                                                    <input type="text" name="txtJueves" class="form-control" id="txtJueves">
+                                                </div>
+                                                <div class="col-sm-2">    
+                                                    <input type="text" name="txtTurnoJueves" class="form-control" id="txtTurnoJueves">
+                                                </div>
+                                                <div class="col-sm-2">        
+                                                    <input type="time" name="txtHorainicioJueves" class="form-control" id="txtHorainicioJueves">  
+                                                </div>
+                                                <div class="col-sm-2">      
+                                                    <input type="time" name="txtHorafinJueves" class="form-control" id="txtHorafinJueves"> 
+                                                </div>
+                                            </div>
+                                            {# Turno Viernes #} 
+                                            <div class="row mb-2 mb-lg-2">
+                                                <div class="col-sm-2">
+                                                    <input type="text" name="txtViernes" class="form-control" id="txtViernes">
+                                                </div>
+                                                <div class="col-sm-2">    
+                                                    <input type="text" name="txtTurnoViernes" class="form-control" id="txtTurnoViernes">
+                                                </div>
+                                                <div class="col-sm-2">        
+                                                    <input type="time" name="txtHorainicioViernes" class="form-control" id="txtHorainicioViernes">  
+                                                </div>
+                                                <div class="col-sm-2">      
+                                                    <input type="time" name="txtHorafinViernes" class="form-control" id="txtHorafinViernes"> 
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>   
+                                </form>
+                                <HR>
+                                {# Muestro Tabla con Turnos existentes #}
+                                <div class="row mb-2 mb-lg-2">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Día de la Semana</th>
+                                                <th>Turno</th>
+                                                <th>Hora Inicio</th>
+                                                <th>Hora Fin</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {# Si esta definida la variable muestra los datos de los turnos del facultativo #}
+                                            {% if datosTurnos is defined %}
+                                                {% for Turno in datosTurnos %}    
+                                                    <tr>
+                                                        {# Formateo String para ponerlos en mayusculas con upper #}
+                                                        <td scope="row">{{ Turno.diasemana | upper }}</td>
+                                                        <td>{{ Turno.turno | upper }}</td>
+                                                        <td>{{ Turno.horainicio }}</td>
+                                                        <td>{{ Turno.horafin }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </tbody>
+                                    </table> 
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+{% endblock %}
