@@ -7,6 +7,8 @@ use App\Repository\TurnosRepository;
 use App\Entity\Facultativos;
 use App\Form\FacultativosType;
 use App\Repository\FacultativosRepository;
+use App\Entity\Especialidades;
+use App\Repository\EspecialidadesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Security\EmailVerifier;
@@ -16,6 +18,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
+
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -51,10 +55,14 @@ class TurnosController extends AbstractController
 
         // Recupero todos los Facultativos
         $facultativos = $em->getRepository(Facultativos::class)->findAll();
+        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
+        $especialidades = $em->getRepository(Especialidades::class)->findAll();
+        dump($especialidades);
 
         // Se envia a pagina enviando los datos de los facultativos
         return $this->render('turnos/busquedaFacultativo.html.twig', [
             'datosFacultativos' => $facultativos,
+            'datosEspecialidades' => $especialidades,
         ]);
     }
 
@@ -100,8 +108,13 @@ class TurnosController extends AbstractController
             $facultativos = $em->getRepository(Facultativos::class)->findAll();
         }
 
+        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
+        $especialidades = $em->getRepository(Especialidades::class)->findAll();
+        dump($especialidades);
+
         return $this->render('turnos/busquedaFacultativo.html.twig', [
             'datosFacultativos' => $facultativos,
+            'datosEspecialidades' => $especialidades,
         ]);
     }
 
@@ -147,9 +160,14 @@ class TurnosController extends AbstractController
             $facultativos = $em->getRepository(Facultativos::class)->findAll();
         }
 
+        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
+        $especialidades = $em->getRepository(Especialidades::class)->findAll();
+        dump($especialidades);
+
         // Enviamos a la pagina con los datos de Pacientes recuperados
         return $this->render('turnos/busquedaFacultativo.html.twig', [
             'datosFacultativos' => $facultativos,
+            'datosEspecialidades' => $especialidades,
         ]);
     }
 
@@ -202,58 +220,85 @@ class TurnosController extends AbstractController
         dump($idfacultativo);
 
         // Recogemos datos de formulario con Post de cada uno de los turnos de los dias de la semana
-        $turnolunes = $request->request->get('txtTurnolunes');
+        $turnolunes = $request->request->get('comboTurnolunes');
         $horainiciolunes = $request->request->get('txtHorainiciolunes');
         $horafinlunes = $request->request->get('txtHorafinlunes');
-        dump($turnolunes . ' De ' . horainiciolunes . ' a ' . horafinlunes);
+        dump($turnolunes . ' De ' . $horainiciolunes . ' a ' . $horafinlunes);
 
-        $turnomartes = $request->request->get('txtTurnomartes');
+        $turnomartes = $request->request->get('comboTurnomartes');
         $horainiciomartes = $request->request->get('txtHorainiciomartes');
         $horafinmartes = $request->request->get('txtHorafinmartes');
-        dump($turnomartes . ' De ' . horainiciomartes . ' a ' . horafinmartes);
+        dump(
+            $turnomartes . ' De ' . $horainiciomartes . ' a ' . $horafinmartes
+        );
 
-        $turnomiercoles = $request->request->get('txtTurnomiercoles');
+        $turnomiercoles = $request->request->get('comboTurnomiercoles');
         $horainiciomiercoles = $request->request->get('txtHorainiciomiercoles');
         $horafinmiercoles = $request->request->get('txtHorafinmiercoles');
         dump(
             $turnomiercoles .
                 ' De ' .
-                horainiciomiercoles .
+                $horainiciomiercoles .
                 ' a ' .
-                horafinmiercoles
+                $horafinmiercoles
         );
 
-        $turnojueves = $request->request->get('txtTurnojueves');
+        $turnojueves = $request->request->get('comboTurnojueves');
         $horainiciojueves = $request->request->get('txtHorainiciojueves');
         $horafinjueves = $request->request->get('txtHorafinjueves');
-        dump($turnojueves . ' De ' . horainiciojueves . ' a ' . horafinjueves);
+        dump(
+            $turnojueves . ' De ' . $horainiciojueves . ' a ' . $horafinjueves
+        );
 
-        $turnoviernes = $request->request->get('txtTurnoviernes');
+        $turnoviernes = $request->request->get('comboTurnoviernes');
         $horainicioviernes = $request->request->get('txtHorainicioviernes');
         $horafinviernes = $request->request->get('txtHorafinviernes');
         dump(
-            $turnoviernes . ' De ' . horainicioviernes . ' a ' . horafinviernes
+            $turnoviernes .
+                ' De ' .
+                $horainicioviernes .
+                ' a ' .
+                $horafinviernes
         );
 
         // Accedemos al objeto Facultativo para guardarlo por cada uno de los registros de turno
         $facultativo = $em
-            ->getRepository(Facultativo::class)
+            ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
         dump($facultativo);
 
         // Accedemos para ver si existen Turnos para el día para el Facultativo (LUNES)
         $turnosfacultativo = $em->getRepository(Turnos::class)->findOneBy([
-            'idfacultativo' => idfacultativo,
+            'idfacultativo' => $idfacultativo,
             'diasemana' => 'LUNES',
         ]);
+
+        // $userinfo->setBirthday(new \DateTime($norm_date));
+        // $userinfo->setBirthday(new \DateTime('now'));
+        // $userinfo->setBirthday(new \DateTime('2013-01-15'));
+        // $userinfo->setBirthday(new \DateTime('+2 days'), new \DateTimeZone('UCT'));
+        // $lastmonth = mktime(0, 0, 0, date("m")-1, date("d"),   date("Y"));
+        // $today = date("H:i:s");                         // 17:16:18
+        // $today = date("Y-m-d H:i:s");                   // 2001-03-10 17:16:18 (the MySQL DATETIME format)
+
         // Si existen los Turnos del facultativo se modificaran (Se recupera un registro por dia)
         if ($turnosfacultativo) {
             // Actualizo campos para actualizar el Lunes
             $turnosfacultativo->setDiasemana('LUNES');
+            dump('despues de setDiasemana');
             $turnosfacultativo->setTurno($turnolunes);
-            $turnosfacultativo->setHorainicio($horainiciolunes);
+            dump('despues de setTurno');
+            $horainicio = TimeInmutable::createFromFormat(
+                'H:i:s',
+                $horainiciolunes
+            );
+            dump($horainicio);
+            $turnosfacultativo->setHorainicio($horainicio);
+            dump('despues de setHorainicio');
             $turnosfacultativo->setHorafin($horafinlunes);
+            dump('despues de setHorafin');
             $turnosfacultativo->setIdfacultativo($facultativo);
+            dump('despues de setIdfacultativo');
             dump($turnosfacultativo);
             // Modifico registro en la tabla de Turnos
             $em->persist($turnosfacultativo);
@@ -271,7 +316,11 @@ class TurnosController extends AbstractController
             // Añado valores a cada uno de los campos para el registro del Lunes
             $nuevoturno->setDiasemana('LUNES');
             $nuevoturno->setTurno($turnolunes);
-            $nuevoturno->setHorainicio($horainiciolunes);
+            $horainicio = TimeInmutable::createFromFormat(
+                'H:i:s',
+                $horainiciolunes
+            );
+            $nuevoturno->setHorainicio($horainicio);
             $nuevoturno->setHorafin($horafinlunes);
             $nuevoturno->setIdfacultativo($facultativo);
             dump($nuevoturno);

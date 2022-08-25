@@ -25,10 +25,12 @@ class Turnos
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     #[Assert\Time]
+    #[Assert\Format('H:i:s')]
     private ?\DateTimeInterface $horainicio = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     #[Assert\Time]
+    #[Assert\Format('H:i:s')]
     private ?\DateTimeInterface $horafin = null;
 
     #[ORM\Column(length: 10)]

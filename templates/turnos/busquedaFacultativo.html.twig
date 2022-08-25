@@ -47,6 +47,7 @@
                             <table class="table">
                                 <thead>
                                     <tr>
+                                        <th>Especialidad</th>
                                         <th>Nombre</th>
                                         <th>Telefono</th>
                                         <th>Accion</th>
@@ -56,6 +57,18 @@
                                     {# Si esta definida la variable muestra los datos de los facultativos #}
                                     {% for Facultativo in datosFacultativos %}    
                                         <tr>
+                                        <td scope="row">  
+                                            <select name="comboEspecialidad" class="form-control" id="comboEspecialidad" readonly="readonly" disabled="disabled">
+                                                {% for Especialidad in datosEspecialidades %}
+                                                    {% if Especialidad == Facultativo.especialidad %}
+                                                        {# Se le pone atributo selected para que se quede seleccionado #}
+                                                        <option value="{{ Especialidad.idespecialidad }}" selected> {{ Especialidad.especialidad }}</option>
+                                                    {% else %}                                        
+                                                        <option value="{{ Especialidad.idespecialidad }}"> {{ Especialidad.especialidad }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </td>
                                             <td scope="row">{{ Facultativo.Nombre | capitalize}} {{ Facultativo.Apellido1 | capitalize}} {{ Facultativo.Apellido2 | capitalize}}</td>
                                             <td>{{ Facultativo.Telefono}}</td>
                                             <td>
