@@ -47,8 +47,8 @@
                             <div class="form-group row">
                                    
                             <HR/>
-                            {# <div {{ react_component('Pacientes', { 'pacientes': datosPacientes }) }}></div> #}
-                            <table class="table">
+
+                            {# <table class="table">
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
@@ -56,9 +56,12 @@
                                         <th>Accion</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody> #}
+
+                                    <div {{ react_component('ListadoPacientes', { 'pacientes': datosPacientes }) }}></div>
+                                    
                                     {# Si esta definida la variable muestra los datos de los pacientes #}
-                                    {% for Paciente in datosPacientes %}    
+                                    {# {% for Paciente in datosPacientes %}    
                                         <tr>
                                             <td scope="row">{{ Paciente.Nombre | capitalize}} {{ Paciente.Apellido1 | capitalize}} {{ Paciente.Apellido2 | capitalize}}</td>
                                             <td>{{ Paciente.Telefono}}</td>
@@ -66,9 +69,9 @@
                                                 <a href="{{ path('mostrarPacienteAdmin', {idpaciente: Paciente.idpaciente }) }}">Editar</a>
                                             </td>
                                         </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                                    {% endfor %} #}
+                                {# </tbody>
+                            </table> #}
                         </div>
                     </div>
                 </div>
