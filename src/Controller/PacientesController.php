@@ -7,6 +7,9 @@ use App\Form\PacientesType;
 use App\Repository\PacientesRepository;
 use App\Entity\Usuarios;
 use App\Repository\UsuariosRepository;
+use App\Entity\Provincias;
+use App\Form\ProvinciasType;
+use App\Repository\ProvinciasRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -117,8 +120,8 @@ class PacientesController extends AbstractController
     //******************************************************
     // Modificar Perfil de Paciente a traves de Formulario *
     //******************************************************
-    #[Route('/modificarpaciente', name: 'modificarPaciente', methods: ['GET', 'POST'])]
-    public function modificarPaciente(
+    #[Route('/buscardatospaciente', name: 'buscarDatosPaciente', methods: ['GET', 'POST'])]
+    public function buscarPerfilPaciente(
         Request $request,
         PacientesRepository $pacientesRepository,
         EntityManagerInterface $em
@@ -129,81 +132,112 @@ class PacientesController extends AbstractController
         dump($idusuario);
         dump($idpaciente);
 
-        // Recupero datos de usuario para enviar los Values a Formulario
+        $usuariomodificar = $em
+            ->getRepository(Usuarios::class)
+            ->find($idusuario);
+        dump($usuariomodificar);
+
+        // Recupero los datos del Paciente
+        $pacientemodificar = $em
+            ->getRepository(Pacientes::class)
+            ->find($idpaciente);
+        dump($pacientemodificar);
+
+        // Recupero todas las Provincias para combo Seleccion (Recupera Array)
+        $provincias = $em->getRepository(Provincias::class)->findAll();
+        dump($provincias);
+
+        // Se envia a pagina enviando los datos de los pacientes
+        return $this->render('pacientes/modificarDatosPaciente.html.twig', [
+            'datosUsuario' => $usuariomodificar,
+            'datosPaciente' => $pacientemodificar,
+            'datosProvincias' => $provincias,
+        ]);
+    }
+
+    // Modificar Datos de Paciente
+    #[Route('/modificarpaciente', name: 'modificarDatosPaciente', methods: ['GET', 'POST'])]
+    public function modificarPacienteAdmin(
+        Request $request,
+        PacientesRepository $pacientesRepository,
+        EntityManagerInterface $em
+    ) {
+        // Recupero las variables de sesion de usuario y paciente
+        $idusuario = $request->getSession()->get('idusuario');
+        $idpaciente = $request->getSession()->get('idpaciente');
+        dump($idusuario);
+        dump($idpaciente);
+
+        /// Recogemos datos de formulario con Post
+        //$idusuario = $request->request->get('txtIdusuario');
+        //dump($idusuario);
+        // $email = $request->query->get('txtEmail');
+        $email = $request->request->get('txtEmail');
+        dump($email);
+        $nombre = $request->request->get('txtNombre');
+        dump($nombre);
+        $apellido1 = $request->request->get('txtApellido1');
+        dump($apellido1);
+        $apellido2 = $request->request->get('txtApellido2');
+        dump($apellido2);
+        $telefono = $request->request->get('txtTelefono');
+        dump($telefono);
+        $direccion = $request->request->get('txtDireccion');
+        dump($direccion);
+        $codigopostal = $request->request->get('txtCodigopostal');
+        dump($codigopostal);
+        $poblacion = $request->request->get('txtLocalidad');
+        dump($poblacion);
+        $idprovincia = $request->request->get('comboProvincia');
+        dump($idprovincia);
+
+        // Recupero datos de objeto Provincia antes de guardar Paciente
+        $provincia = $em
+            ->getRepository(Provincias::class)
+            ->findOneByIdprovincia($idprovincia);
+        dump($provincia);
+
+        // Recupero datos de objeto Usuario con el idusuario
         $usuariomodificar = $em
             ->getRepository(Usuarios::class)
             ->findOneByIdusuario($idusuario);
-        dump($datosusuario);
-        // Recupero datos de paciente para enviar los Values a Formulario
+        dump($usuariomodificar);
+        // Modifico el Email del usuario con el recibido en formulario
+        $usuariomodificar->setEmail($email);
+        dump($usuariomodificar);
+
+        // Recupero el registro a modificar
         $pacientemodificar = $em
             ->getRepository(Pacientes::class)
-            ->findOneByIdpaciente($idpaciente);
-        dump($datospaciente);
+            ->find($idpaciente);
 
-        $paciente = new Pacientes();
-        $formularioPerfilPaciente = $this->createForm(
-            //PerfilPacienteType::class,
-            $paciente
-        );
+        // Modificamos los valores de Paciente con los datos del Formulario, el ID no se puede modificar es clave
+        // $pacientemodificar->setIdpaciente($idpaciente);
+        $pacientemodificar->setNombre($nombre);
+        $pacientemodificar->setApellido1($apellido1);
+        $pacientemodificar->setApellido2($apellido2);
+        $pacientemodificar->setTelefono($telefono);
+        $pacientemodificar->setCodigoPostal($codigopostal);
+        $pacientemodificar->setPoblacion($poblacion);
+        $pacientemodificar->setProvincia($provincia);
+        // Guardo el usuario antes de guardar Paciente con el objeto usuario
+        $pacientemodificar->setIdusuario($usuariomodificar);
+        dump($pacientemodificar);
 
-        $formularioPerfilPaciente->handleRequest($request);
+        // Modificamos el Usuario
+        $em->persist($usuariomodificar);
+        $em->flush();
 
-        // Se valida si el formulario es correcto para guardar los datos
-        if (
-            $formularioPerfilPaciente->isSubmitted() &&
-            $formularioPerfilPaciente->isValid()
-        ) {
-            dump($formularioPerfilPaciente);
-            // Recogemos los campos del Formulario en Array para tratarlos
-            $dataformulario = $formularioPerfilPaciente->getData();
-            dump($dataformulario);
-            //$email = $request->request->get('email');
-            $email = $request->query->get('email');
-            $nombre = $request->query->get('nombre');
-            $apellido1 = $request->query->get('apellido1');
-            $apellido2 = $request->query->get('apellido2');
-            $telefono = $request->query->get('telefono');
-            $codigopostal = $request->query->get('codigopostal');
-            $poblacion = $request->query->get('poblacion');
-            $provincia = $request->query->get('provincia');
+        // Modificamos el Paciente
+        $em->persist($pacientemodificar);
+        $em->flush();
 
-            // Modifico el Email con el recibido en formulario
-            $usuariomodificar->setEmail($email);
-            dump($usuariomodificar);
+        // Construimos mensaje de modificacion correcta
+        $mensaje = 'Se han modificado sus Datos';
 
-            // Modificamos los valores con los datos del Formulario, el ID no se puede modificar es clave
-            // $pacientemodificar->setIdpaciente($idpaciente);
-            $pacientemodificar->setNombre($nombre);
-            $pacientemodificar->setApellido1($apellido1);
-            $pacientemodificar->setApellido2($apellido2);
-            $pacientemodificar->setTelefono($telefono);
-            $pacientemodificar->setCodigoPostal($codigopostal);
-            $pacientemodificar->setPoblacion($poblacion);
-            $pacientemodificar->setProvincia($provincia);
-            // Guardo el objeto usuario en Paciente
-            $pacientemodificar->setIdusuario($usuario);
-            dump($pacientemodificar);
-
-            // Modificamos el Usuario
-            $em->persist($usuariomodificar);
-            $em->flush();
-
-            // Modificamos el Paciente
-            $em->persist($pacientemodificar);
-            $em->flush();
-
-            // Construimos mensaje de modificacion correcta
-            $mensaje = 'Se ha modificado los Datos del Paciente ' . $idpaciente;
-
-            // Devuelvo control a Pagina Inicio de Administrador mandando mensaje
-            return $this->render('dashboard/dashboardPaciente.html.twig', [
-                'mensaje' => $mensaje,
-            ]);
-        }
-
-        // Envio a la vista de Datos Perfil Paciente mandando el formulario
-        return $this->render('pacientes/modificarPerfil.html.twig', [
-            'perfilPacienteForm' => $formularioPerfilPaciente->createView(),
+        // Devuelvo control a Pagina Inicio de Administrador mandando mensaje
+        return $this->render('dashboard/dashboardPaciente.html.twig', [
+            'mensaje' => $mensaje,
         ]);
     }
 }

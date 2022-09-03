@@ -32,9 +32,9 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 #[Route('/vacaciones')]
 class VacacionesController extends AbstractController
 {
-    //*************************************************************************
-    // Alta/Modificacion de Turno de Facultativo por parte del Administrativo *
-    //*************************************************************************
+    //******************************************************************************
+    // Alta/Modificacion de Vacaciones de Facultativo por parte del Administrativo *
+    //******************************************************************************
     #[Route('/buscarvacacionesfacultativo', name: 'buscarVacacionesFacultativo', methods: ['GET', 'POST'])]
     public function buscarVacacionesFacultativo(
         Request $request,
@@ -174,8 +174,8 @@ class VacacionesController extends AbstractController
     }
 
     // Formulario para mostrar Vacaciones si existen Datos de Facultativos y Formulario para añadir/modificar
-    #[Route('/mostrarvacacionesfacultativo', name: 'mostrarVacacionesFacultativoAdmin', methods: ['GET', 'POST'])]
-    public function mostrarVacacionesFacultativoAdmin(
+    #[Route('/mostrarvacacionesadmin', name: 'mostrarVacacionesAdmin', methods: ['GET', 'POST'])]
+    public function mostrarVacacionesAdmin(
         Request $request,
         FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em
@@ -202,7 +202,7 @@ class VacacionesController extends AbstractController
         dump($especialidades);
 
         // Envio a la vista de Datos Turnos Facultativo y Datos de Facultativo
-        return $this->render('vacaciones/altaVacacionesFacultativo.html.twig', [
+        return $this->render('vacaciones/altaVacacionesAdmin.html.twig', [
             'datosFacultativo' => $facultativo,
             'datosEspecialidades' => $especialidades,
             'datosVacaciones' => $vacacionesfacultativo,
@@ -210,8 +210,8 @@ class VacacionesController extends AbstractController
     }
 
     // Recogemos Datos Formulario para modificar Vacaciones si ya existen o Darlos de Alta si no existen
-    #[Route('/altavacacionesfacultativo', name: 'altaFacultativoVacacionesAdmin', methods: ['GET', 'POST'])]
-    public function modificarFacultativoAdmin(
+    #[Route('/altavacacionesadmin', name: 'altaVacacionesAdmin', methods: ['GET', 'POST'])]
+    public function altaVacacionesAdmin(
         Request $request,
         FacultativosRepository $facultativosRepository,
         VacacionesRepository $vacacionesRepository,
@@ -317,6 +317,155 @@ class VacacionesController extends AbstractController
 
         // Devuelvo control a Pagina Inicio de Administrador mandando mensaje
         return $this->render('dashboard/dashboardAdministrativo.html.twig', [
+            'mensaje' => $mensaje,
+        ]);
+    }
+
+    //**********************************************************************************
+    // Alta/Modificacion de Vacaciones de Facultativo por parte del propio Facultativo *
+    //**********************************************************************************
+    #[Route('/mostrarvacaciones', name: 'mostrarVacacionesFacultativo', methods: ['GET', 'POST'])]
+    public function mostrarVacacionesFacultativo(
+        Request $request,
+        FacultativosRepository $facultativosRepository,
+        EntityManagerInterface $em
+    ) {
+        // Recupero las variables de sesion de usuario y facultativo
+        $idusuario = $request->getSession()->get('idusuario');
+        $idfacultativo = $request->getSession()->get('idfacultativo');
+        dump($idusuario);
+        dump($idfacultativo);
+
+        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
+        $especialidades = $em->getRepository(Especialidades::class)->findAll();
+        dump($especialidades);
+
+        // Recupero datos de facultativo para enviar los Values a Formulario
+        $facultativo = $em
+            ->getRepository(Facultativos::class)
+            ->findOneByIdfacultativo($idfacultativo);
+        dump($facultativo);
+
+        // Recupero datos de turnos de facultativo para enviar los Values a Formulario
+        $vacacionesfacultativo = $em
+            ->getRepository(Vacaciones::class)
+            ->findByIdfacultativo($idfacultativo);
+        dump($vacacionesfacultativo);
+
+        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
+        $especialidades = $em->getRepository(Especialidades::class)->findAll();
+        dump($especialidades);
+
+        // Envio a la vista de Datos Turnos Facultativo y Datos de Facultativo
+        return $this->render('vacaciones/altaVacacionesFacultativo.html.twig', [
+            'datosFacultativo' => $facultativo,
+            'datosEspecialidades' => $especialidades,
+            'datosVacaciones' => $vacacionesfacultativo,
+        ]);
+    }
+
+    // Recogemos Datos Formulario para modificar Vacaciones si ya existen o Darlos de Alta si no existen
+    #[Route('/altavacacionesfacultativo', name: 'altaFacultativoVacaciones', methods: ['GET', 'POST'])]
+    public function altaFacultativoVacaciones(
+        Request $request,
+        FacultativosRepository $facultativosRepository,
+        VacacionesRepository $vacacionesRepository,
+        EntityManagerInterface $em
+    ) {
+        // Recogemos los parametros enviados con get (query->get) no por post (request->get)
+        $idfacultativo = $request->query->get('idfacultativo');
+        dump($idfacultativo);
+
+        // Recogemos boton pulsado
+        $boton = $request->request->get('operacion');
+
+        // Recogemos datos de formulario con Post del día de vacaciones
+        $diavacaciones = $request->request->get('txtfecha');
+        dump($diavacaciones);
+        $diaconvertido = \DateTime::createFromFormat('Y-m-d', $diavacaciones);
+        dump($diaconvertido);
+
+        // Si se pulso el boton de Insertar
+        if ($boton == 'insertar') {
+            // Accedemos para ver si existe ese dia de vacaciones para el Facultativo
+            $existevacaciones = $em
+                ->getRepository(Vacaciones::class)
+                ->findOneBy([
+                    'idfacultativo' => $idfacultativo,
+                    'fecha' => $diaconvertido,
+                ]);
+            // Si no existe el dia de vacaciones se da de Alta
+            if (!$existevacaciones) {
+                // Declaro variable de clase entidad Vacaciones
+                $nuevodiavacaciones = new Vacaciones();
+                // Añado valores a cada uno de los campos para el registro del Lunes
+                $nuevodiavacaciones->setDianotrabajado('true');
+                $nuevodiavacaciones->setFecha($diaconvertido);
+
+                // Accedemos al objeto Facultativo para guardarlo con el registro de vacaciones
+                $facultativo = $em
+                    ->getRepository(Facultativos::class)
+                    ->findOneByIdfacultativo($idfacultativo);
+                dump($facultativo);
+                // Añado el Facultativo
+                $nuevodiavacaciones->setIdfacultativo($facultativo);
+
+                dump($nuevodiavacaciones);
+                // Inserto registro en la tabla de Turnos
+                $em->persist($nuevodiavacaciones);
+                $em->flush();
+
+                $mensajedia = strtotime($diavacaciones);
+                $diaformateado = date('d-m-Y', $mensajedia);
+                $mensaje =
+                    'Se ha dado de alta el día ' .
+                    $diaformateado .
+                    ' de vacaciones ';
+                // Si ya existe el dia de vacaciones se manda mensaje
+            } else {
+                $mensajedia = strtotime($diavacaciones);
+                $diaformateado = date('d-m-Y', $mensajedia);
+                $mensaje =
+                    'Ya existe el dia ' .
+                    $diaformateado .
+                    ' de vacaciones que se quiere dar de alta';
+            }
+        }
+
+        // Si se pulso el boton de Borrar
+        if ($boton == 'eliminar') {
+            // Accedemos para ver si existe ese dia de vacaciones para el Facultativo
+            $existevacaciones = $em
+                ->getRepository(Vacaciones::class)
+                ->findOneBy([
+                    'idfacultativo' => $idfacultativo,
+                    'fecha' => $diaconvertido,
+                ]);
+            // Si existe el dia de vacaciones se da de Baja
+            if ($existevacaciones) {
+                // Realizamos Baja del dia de vacaciones
+                $em->remove($existevacaciones);
+                $em->flush();
+
+                $mensajedia = strtotime($diavacaciones);
+                $diaformateado = date('d-m-Y', $mensajedia);
+                $mensaje =
+                    'Se ha dado de baja el día ' .
+                    $diaformateado .
+                    ' de vacaciones ';
+                // Si no existe el dia de vacaciones se manda mensaje
+            } else {
+                $mensajedia = strtotime($diavacaciones);
+                $diaformateado = date('d-m-Y', $mensajedia);
+                $mensaje =
+                    'No existe el dia ' .
+                    $diaformateado .
+                    ' de vacaciones que se quiere dar de baja';
+            }
+        }
+
+        // Devuelvo control a Pagina Inicio de Administrador mandando mensaje
+        return $this->render('dashboard/dashboardFacultativo.html.twig', [
             'mensaje' => $mensaje,
         ]);
     }

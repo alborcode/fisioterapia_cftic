@@ -64,13 +64,16 @@ class DashboardController extends AbstractController
 
         if ($rol == 'ROLE_FACULTATIVO') {
             // Si es facultativo se recupera el identificador a partir del idusuario
-            $datos = $em
+            $facultativo = $em
                 ->getRepository(Facultativos::class)
-                ->findByIdusuario($idusuario);
-            $idfacultativo = $this->getIdfacultativo()->getIdfacultativo();
+                ->findOneByIdusuario($idusuario);
             dump($facultativo);
+            $idfacultativo = $facultativo->getIdfacultativo();
+            dump($idfacultativo);
+
             // Guardo Facultativo en Session
             $session->set('idfacultativo', $idfacultativo);
+
             //Se carga pagina de inicio de Facultativos
             $paginainicio = 'dashboard/dashboardFacultativo.html.twig';
             dump($paginainicio);

@@ -11,7 +11,7 @@
                     <div class="card">
                         <div class="card-body text-center d-flex flex-column align-items-center">
                             <div class="row mb-4 mb-lg-5">
-                                    <p class="fw-bold text-success mb-2">Intranet - Menu Facultativo</p>
+                                    <p class="fw-bold text-success mb-2">Intranet - Menu Administrativo</p>
                                     <h3 class="fw-bold">Añadir Vacaciones Facultativo</h3>
                             </div>
                             <div class="row mb-4 mb-lg-2">
@@ -20,7 +20,7 @@
                             </div>
                             <div class="form-group">
                                 {# Formulario Para Añadir/Modificar Turnos #}
-                                <form method="POST" action="{{ path('altaFacultativoVacaciones', { idfacultativo: datosFacultativo.idfacultativo }) }}">
+                                <form method="POST" action="{{ path('altaVacacionesAdmin', { idfacultativo: datosFacultativo.idfacultativo }) }}">
                                     <div class="row mb-2 mb-lg-2">
                                         <div class="col-sm-3">
                                             Código Facultativo
