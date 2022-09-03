@@ -59,31 +59,12 @@ class TurnosFormType extends AbstractType
                 ],
             ])
             // LUNES
-            ->add('diasemanalunes', ChoiceType::class, [
-                'choices' => [
-                    'LUNES' => true,
-                    'MARTES' => false,
-                    'MIERCOLES' => false,
-                    'JUEVES' => false,
-                    'VIERNES' => false,
-                    'SABADO' => false,
-                    'DOMINGO' => false,
-                ],
+            ->add('diasemanalunes', TextType::class, [
                 'attr' => [
                     'disabled' => true,
                     'readonly' => true,
                     'class' => 'form-control',
-                ],
-            ])
-            ->add('turnolunes', ChoiceType::class, [
-                'choices' => [
-                    'MAÑANA' => true,
-                    'TARDE' => false,
-                ],
-                'attr' => [
-                    'disabled' => true,
-                    'readonly' => true,
-                    'class' => 'form-control',
+                    'value' => 'LUNES',
                 ],
             ])
             ->add('horainiciolunes', TimeType::class, [
@@ -99,31 +80,12 @@ class TurnosFormType extends AbstractType
                 ],
             ])
             // MARTES
-            ->add('diasemanamartes', ChoiceType::class, [
-                'choices' => [
-                    'LUNES' => true,
-                    'MARTES' => false,
-                    'MIERCOLES' => false,
-                    'JUEVES' => false,
-                    'VIERNES' => false,
-                    'SABADO' => false,
-                    'DOMINGO' => false,
-                ],
+            ->add('diasemanamartes', TextType::class, [
                 'attr' => [
                     'disabled' => true,
                     'readonly' => true,
                     'class' => 'form-control',
-                ],
-            ])
-            ->add('turnomartes', ChoiceType::class, [
-                'choices' => [
-                    'MAÑANA' => true,
-                    'TARDE' => false,
-                ],
-                'attr' => [
-                    'disabled' => true,
-                    'readonly' => true,
-                    'class' => 'form-control',
+                    'value' => 'MARTES',
                 ],
             ])
             ->add('horainiciomartes', TimeType::class, [
@@ -147,31 +109,12 @@ class TurnosFormType extends AbstractType
                 ],
             ])
             // MIERCOLES
-            ->add('diasemanamiercoles', ChoiceType::class, [
-                'choices' => [
-                    'LUNES' => true,
-                    'MARTES' => false,
-                    'MIERCOLES' => false,
-                    'JUEVES' => false,
-                    'VIERNES' => false,
-                    'SABADO' => false,
-                    'DOMINGO' => false,
-                ],
+            ->add('diasemanamiercoles', TextType::class, [
                 'attr' => [
                     'disabled' => true,
                     'readonly' => true,
                     'class' => 'form-control',
-                ],
-            ])
-            ->add('turnomiercoles', ChoiceType::class, [
-                'choices' => [
-                    'MAÑANA' => true,
-                    'TARDE' => false,
-                ],
-                'attr' => [
-                    'disabled' => true,
-                    'readonly' => true,
-                    'class' => 'form-control',
+                    'value' => 'MIERCOLES',
                 ],
             ])
             ->add('horainiciomiercoles', TimeType::class, [
@@ -195,31 +138,12 @@ class TurnosFormType extends AbstractType
                 ],
             ])
             // JUEVES
-            ->add('diasemanajueves', ChoiceType::class, [
-                'choices' => [
-                    'LUNES' => true,
-                    'MARTES' => false,
-                    'MIERCOLES' => false,
-                    'JUEVES' => false,
-                    'VIERNES' => false,
-                    'SABADO' => false,
-                    'DOMINGO' => false,
-                ],
+            ->add('diasemanajueves', TextType::class, [
                 'attr' => [
                     'disabled' => true,
                     'readonly' => true,
                     'class' => 'form-control',
-                ],
-            ])
-            ->add('turnojueves', ChoiceType::class, [
-                'choices' => [
-                    'MAÑANA' => true,
-                    'TARDE' => false,
-                ],
-                'attr' => [
-                    'disabled' => true,
-                    'readonly' => true,
-                    'class' => 'form-control',
+                    'value' => 'LUNES',
                 ],
             ])
             ->add('horainiciojueves', TimeType::class, [
@@ -243,31 +167,12 @@ class TurnosFormType extends AbstractType
                 ],
             ])
             // VIERNES
-            ->add('diasemanaviernes', ChoiceType::class, [
-                'choices' => [
-                    'LUNES' => true,
-                    'MARTES' => false,
-                    'MIERCOLES' => false,
-                    'JUEVES' => false,
-                    'VIERNES' => false,
-                    'SABADO' => false,
-                    'DOMINGO' => false,
-                ],
+            ->add('diasemanaviernes', TextType::class, [
                 'attr' => [
                     'disabled' => true,
                     'readonly' => true,
                     'class' => 'form-control',
-                ],
-            ])
-            ->add('turnoviernes', ChoiceType::class, [
-                'choices' => [
-                    'MAÑANA' => true,
-                    'TARDE' => false,
-                ],
-                'attr' => [
-                    'disabled' => true,
-                    'readonly' => true,
-                    'class' => 'form-control',
+                    'value' => 'LUNES',
                 ],
             ])
             ->add('horainicioviernes', TimeType::class, [

@@ -12,7 +12,7 @@
                         <div class="card-body text-center d-flex flex-column align-items-center">
                             <div class="row mb-1 mb-lg-1">
                                     <p class="fw-bold text-success mb-2">Intranet - Menu Administrativo</p>
-                                    <h3 class="fw-bold">Seleccionar Facultativo - Turnos</h3>
+                                    <h3 class="fw-bold">Seleccionar Facultativo - Vacaciones</h3>
                             </div>
                             <div class="row mb-4 mb-lg-5">
                                 {# Incluimos Boton Volver #}
@@ -20,7 +20,7 @@
                             </div>
                             <div class="form-group row mb-4 mb-lg-5">
                                 {# Formulario Busqueda Facultativo por Apellido #}
-                                <form method="GET" action="{{ path('buscarTurnosFacultativoApellido') }}">
+                                <form method="GET" action="{{ path('buscarVacacionesFacultativoApellido') }}">
                                     <div class="form-group row">
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control" placeholder="Primer Apellido" name="txtApellido" class="form-control" id="txtApellido">
@@ -31,7 +31,7 @@
                                     </div>                                    
                                 </form>
                                 {# Formulario Busqueda Facultativo por Telefono #}
-                                <form method="GET" action="{{ path('buscarTurnosFacultativoTelefono') }}">
+                                <form method="GET" action="{{ path('buscarVacacionesFacultativoTelefono') }}">
                                     <div class="form-group row my-3">
                                         <div class="col-sm-3">
                                             <input type="number" class="form-control" placeholder="Telefono" name="txtTelefono" class="form-control" id="txtTelefono">
@@ -72,7 +72,7 @@
                                             <td scope="row">{{ Facultativo.Nombre | capitalize}} {{ Facultativo.Apellido1 | capitalize}} {{ Facultativo.Apellido2 | capitalize}}</td>
                                             <td>{{ Facultativo.Telefono}}</td>
                                             <td>
-                                                <a class="btn btn-info" href="{{ path('mostrarTurnosFacultativoAdmin', {idfacultativo: Facultativo.idfacultativo }) }}">Gestionar</a>
+                                                <a class="btn btn-info" href="{{ path('mostrarVacacionesFacultativoAdmin', {idfacultativo: Facultativo.idfacultativo }) }}">Gestionar</a>
                                             </td>
                                         </tr>
                                     {% endfor %}

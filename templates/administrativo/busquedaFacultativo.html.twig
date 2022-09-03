@@ -54,16 +54,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {# Si esta definida la variable muestra los datos de los facultativos #}
-                                    {% for Facultativo in datosFacultativos %}    
-                                        <tr>
-                                            <td scope="row">{{ Facultativo.Nombre | capitalize}} {{ Facultativo.Apellido1 | capitalize}} {{ Facultativo.Apellido2 | capitalize}}</td>
-                                            <td>{{ Facultativo.Telefono}}</td>
-                                            <td>
-                                                <a href="{{ path('mostrarFacultativoAdmin', {idfacultativo: Facultativo.idfacultativo }) }}">Editar</a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
+                                    <div id="swup">
+                                        {# Si esta definida la variable muestra los datos de los facultativos #}
+                                        {% for Facultativo in datosFacultativos %}    
+                                            <tr>
+                                                <td scope="row">{{ Facultativo.Nombre | capitalize}} {{ Facultativo.Apellido1 | capitalize}} {{ Facultativo.Apellido2 | capitalize}}</td>
+                                                <td>{{ Facultativo.Telefono}}</td>
+                                                <td>
+                                                    <a class="btn btn-info" href="{{ path('mostrarFacultativoAdmin', {idfacultativo: Facultativo.idfacultativo }) }}">Editar</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </div>
                                 </tbody>
                             </table>
                         </div>

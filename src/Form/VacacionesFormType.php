@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Rehabilitaciones;
+use App\Entity\Vacaciones;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,49 +24,51 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\IsTrue;
 
-class RehabilitacionesType extends AbstractType
+class VacacionesFormType extends AbstractType
 {
     public function buildForm(
         FormBuilderInterface $builder,
         array $options
     ): void {
         $builder
-            ->add('sesionestotales', NumberType::class, [
+            ->add('fecha', DateType::class, [
+                'widget' => 'single_text',
+                'html5' => false,
                 'attr' => [
                     'required' => true,
-                    'class' => 'form-control',
+                    'class' => 'js-datepicker form-control',
+                    'autofocus' => true,
                 ],
             ])
-            ->add('sesionesrestantes', NumberType::class, [
-                'attr' => [
-                    'class' => 'form-control',
+            ->add('dianotrabajado', ChoiceType::class, [
+                'choices' => [
+                    'NO' => true,
+                    'SI' => false,
                 ],
-            ])
-            ->add('fechainicio', DateType::class, [
                 'attr' => [
                     'required' => true,
+                    'placeholder' => 'Marcada como Vacaciones',
                     'class' => 'form-control',
                 ],
             ])
-            ->add('ultimasesion', DateTimeType::class, [
-                'attr' => [
-                    'class' => 'form-control',
+            ->add('diadebaja', ChoiceType::class, [
+                'choices' => [
+                    'NO' => true,
+                    'SI' => false,
                 ],
-            ])
-            ->add('observaciones', TextareaType::class, [
                 'attr' => [
-                    'placeholder' => 'Texto del informe',
+                    'required' => true,
+                    'placeholder' => 'Marcada como Baja',
                     'class' => 'form-control',
                 ],
             ]);
-        //->add('idpaciente')
-        //->add('idaseguradora');
+        //->add('idfacultativo');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Rehabilitaciones::class,
+            'data_class' => Vacaciones::class,
         ]);
     }
 }

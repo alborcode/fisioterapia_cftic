@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d3f784c6acc07bf9edca851b06b9b7ea",
+    "content-hash": "2e2e0d343f58b955ba5f33a55535cb85",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -7302,16 +7302,16 @@
         },
         {
             "name": "symfony/ux-autocomplete",
-            "version": "v2.3.0",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-autocomplete.git",
-                "reference": "255d1693576713c63075b9d987555fc588d9a2b2"
+                "reference": "89b37ed23022dc1529845987ad59f6a203a13047"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-autocomplete/zipball/255d1693576713c63075b9d987555fc588d9a2b2",
-                "reference": "255d1693576713c63075b9d987555fc588d9a2b2",
+                "url": "https://api.github.com/repos/symfony/ux-autocomplete/zipball/89b37ed23022dc1529845987ad59f6a203a13047",
+                "reference": "89b37ed23022dc1529845987ad59f6a203a13047",
                 "shasum": ""
             },
             "require": {
@@ -7364,7 +7364,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-autocomplete/tree/v2.3.0"
+                "source": "https://github.com/symfony/ux-autocomplete/tree/v2.4.0"
             },
             "funding": [
                 {
@@ -7380,7 +7380,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-06T20:17:22+00:00"
+            "time": "2022-08-14T12:14:59+00:00"
         },
         {
             "name": "symfony/ux-chartjs",
@@ -7468,16 +7468,16 @@
         },
         {
             "name": "symfony/ux-live-component",
-            "version": "v2.3.0",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-live-component.git",
-                "reference": "aa46264137acac3dab4a7596b6a22f82ed34aa97"
+                "reference": "17a2586f0fe86c4efbcabd39b3a90bcd453a39b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-live-component/zipball/aa46264137acac3dab4a7596b6a22f82ed34aa97",
-                "reference": "aa46264137acac3dab4a7596b6a22f82ed34aa97",
+                "url": "https://api.github.com/repos/symfony/ux-live-component/zipball/17a2586f0fe86c4efbcabd39b3a90bcd453a39b2",
+                "reference": "17a2586f0fe86c4efbcabd39b3a90bcd453a39b2",
                 "shasum": ""
             },
             "require": {
@@ -7533,7 +7533,7 @@
                 "twig"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-live-component/tree/v2.3.0"
+                "source": "https://github.com/symfony/ux-live-component/tree/v2.4.0"
             },
             "funding": [
                 {
@@ -7549,7 +7549,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-08T14:54:39+00:00"
+            "time": "2022-08-15T07:48:28+00:00"
         },
         {
             "name": "symfony/ux-react",
@@ -7626,6 +7626,68 @@
                 }
             ],
             "time": "2022-07-04T18:53:24+00:00"
+        },
+        {
+            "name": "symfony/ux-swup",
+            "version": "v2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/ux-swup.git",
+                "reference": "b9874987bc3a0829ae00839ac4547da07024f2fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/ux-swup/zipball/b9874987bc3a0829ae00839ac4547da07024f2fb",
+                "reference": "b9874987bc3a0829ae00839ac4547da07024f2fb",
+                "shasum": ""
+            },
+            "conflict": {
+                "symfony/flex": "<1.13"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "thanks": {
+                    "name": "symfony/ux",
+                    "url": "https://github.com/symfony/ux"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Titouan Galopin",
+                    "email": "galopintitouan@gmail.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Swup integration for Symfony",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "symfony-ux"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/ux-swup/tree/v2.4.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-06-17T07:08:52+00:00"
         },
         {
             "name": "symfony/ux-twig-component",

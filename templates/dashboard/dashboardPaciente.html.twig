@@ -20,8 +20,12 @@
                             </div>
 
                             {% if mensaje is defined %}
-                                <h1 style="color:blue;"> {{mensaje}} del {{ app.session.get('idusuario') }} tipo {{ app.session.get('rol') }} </h1>
-                            {% endif %}   
+                                <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
+                                    {{mensaje}}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                {# <h3 style="color:blue;"> {{mensaje}} </h3> #}
+                            {% endif %} 
                             
                             <footer class="bg-primary-gradient">
                                 <div class="container py-4 py-lg-5">

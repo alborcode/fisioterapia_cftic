@@ -20,40 +20,33 @@
                             </div>
                             <div class="form-group">
                                 {# Formulario Para Añadir/Modificar Turnos #}
-                                {{ form_start(turnosForm) }}
-                                {# <form method="POST" action="{{ path('modificarFacultativoAdmin', { idfacultativo: datosFacultativo.idfacultativo }) }}"> #}
+                                <form method="POST" action="{{ path('modificarFacultativoTurnosAdmin', { idfacultativo: datosFacultativo.idfacultativo }) }}">
                                     <div class="row mb-2 mb-lg-2">
                                         <div class="col-sm-3">
-                                            {{ form_row(turnosForm.idfacultativo, {label: 'Código Facultativo'}) }}
-                                            {# Código Facultativo
-                                            <input type="number" name="txtIdfacultativo" value="{{datosFacultativo.idfacultativo}}" readonly="readonly" disabled="disabled" class="form-control" id="txtIdfacultativo"> #}
+                                            Código Facultativo
+                                            <input type="number" name="txtIdfacultativo" value="{{datosFacultativo.idfacultativo}}" readonly="readonly" disabled="disabled" class="form-control" id="txtIdfacultativo">
                                         </div>
                                     </div>    
                                     <div class="row mb-2 mb-lg-2">
                                         <div class="col-sm-4">
-                                            {{ form_row(turnosForm.nombre, {label: 'Nombre'}) }}
-                                            {# Nombre
-                                            <input type="text" name="txtNombre" value="{{datosFacultativo.nombre}}" readonly="readonly" disabled="disabled" class="form-control" id="txtNombre"> #}
+                                            Nombre
+                                            <input type="text" name="txtNombre" value="{{datosFacultativo.nombre}}" readonly="readonly" disabled="disabled" class="form-control" id="txtNombre">
                                         </div>
                                         <div class="col-sm-4">
-                                            {{ form_row(turnosForm.apellido1, {label: 'Primer Apellido'}) }}
                                             Primer Apellido
-                                            {# <input type="text" name="txtApellido1" value="{{datosFacultativo.apellido1}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido1"> #}
+                                            <input type="text" name="txtApellido1" value="{{datosFacultativo.apellido1}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido1">
                                         </div>
                                         <div class="col-sm-4">
-                                            {{ form_row(turnosForm.apellido1, {label: 'Segundo Apellido'}) }}
-                                            {# Segundo Apellido
-                                            <input type="text" name="txtApellido2" value="{{datosFacultativo.apellido2}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido2"> #}
+                                            Segundo Apellido
+                                            <input type="text" name="txtApellido2" value="{{datosFacultativo.apellido2}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido2">
                                         </div>
                                     </div>  
                                     <div class="row mb-2 mb-lg-2">
                                         <div class="col-sm-4">
-                                            {{ form_row(turnosForm.telefono, {label: 'Teléfono'}) }}
-                                            {# Teléfono
-                                            <input type="tel" name="txtTelefono" value="{{datosFacultativo.telefono}}" readonly="readonly" disabled="disabled" class="form-control" id="txtTelefono" pattern="(\+34|0034|34)?[ -]*(6|7|8|9)[ -]*([0-9][ -]*){8}"> #}
+                                            Teléfono
+                                            <input type="tel" name="txtTelefono" value="{{datosFacultativo.telefono}}" readonly="readonly" disabled="disabled" class="form-control" id="txtTelefono" pattern="(\+34|0034|34)?[ -]*(6|7|8|9)[ -]*([0-9][ -]*){8}">
                                         </div>
                                         <div class="col-sm-6">
-                                            {# {{ form_row(turnosForm.especialidad, {label: 'Especialidad'}) }} #}
                                             Especialidad    
                                             <select name="comboEspecialidad" class="form-control" id="comboEspecialidad" readonly="readonly" disabled="disabled">
                                                 {% for Especialidad in datosEspecialidades %}
@@ -67,185 +60,248 @@
                                             </select>
                                         </div>
                                     </div>
-                                    {% if datosTurnos is null %}
+
+                                    {# {% if datosTurnos is null %} #}
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-1">
+                                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            Dia Semana
+                                        </div>
+                                        <div class="col-sm-3">
+                                            Hora Inicio
+                                        </div>
+                                        <div class="col-sm-3">
+                                            Hora Fin  
+                                        </div>
+                                    </div>
                                     {# Turno Lunes #} 
                                     <div class="row mb-2 mb-lg-2">
-                                        <div class="col-sm-3">
-                                            Día de la Semana
-                                            <input type="text" name="txtLunes" value="LUNES" readonly="readonly" disabled="disabled" class="form-control" id="txtLunes">
+                                        <div class="col-sm-1">
+                                            <input type="checkbox" name="txtLunes" id="txtLunes" value="true">
                                         </div>
                                         <div class="col-sm-3">
-                                            {{ form_row(turnosForm.turnolunes, {label: 'Turno'}) }}
-                                             {# Turno    
-                                             <select name="comboTurnolunes" class="form-control" id="comboTurnolunes">
-                                                <option value="MAÑANA" selected> MAÑANA</option>                                    
-                                                <option value="TARDE"> TARDE</option>
-                                            </select> #}
+                                            <strong> LUNES </strong>
                                         </div>
                                         <div class="col-sm-3">
-                                            {{ form_row(turnosForm.horainiciolunes, {label: 'Hora Inicio'}) }}
-                                            {# Hora Inicio <small>09 a 15</small>
-                                            <input type="time" id="txtHorainiciolunes" name="txtHorainiciolunes" list="time-list" class="form-control" min="09:00:00" max="15:00:00" value="09:00:00" step="3600">
-                                            <datalist id="time-list" >
-                                                <option id="09" name="09" value="09:00" datatype="time">
-                                                <option id="10" name="10" value="10:00" datatype="time">
-                                                <option id="11" name="11" value="11:00" datatype="time">
-                                                <option id="12" name="12" value="12:00" datatype="time">
-                                                <option id="13" name="13" value="13:00" datatype="time">
-                                                <option id="14" name="14" value="14:00" datatype="time">
-                                                <option id="15" name="15" value="15:00" datatype="time">
-                                                <option id="16" name="16" value="16:00" datatype="time">
-                                                <option id="17" name="17" value="17:00" datatype="time">
-                                                <option id="18" name="18" value="18:00" datatype="time">
-                                                <option id="19" name="19" value="19:00" datatype="time">
-                                                <option id="20" name="20" value="20:00" datatype="time" disabled="disabled">
-                                            </datalist> #}
+                                            <select name="txtHorainiciolunes" id="txtHorainiciolunes" class="form-control">
+                                                <option value="09:00:00" selected>09:00</option>
+                                                <option value="10:00:00">10:00</option>
+                                                <option value="11:00:00">11:00</option>
+                                                <option value="12:00:00">12:00</option>
+                                                <option value="13:00:00">13:00</option>
+                                                <option value="14:00:00">14:00</option>
+                                                <option value="15:00:00">15:00</option>
+                                                <option value="16:00:00">16:00</option>
+                                                <option value="17:00:00">17:00</option>
+                                                <option value="18:00:00">18:00</option>
+                                                <option value="19:00:00">19:00</option>
+                                            </select>    
                                         </div>
-                                        
                                         <div class="col-sm-3">
-                                            {{ form_row(turnosForm.horafinlunes, {label: 'Hora Fin'}) }}
-                                            {# Hora Fin <small>14 a 20</small>      
-                                            <input type="time" name="txtHorafinlunes" class="form-control" id="txtHorafinlunes" min="14:00:00" max="20:00:00" value="14:00:00" step="3600">  #}
+                                            <select name="txtHorafinlunes" id="txtHorafinlunes" class="form-control">
+                                                <option value="10:00:00">10:00</option>
+                                                <option value="11:00:00">11:00</option>
+                                                <option value="12:00:00">12:00</option>
+                                                <option value="13:00:00">13:00</option>
+                                                <option value="14:00:00">14:00</option>
+                                                <option value="15:00:00">15:00</option>
+                                                <option value="16:00:00">16:00</option>
+                                                <option value="17:00:00">17:00</option>
+                                                <option value="18:00:00">18:00</option>
+                                                <option value="19:00:00">19:00</option>
+                                                <option value="20:00:00" selected>20:00</option>
+                                            </select>  
                                         </div>
                                     </div>
                                     {# Turno Martes #} 
                                     <div class="row mb-2 mb-lg-2">
-                                        <div class="col-sm-3">
-                                            <input type="text" name="txtMartes" value="MARTES" readonly="readonly" disabled="disabled" class="form-control" id="txtMartes">
+                                        <div class="col-sm-1">
+                                            <input type="checkbox" name="txtMartes" id="txtMartes" value="true">
                                         </div>
                                         <div class="col-sm-3">
-                                            {{ form_row(turnosForm.turnomartes) }}    
-                                            {# <select name="comboTurnomartes" class="form-control" id="comboTurnomartes">
-                                                <option value="MAÑANA" selected> MAÑANA</option>                                    
-                                                <option value="TARDE"> TARDE</option>
-                                            </select> #}
+                                            <strong> MARTES </strong>
                                         </div>
                                         <div class="col-sm-3">
-                                            {{ form_row(turnosForm.horainiciomartes) }}        
-                                            {# <input type="time" name="txtHorainiciomartes" class="form-control" id="txtHorainiciomartes" min="09:00:00" max="15:00:00" value="09:00:00" step="3600">   #}
+                                            <select name="txtHorainiciomartes" id="txtHorainiciomartes" class="form-control">
+                                                <option value="09:00:00" selected>09:00</option>
+                                                <option value="10:00:00">10:00</option>
+                                                <option value="11:00:00">11:00</option>
+                                                <option value="12:00:00">12:00</option>
+                                                <option value="13:00:00">13:00</option>
+                                                <option value="14:00:00">14:00</option>
+                                                <option value="15:00:00">15:00</option>
+                                                <option value="16:00:00">16:00</option>
+                                                <option value="17:00:00">17:00</option>
+                                                <option value="18:00:00">18:00</option>
+                                                <option value="19:00:00">19:00</option>
+                                            </select>    
                                         </div>
-                                        <div class="col-sm-3">
-                                            {{ form_row(turnosForm.horafinmartes) }}      
-                                            {# <input type="time" name="txtHorafinmartes" class="form-control" id="txtHorafinmartes" min="14:00:00" max="20:00:00" value="14:00:00" step="3600">  #}
+                                        <div class="col-sm-3">   
+                                            <select name="txtHorafinmartes" id="txtHorafinmartes" class="form-control">
+                                                <option value="10:00:00">10:00</option>
+                                                <option value="11:00:00">11:00</option>
+                                                <option value="12:00:00">12:00</option>
+                                                <option value="13:00:00">13:00</option>
+                                                <option value="14:00:00">14:00</option>
+                                                <option value="15:00:00">15:00</option>
+                                                <option value="16:00:00">16:00</option>
+                                                <option value="17:00:00">17:00</option>
+                                                <option value="18:00:00">18:00</option>
+                                                <option value="19:00:00">19:00</option>
+                                                <option value="20:00:00" selected>20:00</option>
+                                            </select>  
                                         </div>
                                     </div>
                                     {# Turno Miercoles #} 
                                     <div class="row mb-2 mb-lg-2">
-                                        <div class="col-sm-3">
-                                            <input type="text" name="txtMiercoles" value="MIERCOLES" readonly="readonly" disabled="disabled" class="form-control" id="txtMiercoles">
+                                        <div class="col-sm-1">
+                                            <input type="checkbox" name="txtMiercoles" id="txtMiercoles" value="true">
                                         </div>
                                         <div class="col-sm-3">
-                                            {{ form_row(turnosForm.turnomiercoles) }} 
-                                             {# <select name="comboTurnomiercoles" class="form-control" id="comboTurnomiercoles">
-                                                <option value="MAÑANA" selected> MAÑANA</option>                                    
-                                                <option value="TARDE"> TARDE</option>
-                                            </select> #}
+                                            <strong> MIERCOLES </strong>
                                         </div>
                                         <div class="col-sm-3">
-                                            {{ form_row(turnosForm.horainiciomiercoles) }}          
-                                            {# <input type="time" name="txtHorainiciomiercoles" class="form-control" id="txtHorainiciomiercoles" min="09:00:00" max="15:00:00" value="09:00:00" step="3600">   #}
+                                            <select name="txtHorainiciomiercoles" id="txtHorainiciomiercoles" class="form-control">
+                                                <option value="09:00:00" selected>09:00</option>
+                                                <option value="10:00:00">10:00</option>
+                                                <option value="11:00:00">11:00</option>
+                                                <option value="12:00:00">12:00</option>
+                                                <option value="13:00:00">13:00</option>
+                                                <option value="14:00:00">14:00</option>
+                                                <option value="15:00:00">15:00</option>
+                                                <option value="16:00:00">16:00</option>
+                                                <option value="17:00:00">17:00</option>
+                                                <option value="18:00:00">18:00</option>
+                                                <option value="19:00:00">19:00</option>
+                                            </select>    
                                         </div>
-                                        <div class="col-sm-3">
-                                            {{ form_row(turnosForm.horafinmiercoles) }}       
-                                            {# <input type="time" name="txtHorafinmiercoles" class="form-control" id="txtHorafinmiercoles" min="14:00:00" max="20:00:00" value="14:00:00" step="3600">  #}
+                                        <div class="col-sm-3">   
+                                            <select name="txtHorafinmiercoles" id="txtHorafinmiercoles" class="form-control">
+                                                <option value="10:00:00">10:00</option>
+                                                <option value="11:00:00">11:00</option>
+                                                <option value="12:00:00">12:00</option>
+                                                <option value="13:00:00">13:00</option>
+                                                <option value="14:00:00">14:00</option>
+                                                <option value="15:00:00">15:00</option>
+                                                <option value="16:00:00">16:00</option>
+                                                <option value="17:00:00">17:00</option>
+                                                <option value="18:00:00">18:00</option>
+                                                <option value="19:00:00">19:00</option>
+                                                <option value="20:00:00" selected>20:00</option>
+                                            </select>  
                                         </div>
                                     </div>
                                     {# Turno Jueves #} 
                                     <div class="row mb-2 mb-lg-2">
-                                        <div class="col-sm-3">
-                                            <input type="text" name="txtJueves" value="JUEVES" readonly="readonly" disabled="disabled" class="form-control" id="txtJueves">
+                                        <div class="col-sm-1">
+                                            <input type="checkbox" name="txtJueves" id="txtJueves" value="true">
                                         </div>
                                         <div class="col-sm-3">
-                                            {{ form_row(turnosForm.turnojueves) }}    
-                                             {# <select name="comboTurnojueves" class="form-control" id="comboTurnojueves">
-                                                <option value="MAÑANA" selected> MAÑANA</option>                                    
-                                                <option value="TARDE"> TARDE</option>
-                                            </select> #}
+                                            <strong> JUEVES </strong>
                                         </div>
                                         <div class="col-sm-3">
-                                            {{ form_row(turnosForm.horainiciojueves) }}         
-                                            {# <input type="time" name="txtHorainiciojueves" class="form-control" id="txtHorainiciojueves" min="09:00:00" max="15:00:00" value="09:00:00" step="3600">   #}
+                                            <select name="txtHorainiciojueves" id="txtHorainiciojueves" class="form-control">
+                                                <option value="09:00:00" selected>09:00</option>
+                                                <option value="10:00:00">10:00</option>
+                                                <option value="11:00:00">11:00</option>
+                                                <option value="12:00:00">12:00</option>
+                                                <option value="13:00:00">13:00</option>
+                                                <option value="14:00:00">14:00</option>
+                                                <option value="15:00:00">15:00</option>
+                                                <option value="16:00:00">16:00</option>
+                                                <option value="17:00:00">17:00</option>
+                                                <option value="18:00:00">18:00</option>
+                                                <option value="19:00:00">19:00</option>
+                                            </select>    
                                         </div>
-                                        <div class="col-sm-3">
-                                            {{ form_row(turnosForm.horafinjueves) }}       
-                                            {# <input type="time" name="txtHorafinjueves" class="form-control" id="txtHorafinjueves" min="14:00:00" max="20:00:00" value="14:00:00" step="3600">  #}
+                                        <div class="col-sm-3">   
+                                            <select name="txtHorafinjueves" id="txtHorafinjueves" class="form-control">
+                                                <option value="10:00:00">10:00</option>
+                                                <option value="11:00:00">11:00</option>
+                                                <option value="12:00:00">12:00</option>
+                                                <option value="13:00:00">13:00</option>
+                                                <option value="14:00:00">14:00</option>
+                                                <option value="15:00:00">15:00</option>
+                                                <option value="16:00:00">16:00</option>
+                                                <option value="17:00:00">17:00</option>
+                                                <option value="18:00:00">18:00</option>
+                                                <option value="19:00:00">19:00</option>
+                                                <option value="20:00:00" selected>20:00</option>
+                                            </select>  
                                         </div>
                                     </div>
                                     {# Turno Viernes #} 
                                     <div class="row mb-2 mb-lg-2">
-                                        <div class="col-sm-3">
-                                            <input type="text" name="txtViernes" value="VIERNES" readonly="readonly" disabled="disabled" class="form-control" id="txtViernes">
+                                        <div class="col-sm-1">
+                                            <input type="checkbox" name="txtViernes" id="txtViernes" value="true">
                                         </div>
                                         <div class="col-sm-3">
-                                            {{ form_row(turnosForm.turnoviernes) }}    
-                                             {# <select name="comboTurnoviernes" class="form-control" id="comboTurnoviernes">
-                                                <option value="MAÑANA" selected> MAÑANA</option>                                    
-                                                <option value="TARDE"> TARDE</option>
-                                            </select> #}
+                                            <strong> VIERNES </strong>
                                         </div>
                                         <div class="col-sm-3">
-                                            {{ form_row(turnosForm.horainicioviernes) }}         
-                                            {# <input type="time" name="txtHorainicioviernes" class="form-control" id="txtHorainicioviernes" min="09:00:00" max="15:00:00" value="09:00:00" step="3600">   #}
+                                            <select name="txtHorainicioviernes" id="txtHorainicioviernes" class="form-control">
+                                                <option value="09:00:00" selected>09:00</option>
+                                                <option value="10:00:00">10:00</option>
+                                                <option value="11:00:00">11:00</option>
+                                                <option value="12:00:00">12:00</option>
+                                                <option value="13:00:00">13:00</option>
+                                                <option value="14:00:00">14:00</option>
+                                                <option value="15:00:00">15:00</option>
+                                                <option value="16:00:00">16:00</option>
+                                                <option value="17:00:00">17:00</option>
+                                                <option value="18:00:00">18:00</option>
+                                                <option value="19:00:00">19:00</option>
+                                            </select>    
                                         </div>
-                                        <div class="col-sm-3">
-                                            {{ form_row(turnosForm.horafinviernes) }}       
-                                            {# <input type="time" name="txtHorafinviernes" class="form-control" id="txtHorafinviernes" min="14:00:00" max="20:00:00" value="14:00:00" step="3600">  #}
+                                        <div class="col-sm-3">   
+                                            <select name="txtHorafinviernes" id="txtHorafinviernes" class="form-control">
+                                                <option value="10:00:00">10:00</option>
+                                                <option value="11:00:00">11:00</option>
+                                                <option value="12:00:00">12:00</option>
+                                                <option value="13:00:00">13:00</option>
+                                                <option value="14:00:00">14:00</option>
+                                                <option value="15:00:00">15:00</option>
+                                                <option value="16:00:00">16:00</option>
+                                                <option value="17:00:00">17:00</option>
+                                                <option value="18:00:00">18:00</option>
+                                                <option value="19:00:00">19:00</option>
+                                                <option value="20:00:00" selected>20:00</option>
+                                            </select>  
                                         </div>
                                     </div>
-                                    {% else %}
-                                        {# Si existen los turnos se cargan en los values por cada ocurrencia (dia) #}
-                                        {% if datosTurnos is defined %}
-                                            {% for Turno in datosTurnos %}
-                                                <div class="row mb-2 mb-lg-2">
-                                                    <div class="col-sm-3">
-                                                        <input type="text" name="txt{{Turno.diasemana}}" value="{{Turno.diasemana}}" class="form-control" id="txt{{Turno.diasemana}}"> 
-                                                    </div>
-                                                    <div class="col-sm-3">    
-                                                        <input type="text" name="txtTurno{{Turno.diasemana}}" value="{{Turno.turno}}" class="form-control" id="txtTurno{{Turno.diasemana}}">
-                                                    </div>
-                                                    <div class="col-sm-3">        
-                                                        <input type="time" name="txtHorainicio{{Turno.diasemana}}" value="{{Turno.horainicio}}" class="form-control" id="txtHorainicio{{Turno.diasemana}}" min="09:00:00">                                                         >  
-                                                    </div>
-                                                    <div class="col-sm-3">      
-                                                        <input type="time" name="txtHorafin{{Turno.diasemana}}" value="{{Turno.horafin}}" class="form-control" id="txtHorafin{{Turno.diasemana}}" max="20:00:00">> 
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    {% endif %}
 
                                     <div class="row mb-2 mb-lg-2">
                                         <button type="submit" class="btn btn-primary col-sm-3" name="actualizar" value="actualizar">
                                             <i class="fa fa-snowflake-o" aria-hidden="true"></i> Actualizar Turnos
                                         </button>
                                     </div>    
-                                {{ form_end(aseguradoraForm) }}
-                                {# </form> #}
+                                {# {{ form_end(aseguradoraForm) }} #}
+                                </form>
                                 <HR>
+                                {# {{ dump(datosTurnos) }} #}
                                 {# Muestro Tabla con Turnos existentes #}
                                 <div class="row mb-2 mb-lg-2">
                                     <table class="table">
                                         <thead>
                                             <tr>
                                                 <th>Día de la Semana</th>
-                                                <th>Turno</th>
                                                 <th>Hora Inicio</th>
                                                 <th>Hora Fin</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {# Si esta definida la variable muestra los datos de los turnos del facultativo #}
-                                            {% if datosTurnos is defined %}
-                                                {% for Turno in datosTurnos %}    
-                                                    <tr>
-                                                        {# Formateo String para ponerlos en mayusculas con upper #}
-                                                        <td scope="row">{{ Turno.diasemana | upper }}</td>
-                                                        <td>{{ Turno.turno | upper }}</td>
-                                                        <td>{{ Turno.horainicio }}</td>
-                                                        <td>{{ Turno.horafin }}</td>
-                                                    </tr>
-                                                {% endfor %}
-                                            {% endif %}
+                                            {# {% if datosTurnos is defined %} #}
+                                            {% for Turno in datosTurnos %}    
+                                                <tr>
+                                                    <td scope="row">{{ Turno.diasemana}}</td>
+                                                    <td>{{ Turno.horainicio |date('H:i')}}</td>
+                                                    <td>{{ Turno.horafin |date('H:i')}}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            {# {% endif %} #}
                                         </tbody>
                                     </table> 
                                 </div>

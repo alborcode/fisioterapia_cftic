@@ -53,7 +53,7 @@
                                             <td scope="row">{{ Paciente.Nombre | capitalize}} {{ Paciente.Apellido1 | capitalize}} {{ Paciente.Apellido2 | capitalize}}</td>
                                             <td>{{ Paciente.Telefono}}</td>
                                             <td>
-                                                <a href="{{ path('modificarPacienteAdmin', {idpaciente: Paciente.idpaciente }) }}">Editar</a>
+                                                <a class="btn btn-info" href="{{ path('modificarPacienteAdmin', {idpaciente: Paciente.idpaciente }) }}">Editar</a>
                                             </td>
                                         </tr>
                                     {% endfor %}

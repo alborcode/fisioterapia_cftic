@@ -48,7 +48,7 @@
                                    
                             <HR/>
 
-                            {# <table class="table">
+                            <table class="table">
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
@@ -56,22 +56,27 @@
                                         <th>Accion</th>
                                     </tr>
                                 </thead>
-                                <tbody> #}
-
-                                    <div {{ react_component('ListadoPacientes', { 'pacientes': datosPacientes }) }}></div>
+                                <tbody>
+                                    {# {{ dump(datosPacientes) }}
+                                    <div {{ react_component('ListadoPacientes', { 'pacientes': datosPacientes }) }}></div> #}
+                                    {# <div {{ react_component('Datapicker', { 'startDate': '2022-09-01', 'endDate': '2022-09-30' }) }}></div> #}
                                     
-                                    {# Si esta definida la variable muestra los datos de los pacientes #}
-                                    {# {% for Paciente in datosPacientes %}    
-                                        <tr>
-                                            <td scope="row">{{ Paciente.Nombre | capitalize}} {{ Paciente.Apellido1 | capitalize}} {{ Paciente.Apellido2 | capitalize}}</td>
-                                            <td>{{ Paciente.Telefono}}</td>
-                                            <td>
-                                                <a href="{{ path('mostrarPacienteAdmin', {idpaciente: Paciente.idpaciente }) }}">Editar</a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %} #}
-                                {# </tbody>
-                            </table> #}
+                                    <div id="swup">
+                                        {# Si esta definida la variable muestra los datos de los pacientes #}
+                                        {% for Paciente in datosPacientes %}    
+                                            <tr>
+                                                <td scope="row">{{ Paciente.Nombre | capitalize}} {{ Paciente.Apellido1 | capitalize}} {{ Paciente.Apellido2 | capitalize}}</td>
+                                                <td>{{ Paciente.Telefono}}</td>
+                                                <td>
+                                                    <a class="btn btn-info" href="{{ path('mostrarPacienteAdmin', {idpaciente: Paciente.idpaciente }) }}">Editar</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </div>
+
+                                </tbody>
+                            </table>
+
                         </div>
                     </div>
                 </div>

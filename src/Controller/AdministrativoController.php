@@ -375,6 +375,7 @@ class AdministrativoController extends AbstractController
 
         // Recupero todos los Pacientes
         $pacientes = $em->getRepository(Pacientes::class)->findAll();
+        dump($pacientes);
 
         // Se envia a pagina enviando los datos de los pacientes
         return $this->render('administrativo/busquedaPaciente.html.twig', [

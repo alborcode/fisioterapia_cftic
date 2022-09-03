@@ -30,47 +30,35 @@ class TurnosType extends AbstractType
         FormBuilderInterface $builder,
         array $options
     ): void {
-        $builder
-            ->add('diasemana', ChoiceType::class, [
-                'choices' => [
-                    'LUNES' => true,
-                    'MARTES' => false,
-                    'MIERCOLES' => false,
-                    'JUEVES' => false,
-                    'VIERNES' => false,
-                    'SABADO' => false,
-                    'DOMINGO' => false,
-                ],
-                'attr' => [
-                    'placeholder' => 'Seleccione Dia de la Semana',
-                    'required' => true,
-                    'autofocus' => true,
-                    'class' => 'form-control',
-                ],
-            ])
-            // ->add('horainicio', TimeType::class, [
-            //     'attr' => [
-            //         'required' => true,
-            //         'class' => 'form-control',
-            //     ],
-            // ])
-            // ->add('horafin', TimeType::class, [
-            //     'attr' => [
-            //         'required' => true,
-            //         'class' => 'form-control',
-            //     ],
-            // ])
-            ->add('turno', ChoiceType::class, [
-                'choices' => [
-                    'MAÑANA' => true,
-                    'TARDE' => false,
-                ],
-                'attr' => [
-                    'required' => true,
-                    'placeholder' => 'Turno',
-                    'class' => 'form-control',
-                ],
-            ]);
+        $builder->add('diasemana', ChoiceType::class, [
+            'choices' => [
+                'LUNES' => true,
+                'MARTES' => false,
+                'MIERCOLES' => false,
+                'JUEVES' => false,
+                'VIERNES' => false,
+                'SABADO' => false,
+                'DOMINGO' => false,
+            ],
+            'attr' => [
+                'placeholder' => 'Seleccione Dia de la Semana',
+                'required' => true,
+                'autofocus' => true,
+                'class' => 'form-control',
+            ],
+        ]);
+        // ->add('horainicio', TimeType::class, [
+        //     'attr' => [
+        //         'required' => true,
+        //         'class' => 'form-control',
+        //     ],
+        // ])
+        // ->add('horafin', TimeType::class, [
+        //     'attr' => [
+        //         'required' => true,
+        //         'class' => 'form-control',
+        //     ],
+        // ])
         //->add('idfacultativo');
     }
 

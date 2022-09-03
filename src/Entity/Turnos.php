@@ -33,10 +33,6 @@ class Turnos
     #[Assert\Format('H:i:s')]
     private ?\DateTimeInterface $horafin = null;
 
-    #[ORM\Column(length: 10)]
-    #[Assert\Choice(['MAÑANA', 'TARDE'])]
-    private ?string $turno = null;
-
     // #[ORM\Column]
     // #[Assert\Choice(['SI', 'NO'])]
     // private ?bool $disponible = null;
@@ -95,30 +91,6 @@ class Turnos
     public function setHorafin(\DateTimeInterface $horafin): self
     {
         $this->horafin = $horafin;
-
-        return $this;
-    }
-
-    public function getTurno(): ?string
-    {
-        return $this->turno;
-    }
-
-    public function setTurno(string $turno): self
-    {
-        $this->turno = $turno;
-
-        return $this;
-    }
-
-    public function isDisponible(): ?bool
-    {
-        return $this->disponible;
-    }
-
-    public function setDisponible(bool $disponible): self
-    {
-        $this->disponible = $disponible;
 
         return $this;
     }

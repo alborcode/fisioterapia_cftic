@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Añadir Vacaciones Facultativo{% endblock %}
+
+{% block body %}
+
+    <section class="py-5 mt-5">
+        <div class="container py-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 col-xl-12">
+                    <div class="card">
+                        <div class="card-body text-center d-flex flex-column align-items-center">
+                            <div class="row mb-4 mb-lg-5">
+                                    <p class="fw-bold text-success mb-2">Intranet - Menu Administrativo</p>
+                                    <h3 class="fw-bold">Añadir Vacaciones Facultativo</h3>
+                            </div>
+                            <div class="row mb-4 mb-lg-2">
+                                {# Incluimos Boton Volver #}
+                                {% include 'menuVolver.html.twig' %}
+                            </div>
+                            <div class="form-group">
+                                {# Formulario Para Añadir/Modificar Turnos #}
+                                <form method="POST" action="{{ path('altaFacultativoVacacionesAdmin', { idfacultativo: datosFacultativo.idfacultativo }) }}">
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-3">
+                                            Código Facultativo
+                                            <input type="number" name="txtIdfacultativo" value="{{datosFacultativo.idfacultativo}}" readonly="readonly" disabled="disabled" class="form-control" id="txtIdfacultativo">
+                                        </div>
+                                    </div>    
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-4">
+                                            Nombre
+                                            <input type="text" name="txtNombre" value="{{datosFacultativo.nombre}}" readonly="readonly" disabled="disabled" class="form-control" id="txtNombre">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            Primer Apellido
+                                            <input type="text" name="txtApellido1" value="{{datosFacultativo.apellido1}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido1">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            Segundo Apellido
+                                            <input type="text" name="txtApellido2" value="{{datosFacultativo.apellido2}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido2">
+                                        </div>
+                                    </div>  
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-4">
+                                            Teléfono
+                                            <input type="tel" name="txtTelefono" value="{{datosFacultativo.telefono}}" readonly="readonly" disabled="disabled" class="form-control" id="txtTelefono" pattern="(\+34|0034|34)?[ -]*(6|7|8|9)[ -]*([0-9][ -]*){8}">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            Especialidad    
+                                            <select name="comboEspecialidad" class="form-control" id="comboEspecialidad" readonly="readonly" disabled="disabled">
+                                                {% for Especialidad in datosEspecialidades %}
+                                                    {% if Especialidad == datosFacultativo.especialidad %}
+                                                        {# Se le pone atributo selected para que se quede seleccionado #}
+                                                        <option value="{{ Especialidad.idespecialidad }}" selected> {{ Especialidad.especialidad }}</option>
+                                                    {% else %}                                        
+                                                        <option value="{{ Especialidad.idespecialidad }}"> {{ Especialidad.especialidad }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    {# {% if datosTurnos is null %} #}
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-6">
+                                            Seleccionar Día
+                                            <input type="date" name="txtfecha" class="form-control" id="txtfecha">  
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-3">
+                                            <button type="submit" class="btn btn-primary" name="operacion" value="insertar">
+                                                <i class="fa fa-chevron-circle-down" aria-hidden="true"></i> Añadir
+                                            </button>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <button type="submit" class="btn btn-primary" name="operacion" value="eliminar">
+                                                <i class="fa fa-remove" aria-hidden="true"></i> Eliminar
+                                            </button>
+                                        </div>
+                                    </div>    
+                                {# {{ form_end(aseguradoraForm) }} #}
+                                </form>
+                                <HR>
+                                {# Muestro Tabla con Vacaciones existentes ya solicitadas #}
+                                <div class="row mb-2 mb-lg-2">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Vacaciones Solicitadas</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {# Si esta definida la variable muestra los datos de las vacaciones del facultativo #}
+                                            {% if datosVacaciones is defined %}
+                                                {% for vacaciones in datosVacaciones %}    
+                                                    <tr>
+                                                        <td scope="row">{{ vacaciones.fecha |date('d-m-Y')}}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </tbody>
+                                    </table> 
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+{% endblock %}
