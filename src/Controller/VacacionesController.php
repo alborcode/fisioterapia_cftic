@@ -191,21 +191,34 @@ class VacacionesController extends AbstractController
             ->findOneByIdfacultativo($idfacultativo);
         dump($facultativo);
 
-        // Recupero datos de turnos de facultativo para enviar los Values a Formulario
+        // Recupero vacaciones de facultativo ordenadas por fecha para enviar los Values a Formulario
         $vacacionesfacultativo = $em
             ->getRepository(Vacaciones::class)
-            ->findByIdfacultativo($idfacultativo);
+            ->findBy(['idfacultativo' => $idfacultativo], ['fecha' => 'ASC']);
         dump($vacacionesfacultativo);
+
+        // Recuperar Fecha minima y maxima
+        $anio = date('Y');
+        $fechaini = $anio . '-01' . '-01';
+        $fechafin = $anio . '-12' . '-31';
+        dump($fechaini);
+        dump($fechafin);
+        // Recupero Fecha del Dia
+        $fechadia = date('Y-m-d');
+        dump($fechadia);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
         dump($especialidades);
 
-        // Envio a la vista de Datos Turnos Facultativo y Datos de Facultativo
+        // Envio a la vista de Vacaciones, Datos Facultativo y Especialidades
         return $this->render('vacaciones/altaVacacionesAdmin.html.twig', [
             'datosFacultativo' => $facultativo,
             'datosEspecialidades' => $especialidades,
             'datosVacaciones' => $vacacionesfacultativo,
+            'fechaini' => $fechaini,
+            'fechafin' => $fechafin,
+            'fechadia' => $fechadia,
         ]);
     }
 
@@ -225,10 +238,15 @@ class VacacionesController extends AbstractController
         $boton = $request->request->get('operacion');
 
         // Recogemos datos de formulario con Post del día de vacaciones
-        $diavacaciones = $request->request->get('txtfecha');
+        //$diavacaciones = $request->request->get('txtfecha');
+        //$diavacaciones = $request->query->get('txtfecha');
+        $diavacaciones = $request->request->get('select_date_value');
         dump($diavacaciones);
         $diaconvertido = \DateTime::createFromFormat('Y-m-d', $diavacaciones);
         dump($diaconvertido);
+
+        $mensaje = null;
+        $mensajewarning = null;
 
         // Si se pulso el boton de Insertar
         if ($boton == 'insertar') {
@@ -271,7 +289,7 @@ class VacacionesController extends AbstractController
             } else {
                 $mensajedia = strtotime($diavacaciones);
                 $diaformateado = date('d-m-Y', $mensajedia);
-                $mensaje =
+                $mensajewarning =
                     'Ya existe el dia ' .
                     $diaformateado .
                     ' de vacaciones que se quiere dar de alta' .
@@ -306,7 +324,7 @@ class VacacionesController extends AbstractController
             } else {
                 $mensajedia = strtotime($diavacaciones);
                 $diaformateado = date('d-m-Y', $mensajedia);
-                $mensaje =
+                $mensajewarning =
                     'No existe el dia ' .
                     $diaformateado .
                     ' de vacaciones que se quiere dar de baja' .
@@ -315,9 +333,46 @@ class VacacionesController extends AbstractController
             }
         }
 
-        // Devuelvo control a Pagina Inicio de Administrador mandando mensaje
-        return $this->render('dashboard/dashboardAdministrativo.html.twig', [
+        // // Devuelvo control a Pagina Inicio de Administrador mandando mensaje
+        // return $this->render('dashboard/dashboardAdministrativo.html.twig', [
+        //     'mensaje' => $mensaje,
+        // ]);
+
+        // Recupero datos de facultativo para enviar los Values a Formulario
+        $facultativo = $em
+            ->getRepository(Facultativos::class)
+            ->findOneByIdfacultativo($idfacultativo);
+        dump($facultativo);
+
+        // Recupero vacaciones de facultativo ordenadas por fecha para enviar los Values a Formulario
+        $vacacionesfacultativo = $em
+            ->getRepository(Vacaciones::class)
+            ->findBy(['idfacultativo' => $idfacultativo], ['fecha' => 'ASC']);
+        dump($vacacionesfacultativo);
+        // Recuperar Año actual
+        $anio = date('Y');
+        $fechaini = $anio . '-01' . '-01';
+        $fechafin = $anio . '-12' . '-31';
+        dump($fechaini);
+        dump($fechafin);
+        // Recupero Fecha del Dia
+        $fechadia = date('Y-m-d');
+        dump($fechadia);
+
+        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
+        $especialidades = $em->getRepository(Especialidades::class)->findAll();
+        dump($especialidades);
+
+        // Envio a la vista de Vacaciones, Datos Facultativo y Especialidades
+        return $this->render('vacaciones/altaVacacionesAdmin.html.twig', [
+            'datosFacultativo' => $facultativo,
+            'datosEspecialidades' => $especialidades,
+            'datosVacaciones' => $vacacionesfacultativo,
+            'fechaini' => $fechaini,
+            'fechafin' => $fechafin,
+            'fechadia' => $fechadia,
             'mensaje' => $mensaje,
+            'mensajewarning' => $mensajewarning,
         ]);
     }
 
@@ -346,11 +401,20 @@ class VacacionesController extends AbstractController
             ->findOneByIdfacultativo($idfacultativo);
         dump($facultativo);
 
-        // Recupero datos de turnos de facultativo para enviar los Values a Formulario
+        // Recupero vacaciones de facultativo ordenadas por fecha para enviar los Values a Formulario
         $vacacionesfacultativo = $em
             ->getRepository(Vacaciones::class)
-            ->findByIdfacultativo($idfacultativo);
+            ->findBy(['idfacultativo' => $idfacultativo], ['fecha' => 'ASC']);
         dump($vacacionesfacultativo);
+        // Recuperar Año actual
+        $anio = date('Y');
+        $fechaini = $anio . '-01' . '-01';
+        $fechafin = $anio . '-12' . '-31';
+        dump($fechaini);
+        dump($fechafin);
+        // Recupero Fecha del Dia
+        $fechadia = date('Y-m-d');
+        dump($diaformateado);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
@@ -361,6 +425,9 @@ class VacacionesController extends AbstractController
             'datosFacultativo' => $facultativo,
             'datosEspecialidades' => $especialidades,
             'datosVacaciones' => $vacacionesfacultativo,
+            'fechaini' => $fechaini,
+            'fechafin' => $fechafin,
+            'fechadia' => $fechadia,
         ]);
     }
 
@@ -384,6 +451,9 @@ class VacacionesController extends AbstractController
         dump($diavacaciones);
         $diaconvertido = \DateTime::createFromFormat('Y-m-d', $diavacaciones);
         dump($diaconvertido);
+
+        $mensaje = null;
+        $mensajewarning = null;
 
         // Si se pulso el boton de Insertar
         if ($boton == 'insertar') {
@@ -425,7 +495,7 @@ class VacacionesController extends AbstractController
             } else {
                 $mensajedia = strtotime($diavacaciones);
                 $diaformateado = date('d-m-Y', $mensajedia);
-                $mensaje =
+                $mensajewarning =
                     'Ya existe el dia ' .
                     $diaformateado .
                     ' de vacaciones que se quiere dar de alta';
@@ -457,16 +527,53 @@ class VacacionesController extends AbstractController
             } else {
                 $mensajedia = strtotime($diavacaciones);
                 $diaformateado = date('d-m-Y', $mensajedia);
-                $mensaje =
+                $mensajewarning =
                     'No existe el dia ' .
                     $diaformateado .
                     ' de vacaciones que se quiere dar de baja';
             }
         }
 
-        // Devuelvo control a Pagina Inicio de Administrador mandando mensaje
-        return $this->render('dashboard/dashboardFacultativo.html.twig', [
+        // // Devuelvo control a Pagina Inicio de Fcaultativo mandando mensaje
+        // return $this->render('dashboard/dashboardFacultativo.html.twig', [
+        //     'mensaje' => $mensaje,
+        // ]);
+
+        // Recupero datos de facultativo para enviar los Values a Formulario
+        $facultativo = $em
+            ->getRepository(Facultativos::class)
+            ->findOneByIdfacultativo($idfacultativo);
+        dump($facultativo);
+
+        // Recupero vacaciones de facultativo ordenadas por fecha para enviar los Values a Formulario
+        $vacacionesfacultativo = $em
+            ->getRepository(Vacaciones::class)
+            ->findBy(['idfacultativo' => $idfacultativo], ['fecha' => 'ASC']);
+        dump($vacacionesfacultativo);
+        // Recuperar Año actual
+        $anio = date('Y');
+        $fechaini = $anio . '-01' . '-01';
+        $fechafin = $anio . '-12' . '-31';
+        dump($fechaini);
+        dump($fechafin);
+        // Recupero Fecha del Dia
+        $fechadia = date('Y-m-d');
+        dump($fechadia);
+
+        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
+        $especialidades = $em->getRepository(Especialidades::class)->findAll();
+        dump($especialidades);
+
+        // Envio a la vista de Datos Turnos Facultativo y Datos de Facultativo
+        return $this->render('vacaciones/altaVacacionesFacultativo.html.twig', [
+            'datosFacultativo' => $facultativo,
+            'datosEspecialidades' => $especialidades,
+            'datosVacaciones' => $vacacionesfacultativo,
+            'fechaini' => $fechaini,
+            'fechafin' => $fechafin,
+            'fechadia' => $fechadia,
             'mensaje' => $mensaje,
+            'mensajewarning' => $mensajewarning,
         ]);
     }
 }

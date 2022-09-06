@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listado Informes Paciente{% endblock %}
+
+{% block body %}
+
+    <section class="py-5 mt-5">
+        <div class="container py-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 col-xl-12">
+                    <div class="card">
+                        <div class="card-body text-center d-flex flex-column align-items-center">
+                            <div class="row mb-1 mb-lg-1">
+                                    <p class="fw-bold text-success mb-2">Intranet - Menu Facultativo</p>
+                                    <h3 class="fw-bold">Detalle Informe de Paciente - Informes</h3>
+                            </div>
+                            <div class="row mb-1 mb-lg-1">
+                                {# Incluimos Boton Volver #}
+                                {% include 'menuVolver.html.twig' %}
+                            </div>
+                            {# Datos Paciente #}      
+                            <div class="row mb-1 mb-lg-1">
+                                <div class="col-sm-4">
+                                    Paciente
+                                    <input type="number" name="txtIdpaciente" value="{{datosPaciente.idpaciente}}" readonly="readonly" disabled="disabled" class="form-control" id="txtIdpaciente">
+                                </div>
+                                <div class="col-sm-8">
+                                    Teléfono
+                                    <input type="tel" name="txtTelefono" value="{{datosPaciente.telefono}}" readonly="readonly" disabled="disabled" class="form-control" id="txtTelefono">
+                                </div>
+                            </div>    
+                            <div class="row mb-1 mb-lg-1">
+                                <div class="col-sm-4">
+                                    Nombre
+                                    <input type="text" name="txtNombre" value="{{datosPaciente.nombre}}" readonly="readonly" disabled="disabled" class="form-control" id="txtNombre">
+                                </div>
+                                <div class="col-sm-4">
+                                    1er Apellido
+                                    <input type="text" name="txtApellido1" value="{{datosPaciente.apellido1}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido1">
+                                </div>
+                                <div class="col-sm-4">
+                                    2º Apellido
+                                    <input type="text" name="txtApellido2" value="{{datosPaciente.apellido2}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido2">
+                                </div>
+                            </div>      
+                            <HR>
+                            {# Datos Informe #}     
+                            <div class="row mb-1 mb-lg-1">
+                                <div class="col-sm-4">
+                                    Nº Informe
+                                    <input type="number" name="txtIdinforme" class="form-control" id="txtIdInforme" value="{{ datosInforme.idinforme }}" readonly="readonly" disabled="disabled">  
+                                </div>
+                                <div class="col-sm-4">
+                                    Fecha
+                                    <input type="date" name="txtFechaInforme" class="form-control" id="txtFechaInforme" value="{{ datosInforme.fecha | date('Y-m-d') }}" min="{{ datosInforme.fecha | date('Y-m-d') }}" max="{{ datosInforme.fecha | date('Y-m-d') }}" readonly="readonly" disabled="disabled">  
+                                </div>
+                                <div class="col-sm-4">
+                                    Tipo    
+                                    <select name="comboTipoInforme" class="form-control" readonly="readonly" disabled="disabled" id="comboTipoInforme">
+                                        <option value="{{ datosInforme.tipoinforme }}" selected> {{ datosInforme.tipoinforme }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-2 mb-lg-2">
+                                {# {{ dump(datosInforme.detalle) }} #}
+                                <div class="form-floating">
+                                    Observaciones
+                                    <textarea id="txtObservaciones" name="txtObservaciones" class="form-control" readonly="readonly" disabled="disabled" style="resize: none" rows="6" cols="100">{{datosInforme.detalle}}</textarea>
+                                </div> 
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+{% endblock %}

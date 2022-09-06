@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listado Informes de Paciente{% endblock %}
+
+{% block body %}
+
+    <section class="py-5 mt-5">
+        <div class="container py-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 col-xl-12">
+                    <div class="card">
+                        <div class="card-body text-center d-flex flex-column align-items-center">
+                            <div class="row mb-1 mb-lg-1">
+                                    <p class="fw-bold text-success mb-2">Intranet - Menu Facultativo</p>
+                                    <h3 class="fw-bold">Listado Informes de Paciente - Informes</h3>
+                            </div>
+                            <div class="row mb-3 mb-lg-3">
+                                {# Incluimos Boton Volver #}
+                                {% include 'menuVolver.html.twig' %}
+                            </div>
+                            {# Datos Paciente #}      
+                            <div class="row mb-1 mb-lg-1">
+                                <div class="col-sm-4">
+                                    Paciente
+                                    <input type="number" name="txtIdpaciente" value="{{datosPaciente.idpaciente}}" readonly="readonly" disabled="disabled" class="form-control" id="txtIdpaciente">
+                                </div>
+                                <div class="col-sm-8">
+                                    Teléfono
+                                    <input type="tel" name="txtTelefono" value="{{datosPaciente.telefono}}" readonly="readonly" disabled="disabled" class="form-control" id="txtTelefono">
+                                </div>
+                            </div>    
+                            <div class="row mb-1 mb-lg-1">
+                                <div class="col-sm-4">
+                                    Nombre
+                                    <input type="text" name="txtNombre" value="{{datosPaciente.nombre}}" readonly="readonly" disabled="disabled" class="form-control" id="txtNombre">
+                                </div>
+                                <div class="col-sm-4">
+                                    1er Apellido
+                                    <input type="text" name="txtApellido1" value="{{datosPaciente.apellido1}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido1">
+                                </div>
+                                <div class="col-sm-4">
+                                    2º Apellido
+                                    <input type="text" name="txtApellido2" value="{{datosPaciente.apellido2}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido2">
+                                </div>
+                            </div>      
+                            <HR/>
+                            
+                            {# Muestro mensajes si llegan #}
+                            {% if mensaje is defined %} 
+                                {% if mensaje is not null %}
+                                    <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
+                                        {{mensaje}}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                            {% if mensajewarning is defined %}        
+                                {% if mensajewarning is not null %}
+                                    <div class="alert alert-warning d-flex align-items-center alert-dismissible fade show" role="alert">
+                                        {{mensajewarning}}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endif %}
+                            {% endif %}      
+                            <div class="row mb-1 mb-lg-1">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nº Informe</th>
+                                            <th>Fecha</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>                                   
+                                        <div id="swup">
+                                            {# Si esta definida la variable muestra los datos de los pacientes #}
+                                            {% for Informe in datosInformes %}    
+                                                <tr>
+                                                    <td scope="row">{{ Informe.Idinforme}}</td>
+                                                    <td>{{ Informe.fecha |date('d-m-Y')}}</td>
+                                                    <td>
+                                                        <a class="btn btn-warning" href="{{ path('detalleInforme', {idpaciente: datosPaciente.idpaciente, idinforme: Informe.Idinforme }) }}">Detalle</a>
+                                                        <span> </span>
+                                                        <a class="btn btn-info" href="{{ path('formularioModificar', {idpaciente: Paciente.idpaciente, idinforme: Informe.Idinforme }) }}">Modificar</a>
+                                                </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </div>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+{% endblock %}

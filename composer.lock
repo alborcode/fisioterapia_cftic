@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e2e0d343f58b955ba5f33a55535cb85",
+    "content-hash": "e3a58da47d4a29087b88762c38c44681",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -7553,7 +7553,7 @@
         },
         {
             "name": "symfony/ux-react",
-            "version": "v2.3.0",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-react.git",
@@ -7609,7 +7609,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-react/tree/v2.3.0"
+                "source": "https://github.com/symfony/ux-react/tree/v2.4.0"
             },
             "funding": [
                 {

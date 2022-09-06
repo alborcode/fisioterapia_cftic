@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Alta Informe Paciente{% endblock %}
+
+{% block body %}
+
+    <section class="py-5 mt-5">
+        <div class="container py-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 col-xl-12">
+                    <div class="card">
+                        <div class="card-body text-center d-flex flex-column align-items-center">
+                            <div class="row mb-1 mb-lg-1">
+                                    <p class="fw-bold text-success mb-2">Pacientes</p>
+                                    <h2 class="fw-bold">Alta Informe Paciente</h2>
+                            </div>
+                            <div class="row mb-1 mb-lg-1">
+                                {# Incluimos Boton Volver #}
+                                {% include 'menuVolver.html.twig' %}
+                            </div>
+                            <div class="form-group">
+                            {# Formulario Con datos no modificables informativos excepto el texto y tipo de informe #}
+                                <form method="POST" action="{{ path('altaInforme', { idfacultativo: datosFacultativo.idfacultativo, idpaciente: datosPaciente.idpaciente }) }}">
+                                    {# Datos Facultativo #}
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-6">
+                                            Especialidad    
+                                            <select name="comboEspecialidad" readonly="readonly" disabled="disabled" class="form-control" id="comboEspecialidad">
+                                                {% for Especialidad in datosEspecialidades %}
+                                                    {% if Especialidad == datosFacultativo.especialidad %}
+                                                        {# Se le pone atributo selected para que se quede seleccionado #}
+                                                        <option value="{{ Especialidad.idespecialidad }}" selected> {{ Especialidad.especialidad }} </option>
+                                                    {% else %}                                        
+                                                        <option value="{{ Especialidad.idespecialidad }}"> {{ Especialidad.especialidad }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-4">
+                                            Nombre
+                                            <input type="text" name="txtNombre" value="{{datosFacultativo.nombre}}" readonly="readonly" disabled="disabled" class="form-control" id="txtNombre">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            1er Apellido
+                                            <input type="text" name="txtApellido1" value="{{datosFacultativo.apellido1}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido1">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            2º Apellido
+                                            <input type="text" name="txtApellido2" value="{{datosFacultativo.apellido2}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido2">
+                                        </div>
+                                    </div>  
+                                    <HR>
+                                    {# Datos Paciente #}      
+                                    <div class="row mb-1 mb-lg-1">
+                                        <div class="col-sm-3">
+                                            Código Paciente
+                                            <input type="number" name="txtIdpaciente" value="{{datosPaciente.idpaciente}}" readonly="readonly" disabled="disabled" class="form-control" id="txtIdpaciente">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            Teléfono
+                                            <input type="tel" name="txtTelefono" value="{{datosPaciente.telefono}}" readonly="readonly" disabled="disabled" class="form-control" id="txtTelefono">
+                                        </div>
+                                    </div>    
+                                    <div class="row mb-1 mb-lg-1">
+                                        <div class="col-sm-4">
+                                            Nombre
+                                            <input type="text" name="txtNombre" value="{{datosPaciente.nombre}}" readonly="readonly" disabled="disabled" class="form-control" id="txtNombre">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            1er Apellido
+                                            <input type="text" name="txtApellido1" value="{{datosPaciente.apellido1}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido1">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            2º Apellido
+                                            <input type="text" name="txtApellido2" value="{{datosPaciente.apellido2}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido2">
+                                        </div>
+                                    </div> 
+                                    <HR> 
+                                    {# Datos Informe #}     
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-4">
+                                            Fecha Informe
+                                            <input type="date" name="txtFechaInforme" class="form-control" id="txtFechaInforme" required="required" value="{{ fechadia | date('Y-m-d') }}" min="{{ fechadia | date('Y-m-d') }}" max="{{ fechadia | date('Y-m-d') }}">  
+                                        </div>
+                                        <div class="col-sm-4">
+                                            Tipo Informe
+                                            <select name="comboTipoInforme" class="form-control" id="comboTipoInforme">
+                                                <option value="ESTANDARD" selected> ESTANDARD </option>                                    
+                                                <option value="URGENCIA"> URGENCIA </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-12">
+                                            Observaciones
+                                            <textarea id="txtObservaciones" name="txtObservaciones" class="form-control" rows="6" cols="100" minlength="3"></textarea>
+                                        </div> 
+                                    </div>
+                                        <div class="row">
+                                        <div class="col-sm-4">
+                                            <button class="btn btn-primary shadow d-block w-100" type="submit">
+                                                Alta Informe Paciente
+                                            </button>
+                                        </div>    
+                                    </div>  
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+{% endblock %}

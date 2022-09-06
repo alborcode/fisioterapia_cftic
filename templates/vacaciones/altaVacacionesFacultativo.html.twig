@@ -61,14 +61,12 @@
                                         </div>
                                     </div>
 
-                                    {# {% if datosTurnos is null %} #}
                                     <div class="row mb-2 mb-lg-2">
                                         <div class="col-sm-6">
                                             Seleccionar Día
-                                            <input type="date" name="txtfecha" class="form-control" id="txtfecha">  
+                                            <input type="date" name="txtfecha" class="form-control" id="txtfecha" required="required" min="{{ fechaini }}" max="{{ fechafin }}">  
                                         </div>
                                     </div>
-
                                     <div class="row mb-2 mb-lg-2">
                                         <div class="col-sm-3">
                                             <button type="submit" class="btn btn-primary" name="operacion" value="insertar">
@@ -80,10 +78,27 @@
                                                 <i class="fa fa-remove" aria-hidden="true"></i> Eliminar
                                             </button>
                                         </div>
-                                    </div>    
-                                {# {{ form_end(aseguradoraForm) }} #}
+                                    </div>
+
                                 </form>
+                                
                                 <HR>
+                                {% if mensaje is defined %}
+                                    {% if mensaje is not null %}
+                                        <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
+                                            {{mensaje}}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                                {% if mensajewarning is defined %}        
+                                    {% if mensajewarning is not null %}
+                                        <div class="alert alert-warning d-flex align-items-center alert-dismissible fade show" role="alert">
+                                            {{mensajewarning}}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}      
                                 {# Muestro Tabla con Vacaciones existentes ya solicitadas #}
                                 <div class="row mb-2 mb-lg-2">
                                     <table class="table">

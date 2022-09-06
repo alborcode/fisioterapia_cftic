@@ -2,6 +2,18 @@
 
 {% block title %}Añadir Vacaciones Facultativo{% endblock %}
 
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+    {# <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> #}
+    <link rel="stylesheet" href="{{ asset('css/date-time-picker-component.min.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+    {# <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> #}
+    <script src="{{ asset('js/date-time-picker-component.min.js') }}"></script>
+{% endblock %}
+
 {% block body %}
 
     <section class="py-5 mt-5">
@@ -10,11 +22,11 @@
                 <div class="col-md-6 col-xl-12">
                     <div class="card">
                         <div class="card-body text-center d-flex flex-column align-items-center">
-                            <div class="row mb-4 mb-lg-5">
+                            <div class="row mb-1 mb-lg-1">
                                     <p class="fw-bold text-success mb-2">Intranet - Menu Administrativo</p>
                                     <h3 class="fw-bold">Añadir Vacaciones Facultativo</h3>
                             </div>
-                            <div class="row mb-4 mb-lg-2">
+                            <div class="row mb-1 mb-lg-1">
                                 {# Incluimos Boton Volver #}
                                 {% include 'menuVolver.html.twig' %}
                             </div>
@@ -61,18 +73,25 @@
                                         </div>
                                     </div>
 
-                                    {# {% if datosTurnos is null %} #}
                                     <div class="row mb-2 mb-lg-2">
                                         <div class="col-sm-6">
-                                            Seleccionar Día
-                                            <input type="date" name="txtfecha" class="form-control" id="txtfecha">  
+                                            Seleccionar Fecha
+                                            {# <div {{ react_component('datepicker', { options: '2017-01-01' }) }}></div> #}    
+                                            {# <input type="date" name="txtFecha" class="form-control" id="txtFecha" required="required" min="{{ fechaini }}" max="{{ fechafin }}"> #}
+                                            <div id="select_date">
+                                                <input type="hidden" name="select_date_value" class="date_output" value="{{ fechadia }}">
+                                            </div>
                                         </div>
-                                    </div>
-
+                                        {# <div class="col-sm-6">
+                                            Seleccionar Rango Fechas
+                                            <div id="select_rangedate">
+                                                <input type="hidden" name="select_rangedate_value" class="date_output" value="{{ fechadia }}">
+                                            </div>  
+                                        </div> #}
                                     <div class="row mb-2 mb-lg-2">
                                         <div class="col-sm-3">
-                                            <button type="submit" class="btn btn-primary" name="operacion" value="insertar">
-                                                <i class="fa fa-chevron-circle-down" aria-hidden="true"></i> Añadir
+                                            <button type="submit" class="btn btn-primary" name="operacion" value="insertar" {{ stimulus_action('datepicker', 'render') }}>
+                                                <i class="fa fa-calendar" aria-hidden="true"></i> Añadir
                                             </button>
                                         </div>
                                         <div class="col-sm-3">
@@ -81,9 +100,26 @@
                                             </button>
                                         </div>
                                     </div>    
-                                {# {{ form_end(aseguradoraForm) }} #}
+
                                 </form>
+
                                 <HR>
+                                {% if mensaje is defined %}
+                                    {% if mensaje is not null %}
+                                        <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
+                                            {{mensaje}}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                                {% if mensajewarning is defined %}        
+                                    {% if mensajewarning is not null %}
+                                        <div class="alert alert-warning d-flex align-items-center alert-dismissible fade show" role="alert">
+                                            {{mensajewarning}}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}      
                                 {# Muestro Tabla con Vacaciones existentes ya solicitadas #}
                                 <div class="row mb-2 mb-lg-2">
                                     <table class="table">
@@ -112,5 +148,71 @@
             </div>
         </div>
     </section>
+    {# <script src="{{ asset('js/seleccionfechasimple.js') }}"></script> #}
+    <script type="text/javascript">
+        const es = {
+            'jan':'Ene',
+            'feb':'Feb',
+            'mar':'Mar',
+            'apr':'Abr',
+            'may':'May',
+            'jun':'Jun',
+            'jul':'Jul',
+            'aug':'Ago',
+            'sep':'Sep',
+            'oct':'Oct',
+            'nov':'Nov',
+            'dec':'Dic',
+            'jan_':'Enero',
+            'feb_':'Febrero',
+            'mar_':'Marzo',
+            'apr_':'Abril',
+            'may_':'Mayo',
+            'jun_':'Junio',
+            'jul_':'Julio',
+            'aug_':'Agosto',
+            'sep_':'Septiembre',
+            'oct_':'Octubre',
+            'nov_':'Noviembre',
+            'dec_':'Diciembre',
+            'mon':'Lun',
+            'tue':'Mar',
+            'wed':'Mie',
+            'thu':'Jue',
+            'fri':'Vie',
+            'sat':'Sab',
+            'sun':'Dom',
+            'mon_':'Lunes',
+            'tue_':'Martes',
+            'wed_':'Mercoles',
+            'thu_':'Jueves',
+            'fri_':'Viernes',
+            'sat_':'Sabado',
+            'sun_':'Domingo',
+            'done':'Hecho'
+        };
+        const fechainicial = "{{ fechaini }}";
+        console.log(fechainicial)
+        const fechafinal = "{{ fechafin }}";
+        console.log(fechafinal)
+        const fechaactual = "{{ fechadia }}";
+        console.log(fechaactual)
+
+        new DateTimePickerComponent.DatePicker( 'select_date', 
+        {
+            first_date: fechainicial,
+            last_date: fechafinal,
+            start_date: fechaactual,
+            first_day_no: 1,
+            l10n: es,
+            date_output: "short_ISO",
+            styles: {
+                active_background: '#e34c26',
+                active_color: '#fff',
+                inactive_background: '#0366d9',
+                inactive_color: '#fff'
+            }
+        });
+</script>
     
 {% endblock %}

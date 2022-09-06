@@ -39,6 +39,9 @@ security:
         # Dashboard segun perfil
         - { path: ^/pacientes, roles: [ROLE_PACIENTE, ROLE_FACULTATIVO, ROLE_ADMINISTRATIVO] }
         - { path: ^/facultativos, roles: [ROLE_FACULTATIVO, ROLE_ADMINISTRATIVO] }
+        - { path: ^/vacaciones, roles: [ROLE_FACULTATIVO, ROLE_ADMINISTRATIVO] }
+        - { path: ^/informes, roles: [ROLE_FACULTATIVO] }
+        - { path: ^/turnos, roles: ROLE_ADMINISTRATIVO }
         - { path: ^/administrativo, roles: ROLE_ADMINISTRATIVO }
         # - { path: ^/dahsboard, roles: IS_AUTHENTICATED_FULLY }
         # - { path: ^/turnos, roles: ROLE_ADMINISTRATIVO }

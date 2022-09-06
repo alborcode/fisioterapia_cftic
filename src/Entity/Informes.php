@@ -25,9 +25,6 @@ class Informes
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $detalle = null;
 
-    #[ORM\Column(length: 100, nullable: true)]
-    private ?string $anexo = null;
-
     // Se modifica JoinColumn para añadir el name ya que no es id se cambio
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, name:"idfacultativo", referencedColumnName:"idfacultativo")]

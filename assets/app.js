@@ -13,7 +13,6 @@ import bsCustomFileInput from 'bs-custom-file-input';
 // start the Stimulus application
 import './bootstrap';
 
-
 // assets/app.js
 import { registerReactControllerComponents } from '@symfony/ux-react';
 

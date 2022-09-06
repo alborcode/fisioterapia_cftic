@@ -11,8 +11,8 @@
                     <div class="card">
                         <div class="card-body text-center d-flex flex-column align-items-center">
                             <div class="row mb-1 mb-lg-1">
-                                    <p class="fw-bold text-success mb-2">Intranet - Menu Administrativo</p>
-                                    <h3 class="fw-bold">Seleccionar Paciente</h3>
+                                    <p class="fw-bold text-success mb-2">Intranet - Menu Facultativo</p>
+                                    <h3 class="fw-bold">Seleccionar Paciente - Informes</h3>
                             </div>
                             <div class="row mb-4 mb-lg-5">
                                 {# Incluimos Boton Volver #}
@@ -47,6 +47,24 @@
                             <div class="form-group row">
                                    
                             <HR/>
+                            
+                            {# Muestro mensajes si llegan #}
+                            {% if mensaje is defined %} 
+                                {% if mensaje is not null %}
+                                    <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
+                                        {{mensaje}}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                            {% if mensajewarning is defined %}        
+                                {% if mensajewarning is not null %}
+                                    <div class="alert alert-warning d-flex align-items-center alert-dismissible fade show" role="alert">
+                                        {{mensajewarning}}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endif %}
+                            {% endif %}      
 
                             <table class="table">
                                 <thead>
@@ -56,8 +74,7 @@
                                         <th>Accion</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {# {{ dump(datosPacientes) }} #}                                  
+                                <tbody>                                   
                                     <div id="swup">
                                         {# Si esta definida la variable muestra los datos de los pacientes #}
                                         {% for Paciente in datosPacientes %}    
@@ -65,7 +82,9 @@
                                                 <td scope="row">{{ Paciente.Nombre | capitalize}} {{ Paciente.Apellido1 | capitalize}} {{ Paciente.Apellido2 | capitalize}}</td>
                                                 <td>{{ Paciente.Telefono}}</td>
                                                 <td>
-                                                    <a class="btn btn-info" href="{{ path('mostrarPacienteAdmin', {idpaciente: Paciente.idpaciente }) }}">Editar</a>
+                                                    <a class="btn btn-info" href="{{ path('mostrarDatosFacultativoPaciente', {idpaciente: Paciente.idpaciente }) }}">Alta</a>
+                                                    <span> </span>
+                                                    <a class="btn btn-warning" href="{{ path('mostrarListadoInformes', {idpaciente: Paciente.idpaciente, idfacultativo: Paciente.idpaciente }) }}">Informes</a>
                                                 </td>
                                             </tr>
                                         {% endfor %}
