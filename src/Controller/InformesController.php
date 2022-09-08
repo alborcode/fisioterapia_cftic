@@ -195,11 +195,13 @@ class InformesController extends AbstractController
         FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em
     ) {
+        // Recupero las variable de sesion de facultativo
+        $idfacultativo = $request->getSession()->get('idfacultativo');
+        dump($idfacultativo);
+
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idpaciente = $request->query->get('idpaciente');
         dump($idpaciente);
-        $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
 
         // Recupero datos de objeto Paciente con el idpaciente
         $paciente = $em
@@ -307,7 +309,7 @@ class InformesController extends AbstractController
         $idpaciente = $request->query->get('idpaciente');
         dump($idpaciente);
         $idinforme = $request->query->get('idinforme');
-        dump($idfacultativo);
+        dump($idinforme);
 
         // Recupero datos de objeto Paciente con el idpaciente
         $paciente = $em
@@ -318,7 +320,7 @@ class InformesController extends AbstractController
         // Recupero el Informe del Paciente
         $informe = $em
             ->getRepository(Informes::class)
-            ->findOneByIdpaciente($idpaciente);
+            ->findOneByIdinforme($idinforme);
         dump($informe);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
@@ -345,9 +347,11 @@ class InformesController extends AbstractController
         $idfacultativo = $request->getSession()->get('idfacultativo');
         dump($idfacultativo);
 
-        // Recupero el paciente que se envia
+        // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idpaciente = $request->query->get('idpaciente');
         dump($idpaciente);
+        $idinforme = $request->query->get('idinforme');
+        dump($idinforme);
 
         // Recupero datos de facultativo para enviar los Values a Formulario
         $facultativo = $em
@@ -361,35 +365,78 @@ class InformesController extends AbstractController
             ->findOneByIdpaciente($idpaciente);
         dump($paciente);
 
+        // Recupero datos de Informe para enviar los Values a Formulario
+        $informe = $em
+            ->getRepository(Informes::class)
+            ->findOneByIdinforme($idinforme);
+        dump($informe);
+
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
         dump($especialidades);
 
-        // Recupero Fecha del Dia
-        $fechadia = new \DateTime('@' . strtotime('now'));
-        dump($fechadia);
-
-        // Envio a la vista de Datos Perfil Paciente
-        return $this->render('informes/altaInforme.html.twig', [
+        // Envio a la vista de Datos
+        return $this->render('informes/modificarInforme.html.twig', [
             'datosPaciente' => $paciente,
             'datosFacultativo' => $facultativo,
             'datosEspecialidades' => $especialidades,
-            'fechadia' => $fechadia,
+            'datosInforme' => $informe,
         ]);
     }
 
-    // Recogemos Datos Formulario para dar el Alta del Informe
+    // Recogemos Datos Formulario para Modificar el Informe
     #[Route('/modificarinfome', name: 'modificarInforme', methods: ['GET', 'POST'])]
     public function modificarInforme(
         Request $request,
         FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em
     ) {
-        // Recogemos los parametros enviados con get (query->get) no por post (request->get)
+        // Recupero las variable de sesion de facultativo
+        $idfacultativo = $request->getSession()->get('idfacultativo');
+        dump($idfacultativo);
+
+        // Recupero Parametros con Get
+        $idinforme = $request->query->get('idinforme');
+        dump($idinforme);
         $idpaciente = $request->query->get('idpaciente');
         dump($idpaciente);
-        $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
+
+        // Recupero el Informe a modificar con el idinforme
+        $modificarinforme = $em
+            ->getRepository(Informes::class)
+            ->findOneByIdinforme($idinforme);
+        dump($modificarinforme);
+
+        // Recogemos el idpaciente del Informe recuperado
+        //$idpaciente = $modificarinforme->getIdpaciente();
+
+        // Recogemos datos de formulario
+        // $fecha = $request->request->get('txtFechaInforme');
+        // dump($fecha);
+        // $diaconvertido = \DateTime::createFromFormat('Y-m-d', $fecha);
+        // dump($diaconvertido);
+        $tipoinforme = $request->request->get('comboTipoInforme');
+        dump($tipoinforme);
+        $observaciones = $request->request->get('txtObservaciones');
+        dump($observaciones);
+
+        // Modificamos los valores del Informe con los datos del Formulario, el ID no se puede modificar es clave
+        // $modificarinforme->setIdinforme($idinforme);
+        // $modificarinforme->setFecha($diaconvertido);
+        $modificarinforme->setTipoinforme($tipoinforme);
+        $modificarinforme->setDetalle($observaciones);
+        dump($modificarinforme);
+
+        // Modificamos el Informe
+        $em->persist($modificarinforme);
+        $em->flush();
+
+        // Construimos mensaje de modificacion correcta
+        $mensaje =
+            'Se ha modificado el informe ' .
+            $idinforme .
+            ' para el Paciente ' .
+            $idpaciente;
 
         // Recupero datos de objeto Paciente con el idpaciente
         $paciente = $em
@@ -397,52 +444,16 @@ class InformesController extends AbstractController
             ->findOneByIdpaciente($idpaciente);
         dump($paciente);
 
-        // Recupero datos de objeto Facultativo con el idfacultativo
-        $facultativo = $em
-            ->getRepository(Facultativos::class)
-            ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
-
-        // Recogemos datos de formulario
-        $fecha = $request->request->get('txtFechaInforme');
-        dump($fecha);
-        $diaconvertido = \DateTime::createFromFormat('Y-m-d', $fecha);
-        dump($diaconvertido);
-        $tipoinforme = $request->request->get('comboTipoInforme');
-        dump($tipoinforme);
-        $observaciones = $request->request->get('txtObservaciones');
-        dump($observaciones);
-
-        // Declaro variable de clase entidad Informe
-        $nuevoinforme = new Informes();
-
-        // Modificamos los valores del Informe con los datos del Formulario, el ID no se puede modificar es clave
-        // $nuevoinforme->setIdinforme($idinforme);
-        $nuevoinforme->setFecha($diaconvertido);
-        $nuevoinforme->setTipoinforme($tipoinforme);
-        $nuevoinforme->setDetalle($observaciones);
-
-        // Guardo el pacientes antes de guardar el Informe con el objeto paciente
-        $nuevoinforme->setIdpaciente($paciente);
-        // Guardo el facultativo antes de guardar el Informe con el objeto facultativo
-        $nuevoinforme->setIdfacultativo($facultativo);
-        dump($nuevoinforme);
-
-        // Insertamos el Informe
-        $em->persist($nuevoinforme);
-        $em->flush();
-
-        // Construimos mensaje de alta correcta
-        $mensaje =
-            'Se ha añadido un nuevo Informe para el Paciente ' . $idpaciente;
-
-        // Recupero todos los Pacientes para enviar al formulario
-        $pacientes = $em->getRepository(Pacientes::class)->findAll();
-        dump($pacientes);
+        // Recupero todos los Informes del Paciente (no hace falta que sean del mismo facultativo)
+        $informespaciente = $em
+            ->getRepository(Informes::class)
+            ->findByIdpaciente($idpaciente);
+        dump($informespaciente);
 
         // Enviamos a la pagina con los datos de Pacientes recuperados
-        return $this->render('informes/busquedaPaciente.html.twig', [
-            'datosPacientes' => $pacientes,
+        return $this->render('informes/mostrarlistadoinformes.html.twig', [
+            'datosPaciente' => $paciente,
+            'datosInformes' => $informespaciente,
             'mensaje' => $mensaje,
         ]);
     }

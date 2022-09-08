@@ -69,6 +69,7 @@
                             <table class="table">
                                 <thead>
                                     <tr>
+                                        <th>Código</th>
                                         <th>Nombre</th>
                                         <th>Telefono</th>
                                         <th>Accion</th>
@@ -79,7 +80,8 @@
                                         {# Si esta definida la variable muestra los datos de los pacientes #}
                                         {% for Paciente in datosPacientes %}    
                                             <tr>
-                                                <td scope="row">{{ Paciente.Nombre | capitalize}} {{ Paciente.Apellido1 | capitalize}} {{ Paciente.Apellido2 | capitalize}}</td>
+                                                <td scope="row">{{ Paciente.Idpaciente}}</td>
+                                                <td>{{ Paciente.Nombre | capitalize}} {{ Paciente.Apellido1 | capitalize}} {{ Paciente.Apellido2 | capitalize}}</td>
                                                 <td>{{ Paciente.Telefono}}</td>
                                                 <td>
                                                     <a class="btn btn-info" href="{{ path('mostrarDatosFacultativoPaciente', {idpaciente: Paciente.idpaciente }) }}">Alta</a>

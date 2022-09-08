@@ -2,18 +2,6 @@
 
 {% block title %}Añadir Vacaciones Facultativo{% endblock %}
 
-{% block stylesheets %}
-    {{ encore_entry_link_tags('app') }}
-    {# <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> #}
-    <link rel="stylesheet" href="{{ asset('css/date-time-picker-component.min.css') }}">
-{% endblock %}
-
-{% block javascripts %}
-    {{ encore_entry_script_tags('app') }}
-    {# <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> #}
-    <script src="{{ asset('js/date-time-picker-component.min.js') }}"></script>
-{% endblock %}
-
 {% block body %}
 
     <section class="py-5 mt-5">
@@ -74,27 +62,22 @@
                                     </div>
 
                                     <div class="row mb-2 mb-lg-2">
-                                        <div class="col-sm-6">
-                                            Seleccionar Fecha
-                                            {# <div {{ react_component('datepicker', { options: '2017-01-01' }) }}></div> #}    
-                                            {# <input type="date" name="txtFecha" class="form-control" id="txtFecha" required="required" min="{{ fechaini }}" max="{{ fechafin }}"> #}
-                                            <div id="select_date">
-                                                <input type="hidden" name="select_date_value" class="date_output" value="{{ fechadia }}">
-                                            </div>
+                                         <div class="col-sm-4">
+                                            <input type="text" class="form-control mb-lg-2 py-2" id="txFecha" name="txFecha" placeholder="AAAA/MM/DD" autocomplete="false" readonly="readonly">
                                         </div>
                                         {# <div class="col-sm-6">
                                             Seleccionar Rango Fechas
                                             <div id="select_rangedate">
                                                 <input type="hidden" name="select_rangedate_value" class="date_output" value="{{ fechadia }}">
-                                            </div>  
-                                        </div> #}
-                                    <div class="row mb-2 mb-lg-2">
-                                        <div class="col-sm-3">
-                                            <button type="submit" class="btn btn-primary" name="operacion" value="insertar" {{ stimulus_action('datepicker', 'render') }}>
-                                                <i class="fa fa-calendar" aria-hidden="true"></i> Añadir
+                                        </div> #} 
+                                    </div> 
+                                    <div class="row mb-1 mb-lg-1 py-1">
+                                        <div class="col-sm-3 col-xl-3">
+                                            <button type="submit" class="btn btn-primary" name="operacion" value="insertar">
+                                                <i class="fa fa-chevron-circle-down" aria-hidden="true"></i> Añadir
                                             </button>
                                         </div>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-3 col-xl-3">
                                             <button type="submit" class="btn btn-primary" name="operacion" value="eliminar">
                                                 <i class="fa fa-remove" aria-hidden="true"></i> Eliminar
                                             </button>
@@ -119,7 +102,11 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                         </div>
                                     {% endif %}
-                                {% endif %}      
+                                {% endif %}     
+
+                                {# {{  dump (festivosregionales) }} #}
+                                {# Paso Array de Festivos Regionales en div para Jquery #}
+                                {# <div id="your-div" data-yourArray="{{ festivosregionales|json_encode| raw }}">  #}
                                 {# Muestro Tabla con Vacaciones existentes ya solicitadas #}
                                 <div class="row mb-2 mb-lg-2">
                                     <table class="table">
@@ -148,71 +135,75 @@
             </div>
         </div>
     </section>
-    {# <script src="{{ asset('js/seleccionfechasimple.js') }}"></script> #}
-    <script type="text/javascript">
-        const es = {
-            'jan':'Ene',
-            'feb':'Feb',
-            'mar':'Mar',
-            'apr':'Abr',
-            'may':'May',
-            'jun':'Jun',
-            'jul':'Jul',
-            'aug':'Ago',
-            'sep':'Sep',
-            'oct':'Oct',
-            'nov':'Nov',
-            'dec':'Dic',
-            'jan_':'Enero',
-            'feb_':'Febrero',
-            'mar_':'Marzo',
-            'apr_':'Abril',
-            'may_':'Mayo',
-            'jun_':'Junio',
-            'jul_':'Julio',
-            'aug_':'Agosto',
-            'sep_':'Septiembre',
-            'oct_':'Octubre',
-            'nov_':'Noviembre',
-            'dec_':'Diciembre',
-            'mon':'Lun',
-            'tue':'Mar',
-            'wed':'Mie',
-            'thu':'Jue',
-            'fri':'Vie',
-            'sat':'Sab',
-            'sun':'Dom',
-            'mon_':'Lunes',
-            'tue_':'Martes',
-            'wed_':'Mercoles',
-            'thu_':'Jueves',
-            'fri_':'Viernes',
-            'sat_':'Sabado',
-            'sun_':'Domingo',
-            'done':'Hecho'
-        };
+
+    <script>
         const fechainicial = "{{ fechaini }}";
         console.log(fechainicial)
         const fechafinal = "{{ fechafin }}";
         console.log(fechafinal)
         const fechaactual = "{{ fechadia }}";
         console.log(fechaactual)
+        const fechasfestivos = JSON.parse('{{ festivosregionales | json_encode | raw }}');
+        console.log(fechasfestivos)
+        
+        // Extraer de Array las fechas y montar fechas entre comillas separadas por comas
+        // var concatena = "[";
+        // $.each(fechasfestivos, (index, value) =>
+        // {
+        //     concatena = concatena+'"'+value+'"'+',';
+        //     console.log(concatena)
+        // });
+        // // encuentra la ultima ocurencia de coma
+        // var n = concatena.lastIndexOf(",");
+        // //saca la cadena de texto hasta la ultima ocurencia de coma
+        // var dates = concatena.substring(n, -1)
+        // console.log(dates)
+        // dates = dates+']';
+        // console.log(dates)
 
-        new DateTimePickerComponent.DatePicker( 'select_date', 
-        {
-            first_date: fechainicial,
-            last_date: fechafinal,
-            start_date: fechaactual,
-            first_day_no: 1,
-            l10n: es,
-            date_output: "short_ISO",
-            styles: {
-                active_background: '#e34c26',
-                active_color: '#fff',
-                inactive_background: '#0366d9',
-                inactive_color: '#fff'
+        //var dates = ["2022-09-20", "2022-09-21"];
+        // Funcion que desactiva Festivos
+        //function DisableDates(date) {
+        //    var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+        //    return [fechasfestivos.indexOf(string) == -1];
+        //}
+
+        // Funcion que desactiva Festivos y fines de semana
+        function noWeekendsOrHolidays(date) {
+            var noWeekend = $.datepicker.noWeekends(date);
+            if (noWeekend[0]) {
+                var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+                return [fechasfestivos.indexOf(string) == -1];
+            } else {
+                return noWeekend;
             }
-        });
-</script>
+        }
+
+        $(function() {
+            $.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
+            $("#txFecha").datepicker({
+                firstDay: 1,
+                //beforeShowDay: $.datepicker.noWeekends,
+                //beforeShowDay: DisableDates,
+                beforeShowDay: noWeekendsOrHolidays,
+                autoSize: true,
+                changeYear: true,
+                changeMonth:true,
+                dateFormat: 'yy-mm-dd',
+                minDate: new Date(fechainicial),
+                maxDate: new Date(fechafinal),
+                showOn: "button",
+                //showOn: "both"
+                buttonText: "Calendario  ",
+                showAnim: "fold",
+                //showButtonPanel: true,
+                //buttonImage: "/images/datepicker.gif"
+                //buttonImageOnly: true
+            }).next('button').append('<i class="fa fa-calendar"></i>');
+            
+            //$.datepicker.parseDate('dd-mm-yy', '22/04/2010');
+            // $( "#txFecha" ).datepicker("show");
+        });    
+    </script>
     
 {% endblock %}

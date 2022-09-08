@@ -15,8 +15,8 @@
                                     <h3 class="fw-bold">Listado Informes de Paciente - Informes</h3>
                             </div>
                             <div class="row mb-3 mb-lg-3">
-                                {# Incluimos Boton Volver #}
-                                {% include 'menuVolver.html.twig' %}
+                                {# Incluimos Boton Volver Pacientes#}
+                                {% include 'menuVolverPacientes.html.twig' %}
                             </div>
                             {# Datos Paciente #}      
                             <div class="row mb-1 mb-lg-1">
@@ -80,9 +80,9 @@
                                                     <td>{{ Informe.fecha |date('d-m-Y')}}</td>
                                                     <td>
                                                         <a class="btn btn-warning" href="{{ path('detalleInforme', {idpaciente: datosPaciente.idpaciente, idinforme: Informe.Idinforme }) }}">Detalle</a>
-                                                        <span> </span>
-                                                        <a class="btn btn-info" href="{{ path('formularioModificar', {idpaciente: Paciente.idpaciente, idinforme: Informe.Idinforme }) }}">Modificar</a>
-                                                </td>
+                                                            <span> </span>
+                                                        <a class="btn btn-info" href="{{ path('formularioModificar', {idpaciente: datosPaciente.idpaciente, idinforme: Informe.Idinforme }) }}">Modificar</a>
+                                                    </td>
                                                 </tr>
                                             {% endfor %}
                                         </div>

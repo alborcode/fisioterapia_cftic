@@ -24,12 +24,6 @@
                 }
             }
         },
-        "@symfony/ux-react": {
-            "react": {
-                "enabled": true,
-                "fetch": "eager"
-            }
-        },
         "@symfony/ux-swup": {
             "swup": {
                 "enabled": true,

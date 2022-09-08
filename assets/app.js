@@ -14,7 +14,7 @@ import bsCustomFileInput from 'bs-custom-file-input';
 import './bootstrap';
 
 // assets/app.js
-import { registerReactControllerComponents } from '@symfony/ux-react';
+//import { registerReactControllerComponents } from '@symfony/ux-react';
 
 // Registers React controller components to allow loading them from Twig
 //
@@ -25,6 +25,6 @@ import { registerReactControllerComponents } from '@symfony/ux-react';
 // By putting only controller components in `react/controllers`, you ensure that
 // internal components won't be automatically included in your JS built file if
 // they are not necessary.
-registerReactControllerComponents(require.context('./react/controllers', true, /\.(j|t)sx?$/));
+//registerReactControllerComponents(require.context('./react/controllers', true, /\.(j|t)sx?$/));
 
 bsCustomFileInput.init();

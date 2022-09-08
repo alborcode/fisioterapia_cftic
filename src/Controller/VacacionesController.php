@@ -207,6 +207,24 @@ class VacacionesController extends AbstractController
         $fechadia = date('Y-m-d');
         dump($fechadia);
 
+        // Recupero de API los Festivos de la Comunidad de Madrid (fecha_festivo dara las fechas en formato Y-m-d)
+        $datos = file_get_contents(
+            'https://datos.comunidad.madrid/catalogo/dataset/2f422c9b-47df-407f-902d-4a2f44dd435e/resource/453162e0-bd61-4f52-8699-7ed5f33168f6/download/festivos_regionales.json'
+        );
+        $datosjson = json_decode($datos, true);
+        dump($datosjson);
+
+        // En el Array guardo los datos Json de data con los registros
+        $festivosregionales = $datosjson['data'];
+        dump($festivosregionales);
+
+        // Recupero un Array solo de las Fechas de Festivos
+        $festivosarray = array_column($festivosregionales, 'fecha_festivo');
+        dump($festivosarray);
+
+        // $festivos = $festivosregionales['fecha_festivo'];
+        // dump($festivos);
+
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
         dump($especialidades);
@@ -219,6 +237,7 @@ class VacacionesController extends AbstractController
             'fechaini' => $fechaini,
             'fechafin' => $fechafin,
             'fechadia' => $fechadia,
+            'festivosregionales' => $festivosarray,
         ]);
     }
 
@@ -240,7 +259,7 @@ class VacacionesController extends AbstractController
         // Recogemos datos de formulario con Post del día de vacaciones
         //$diavacaciones = $request->request->get('txtfecha');
         //$diavacaciones = $request->query->get('txtfecha');
-        $diavacaciones = $request->request->get('select_date_value');
+        $diavacaciones = $request->request->get('txFecha');
         dump($diavacaciones);
         $diaconvertido = \DateTime::createFromFormat('Y-m-d', $diavacaciones);
         dump($diaconvertido);
@@ -359,6 +378,20 @@ class VacacionesController extends AbstractController
         $fechadia = date('Y-m-d');
         dump($fechadia);
 
+        // Recupero de API los Festivos de la Comunidad de Madrid (fecha_festivo dara las fechas en formato Y-m-d)
+        $datos = file_get_contents(
+            'https://datos.comunidad.madrid/catalogo/dataset/2f422c9b-47df-407f-902d-4a2f44dd435e/resource/453162e0-bd61-4f52-8699-7ed5f33168f6/download/festivos_regionales.json'
+        );
+        $datosjson = json_decode($datos, true);
+        dump($datosjson);
+
+        // En el Array guardo los datos Json de data con los registros
+        $festivosregionales = $datosjson['data'];
+        dump($festivosregionales);
+        // Recupero un Array solo de las Fechas de Festivos
+        $festivosarray = array_column($festivosregionales, 'fecha_festivo');
+        dump($festivosarray);
+
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
         dump($especialidades);
@@ -371,6 +404,7 @@ class VacacionesController extends AbstractController
             'fechaini' => $fechaini,
             'fechafin' => $fechafin,
             'fechadia' => $fechadia,
+            'festivosregionales' => $festivosarray,
             'mensaje' => $mensaje,
             'mensajewarning' => $mensajewarning,
         ]);
@@ -414,7 +448,21 @@ class VacacionesController extends AbstractController
         dump($fechafin);
         // Recupero Fecha del Dia
         $fechadia = date('Y-m-d');
-        dump($diaformateado);
+        dump($fechadia);
+
+        // Recupero de API los Festivos de la Comunidad de Madrid (fecha_festivo dara las fechas en formato Y-m-d)
+        $datos = file_get_contents(
+            'https://datos.comunidad.madrid/catalogo/dataset/2f422c9b-47df-407f-902d-4a2f44dd435e/resource/453162e0-bd61-4f52-8699-7ed5f33168f6/download/festivos_regionales.json'
+        );
+        $datosjson = json_decode($datos, true);
+        dump($datosjson);
+
+        // En el Array guardo los datos Json de data con los registros
+        $festivosregionales = $datosjson['data'];
+        dump($festivosregionales);
+        // Recupero un Array solo de las Fechas de Festivos
+        $festivosarray = array_column($festivosregionales, 'fecha_festivo');
+        dump($festivosarray);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
@@ -428,6 +476,7 @@ class VacacionesController extends AbstractController
             'fechaini' => $fechaini,
             'fechafin' => $fechafin,
             'fechadia' => $fechadia,
+            'festivosregionales' => $festivosarray,
         ]);
     }
 
@@ -447,7 +496,7 @@ class VacacionesController extends AbstractController
         $boton = $request->request->get('operacion');
 
         // Recogemos datos de formulario con Post del día de vacaciones
-        $diavacaciones = $request->request->get('txtfecha');
+        $diavacaciones = $request->request->get('txFecha');
         dump($diavacaciones);
         $diaconvertido = \DateTime::createFromFormat('Y-m-d', $diavacaciones);
         dump($diaconvertido);
@@ -560,6 +609,20 @@ class VacacionesController extends AbstractController
         $fechadia = date('Y-m-d');
         dump($fechadia);
 
+        // Recupero de API los Festivos de la Comunidad de Madrid (fecha_festivo dara las fechas en formato Y-m-d)
+        $datos = file_get_contents(
+            'https://datos.comunidad.madrid/catalogo/dataset/2f422c9b-47df-407f-902d-4a2f44dd435e/resource/453162e0-bd61-4f52-8699-7ed5f33168f6/download/festivos_regionales.json'
+        );
+        $datosjson = json_decode($datos, true);
+        dump($datosjson);
+
+        // En el Array guardo los datos Json de data con los registros
+        $festivosregionales = $datosjson['data'];
+        dump($festivosregionales);
+        // Recupero un Array solo de las Fechas de Festivos
+        $festivosarray = array_column($festivosregionales, 'fecha_festivo');
+        dump($festivosarray);
+
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
         dump($especialidades);
@@ -572,6 +635,7 @@ class VacacionesController extends AbstractController
             'fechaini' => $fechaini,
             'fechafin' => $fechafin,
             'fechadia' => $fechadia,
+            'festivosregionales' => $festivosarray,
             'mensaje' => $mensaje,
             'mensajewarning' => $mensajewarning,
         ]);
