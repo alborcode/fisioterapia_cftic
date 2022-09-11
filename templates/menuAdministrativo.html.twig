@@ -8,7 +8,7 @@
                     <li><a class="dropdown-item" href="{{ path('altaPacienteAdmin') }}">Alta Paciente</a></li>
                     <li><a class="dropdown-item" href="{{ path('buscarPerfilPaciente') }}">Modificar Perfil Paciente</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{{ path('app_citas_new') }}">Pedir Cita Paciente</a></li>
+                        <li><a class="dropdown-item" href="{{ path('buscarCitasFacultativoAdmin') }}">Pedir Cita Paciente</a></li>
                 </ul>
         </li>
         {# Menu de Facultativos #}
@@ -18,8 +18,10 @@
                 <li><a class="dropdown-item" href="{{ path('altaFacultativoAdmin') }}">Alta Facultativo</a></li>
                 <li><a class="dropdown-item" href="{{ path('buscarPerfilFacultativo') }}">Modificar Perfil Facultativo</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="{{ path('buscarTurnosFacultativo') }}">Gestion Turnos</a></li>
-                <li><a class="dropdown-item" href="{{ path('buscarVacacionesFacultativo') }}">Gestion Vacaciones</a></li>
+                    <li><a class="dropdown-item" href="{{ path('buscarVacacionesFacultativo') }}">Gestion Vacaciones</a></li>
+                    <li><a class="dropdown-item" href="{{ path('buscarTurnosFacultativo') }}">Gestion Turnos</a></li>
+                <li><hr class="dropdown-divider"></li>
+                 <li><a class="dropdown-item" href="{{ path('buscarFacultativoCitasD') }}">Alta Citas Disponibles</a></li>
             </ul>
         </li>
         {# Menu de Administrativos #}
@@ -28,8 +30,8 @@
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="{{ path('altaAdministrativo') }}">Alta Administrativo</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="{{ path('altaEspecialidad') }}">Alta Especialidades</a></li>
-                <li><a class="dropdown-item" href="{{ path('buscarEspecialidaModificar') }}">Modificar Datos Especialidad</a></li>
+                    <li><a class="dropdown-item" href="{{ path('altaEspecialidad') }}">Alta Especialidades</a></li>
+                    <li><a class="dropdown-item" href="{{ path('buscarEspecialidaModificar') }}">Modificar Datos Especialidad</a></li>
             </ul>
         </li>
 

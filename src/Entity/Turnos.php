@@ -23,15 +23,11 @@ class Turnos
     #[Assert\Choice(['DOMINGO', 'LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'])]
     private ?string $diasemana = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    #[Assert\Time]
-    #[Assert\Format('H:i:s')]
-    private ?\DateTimeInterface $horainicio = null;
+    #[ORM\Column]
+    private ?int $horainicio = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    #[Assert\Time]
-    #[Assert\Format('H:i:s')]
-    private ?\DateTimeInterface $horafin = null;
+    #[ORM\Column]
+    private ?int $horafin = null;
 
     // #[ORM\Column]
     // #[Assert\Choice(['SI', 'NO'])]
@@ -71,24 +67,24 @@ class Turnos
         return $this;
     }
 
-    public function getHorainicio(): ?\DateTimeInterface
+    public function getHorainicio(): ?int
     {
         return $this->horainicio;
     }
 
-    public function setHorainicio(\DateTimeInterface $horainicio): self
+    public function setHorainicio(?int $horainicio): self
     {
         $this->horainicio = $horainicio;
 
         return $this;
     }
 
-    public function getHorafin(): ?\DateTimeInterface
+    public function getHorafin(): ?int
     {
         return $this->horafin;
     }
 
-    public function setHorafin(\DateTimeInterface $horafin): self
+    public function setHorafin(?int $horafin): self
     {
         $this->horafin = $horafin;
 

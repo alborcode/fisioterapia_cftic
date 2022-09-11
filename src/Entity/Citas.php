@@ -19,12 +19,8 @@ class Citas
     #[Assert\Date]
     private ?\DateTimeInterface $fecha = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    #[Assert\Time]
-    private ?\DateTimeInterface $hora = null;
-
     #[ORM\Column]
-    private ?bool $disponible = null;
+    private ?int $hora = null;
 
     // Se modifica JoinColumn para añadir el name ya que no es id se cambio
     #[ORM\ManyToOne]
@@ -53,26 +49,14 @@ class Citas
         return $this;
     }
 
-    public function getHora(): ?\DateTimeInterface
+    public function getHora(): ?int
     {
         return $this->hora;
     }
 
-    public function setHora(\DateTimeInterface $hora): self
+    public function setHora(?int $hora): self
     {
         $this->hora = $hora;
-
-        return $this;
-    }
-
-    public function isDisponible(): ?bool
-    {
-        return $this->disponible;
-    }
-
-    public function setDisponible(bool $disponible): self
-    {
-        $this->disponible = $disponible;
 
         return $this;
     }

@@ -12,7 +12,7 @@
                         <div class="card-body text-center d-flex flex-column align-items-center">
                             <div class="row mb-1 mb-lg-1">
                                     <p class="fw-bold text-success mb-2">Intranet - Menu Administrativo</p>
-                                    <h3 class="fw-bold">Seleccionar Facultativo - Vacaciones</h3>
+                                    <h3 class="fw-bold">Seleccionar Facultativo - Citas</h3>
                             </div>
                             <div class="row mb-4 mb-lg-5">
                                 {# Incluimos Boton Volver #}
@@ -49,7 +49,6 @@
                                     <tr>
                                         <th>Especialidad</th>
                                         <th>Nombre</th>
-                                        <th>Telefono</th>
                                         <th>Accion</th>
                                     </tr>
                                 </thead>
@@ -73,7 +72,7 @@
                                                 <td scope="row">{{ Facultativo.Nombre | capitalize}} {{ Facultativo.Apellido1 | capitalize}} {{ Facultativo.Apellido2 | capitalize}}</td>
                                                 <td>{{ Facultativo.Telefono}}</td>
                                                 <td>
-                                                    <a class="btn btn-info" href="{{ path('mostrarVacacionesAdmin', {idfacultativo: Facultativo.idfacultativo }) }}">Gestionar</a>
+                                                    <a class="btn btn-info" href="{{ path('buscarPacienteCita', {idfacultativo: Facultativo.idfacultativo }) }}">Pedir Cita</a>
                                                 </td>
                                             </tr>
                                         {% endfor %}

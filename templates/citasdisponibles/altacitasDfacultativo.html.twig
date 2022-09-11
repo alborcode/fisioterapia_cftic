@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modificar Turnos Facultativo{% endblock %}
+
+{% block body %}
+
+    <section class="py-5 mt-5">
+        <div class="container py-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 col-xl-12">
+                    <div class="card">
+                        <div class="card-body text-center d-flex flex-column align-items-center">
+                            <div class="row mb-4 mb-lg-5">
+                                    <p class="fw-bold text-success mb-2">Intranet - Menu Administrativo</p>
+                                    <h3 class="fw-bold">Alta Citas Disponibles</h3>
+                            </div>
+                            <div class="row mb-4 mb-lg-2">
+                                {# Incluimos Boton Volver #}
+                                {% include 'menuVolver.html.twig' %}
+                            </div>
+                            <div class="form-group">
+                                {# Formulario Para Añadir/Modificar Citas Disponibles #}
+                                <form method="POST" action="{{ path('altaCitasDFacultativo', { idfacultativo: datosFacultativo.idfacultativo }) }}">
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-3">
+                                            Código Facultativo
+                                            <input type="number" name="txtIdfacultativo" value="{{datosFacultativo.idfacultativo}}" readonly="readonly" disabled="disabled" class="form-control" id="txtIdfacultativo">
+                                        </div>
+                                    </div>    
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-4">
+                                            Nombre
+                                            <input type="text" name="txtNombre" value="{{datosFacultativo.nombre}}" readonly="readonly" disabled="disabled" class="form-control" id="txtNombre">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            Primer Apellido
+                                            <input type="text" name="txtApellido1" value="{{datosFacultativo.apellido1}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido1">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            Segundo Apellido
+                                            <input type="text" name="txtApellido2" value="{{datosFacultativo.apellido2}}" readonly="readonly" disabled="disabled" class="form-control" id="txtApellido2">
+                                        </div>
+                                    </div>  
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-4">
+                                            Teléfono
+                                            <input type="tel" name="txtTelefono" value="{{datosFacultativo.telefono}}" readonly="readonly" disabled="disabled" class="form-control" id="txtTelefono" pattern="(\+34|0034|34)?[ -]*(6|7|8|9)[ -]*([0-9][ -]*){8}">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            Especialidad    
+                                            <select name="comboEspecialidad" class="form-control" id="comboEspecialidad" readonly="readonly" disabled="disabled">
+                                                {% for Especialidad in datosEspecialidades %}
+                                                    {% if Especialidad == datosFacultativo.especialidad %}
+                                                        {# Se le pone atributo selected para que se quede seleccionado #}
+                                                        <option value="{{ Especialidad.idespecialidad }}" selected> {{ Especialidad.especialidad }}</option>
+                                                    {% else %}                                        
+                                                        <option value="{{ Especialidad.idespecialidad }}"> {{ Especialidad.especialidad }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-2 mb-lg-2">
+                                        Alta de Citas Disponibles de Facultativo para mes desde la fecha actual
+                                        <button type="submit" class="btn btn-primary col-sm-3" name="actualizar" value="actualizar">
+                                            <i class="fa fa-snowflake-o" aria-hidden="true"></i> Alta Citas
+                                        </button>
+                                    </div>    
+                                </form>
+                                <HR>
+
+                                {# Si existen mensajes los mostramos #}
+                                {% if mensaje is defined %}
+                                    {% if mensaje is not null %}
+                                        <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
+                                            {{mensaje}}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                                {% if mensajewarning is defined %}        
+                                    {% if mensajewarning is not null %}
+                                        <div class="alert alert-warning d-flex align-items-center alert-dismissible fade show" role="alert">
+                                            {{mensajewarning}}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}    
+
+                                {# {{ dump(datosTurnos) }} #}
+                                {# Muestro Tabla con Citas Disponibles existentes #}
+                                <div class="row mb-2 mb-lg-2">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Día</th>
+                                                <th>Hora</th>
+                                                <th>Disponible</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {# Si esta definida la variable muestra los datos de las citas disponibles del facultativo #}
+                                            {# {% if datosCitasDisponibles is defined %} #}
+                                            {% for Cita in datosCitasDisponibles %}    
+                                                <tr>
+                                                    <td scope="row">{{ Cita.fecha |date('d-m-Y')}}</td>
+                                                    <td>{{ Cita.hora}}:00</td>
+                                                    {% if Cita.disponible == true %}
+                                                        <td>{{ 'Disponible'}}</td>
+                                                    {% else %}
+                                                        td>{{ 'No Disponible'}}</td>
+                                                    {% endif %}
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table> 
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+{% endblock %}

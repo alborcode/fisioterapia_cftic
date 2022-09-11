@@ -12,16 +12,37 @@
                         <div class="card-body text-center d-flex flex-column align-items-center">
                             <div class="row mb-1 mb-lg-1">
                                     <p class="fw-bold text-success mb-2">Intranet - Menu Facultativo</p>
-                                    <h3 class="fw-bold">Seleccionar Paciente - Informes</h3>
+                                    <h3 class="fw-bold">Seleccionar Paciente - Citas</h3>
                             </div>
-                            <div class="row mb-4 mb-lg-5">
+                            <div class="row mb-1 mb-lg-1">
                                 {# Incluimos Boton Volver #}
                                 {% include 'menuVolver.html.twig' %}
                             </div>
+                            <div class="form-group row mb-1 mb-lg-1">
+                                <form method="POST">
+                                    <div class="row mb-1 mb-lg-5">
+                                        <div class="col-sm-3">
+                                            <select name="comboEspecialidad" class="form-control" readonly="readonly" disabled="disabled" id="comboEspecialidad">
+                                                {% for Especialidad in datosEspecialidades %}
+                                                    {% if Especialidad == datosFacultativo.especialidad %}
+                                                        {# Se le pone atributo selected para que se quede seleccionado #}
+                                                        <option value="{{ Especialidad.idespecialidad }}" selected> {{ Especialidad.especialidad }}</option>
+                                                    {% else %}                                        
+                                                        <option value="{{ Especialidad.idespecialidad }}"> {{ Especialidad.especialidad }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <input type="text" name="txtNombre" value="{{datosFacultativo.nombre}} {{datosFacultativo.apellido1}} {{datosFacultativo.apellido2}}" readonly="readonly" disabled="disabled" class="form-control" id="txtNombre">
+                                        </div>
+                                    </div>                               
+                                </form>
+
                             <div class="form-group row mb-4 mb-lg-5">
                                 {# Formulario Busqueda Paciente por Apellido #}
                                 {# {{ form_start(buscarPacienteApellidoForm,{'action':path('buscarPerfilPaciente'),'method':'GET'}) }}  #}
-                                <form method="GET" action="{{ path('buscarPerfilPacienteApellido') }}">
+                                <form method="GET" action="{{ path('buscarPacienteCitaApellido') }}">
                                     <div class="form-group row">
                                         <div class="col-sm-3">
                                             {# {{ form_row(buscarPacienteForm.apellido1, {label: 'Primer Apellido'}) }} #}
@@ -34,7 +55,7 @@
                                 {# {{ form_end(buscarPacienteForm) }} #}
                                 </form>
                                 {# Formulario Busqueda Paciente por Telefono #}
-                                <form method="GET" action="{{ path('buscarPerfilPacienteTelefono') }}">
+                                <form method="GET" action="{{ path('buscarPacienteCitaTelefono') }}">
                                     <div class="form-group row my-3">
                                         <div class="col-sm-3">
                                             <input type="number" class="form-control" placeholder="Telefono" name="txtTelefono" class="form-control" id="txtTelefono">
@@ -84,9 +105,7 @@
                                                 <td>{{ Paciente.Nombre | capitalize}} {{ Paciente.Apellido1 | capitalize}} {{ Paciente.Apellido2 | capitalize}}</td>
                                                 <td>{{ Paciente.Telefono}}</td>
                                                 <td>
-                                                    <a class="btn btn-info" href="{{ path('mostrarDatosFacultativoPaciente', {idpaciente: Paciente.idpaciente }) }}">Alta</a>
-                                                    <span> </span>
-                                                    <a class="btn btn-warning" href="{{ path('mostrarListadoInformes', {idpaciente: Paciente.idpaciente}) }}">Informes</a>
+                                                    <a class="btn btn-info" href="{{ path('mostrarCitasAdmin', {idpaciente: Paciente.idpaciente, idfacultativo: datosFacultativo.idfacultativo }) }}">Gestion Citas</a>
                                                 </td>
                                             </tr>
                                         {% endfor %}

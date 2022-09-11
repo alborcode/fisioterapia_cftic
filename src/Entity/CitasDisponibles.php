@@ -2,35 +2,35 @@
 
 namespace App\Entity;
 
-use App\Repository\VacacionesRepository;
+use App\Repository\CitasDisponiblesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: VacacionesRepository::class)]
-class Vacaciones
+#[ORM\Entity(repositoryClass: CitasDisponiblesRepository::class)]
+class CitasDisponibles
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $idvacaciones = null;
+    private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Assert\Date]
     private ?\DateTimeInterface $fecha = null;
 
     #[ORM\Column]
-    #[Assert\Choice(['SI', 'NO'])]
-    private ?bool $dianotrabajado = null;
+    private ?int $hora = null;
+
+    #[ORM\Column]
+    private ?bool $disponible = null;
 
     // Se modifica JoinColumn para añadir el name ya que no es id se cambio
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, name:"idfacultativo", referencedColumnName:"idfacultativo")]
     private ?Facultativos $idfacultativo = null;
 
-    public function getIdvacaciones(): ?int
+    public function getId(): ?int
     {
-        return $this->idvacaciones;
+        return $this->id;
     }
 
     public function getFecha(): ?\DateTimeInterface
@@ -45,14 +45,26 @@ class Vacaciones
         return $this;
     }
 
-    public function isDianotrabajado(): ?bool
+    public function getHora(): ?int
     {
-        return $this->dianotrabajado;
+        return $this->hora;
     }
 
-    public function setDianotrabajado(bool $dianotrabajado): self
+    public function setHora(?int $hora): self
     {
-        $this->dianotrabajado = $dianotrabajado;
+        $this->hora = $hora;
+
+        return $this;
+    }
+
+    public function isDisponible(): ?bool
+    {
+        return $this->disponible;
+    }
+
+    public function setDisponible(bool $disponible): self
+    {
+        $this->disponible = $disponible;
 
         return $this;
     }
