@@ -62,8 +62,8 @@ class RegistrationController extends AbstractController
                 (new TemplatedEmail())
                     ->from(
                         new Address(
-                            'fisiosalud87@gmail.com',
-                            'Admin Fisioterapia'
+                            'admin@alborcode.org.es',
+                            'Clinica Fisio Salud Admin'
                         )
                     )
                     ->to($user->getEmail())

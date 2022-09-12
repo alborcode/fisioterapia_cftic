@@ -38,6 +38,9 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
+// Use necesario para usar las funciones de paginacion
+use Knp\Component\Pager\PaginatorInterface;
+
 #[Route('/citas')]
 class CitasController extends AbstractController
 {

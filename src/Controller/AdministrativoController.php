@@ -42,6 +42,9 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
+// Use necesario para usar las funciones de paginacion
+use Knp\Component\Pager\PaginatorInterface;
+
 #[Route('/administrativo')]
 class AdministrativoController extends AbstractController
 {
@@ -353,57 +356,37 @@ class AdministrativoController extends AbstractController
     //**********************************************************
     // Modificar Perfil de Paciente a traves de Administrativo *
     //**********************************************************
-    #[Route('/buscarperfilpaciente', name: 'buscarPerfilPaciente', methods: ['GET', 'POST'])]
+    #[Route('/buscarperfilpaciente', name: 'buscarPerfilPacienteAdmin', methods: ['GET', 'POST'])]
     public function buscarPerfilPaciente(
         Request $request,
         PacientesRepository $pacientesRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
+        // Recupero datos de Paccientes para enviar los Values a Formulario con Paginacion
         // $em = $this->getDoctrine()->getManager();
-        // $query = $em->getRepository(Pacientes::class)>findAll();
-
-        // $pagination = $paginator->paginate(
-        //     $query /* query NOT result */,
-        //     $request->query->getInt('page', 1) /*page number*/,
-        //     10 /*limit per page*/
-        // );
-
-        // // parameters to template
-        // return $this->render('pacientes/mostrarPerfil.html.twig', [
-        //     'datosPacientes' => $pagination,
-        // ]);
-
-        // Recupero todos los Pacientes
-        $pacientes = $em->getRepository(Pacientes::class)->findAll();
-        dump($pacientes);
+        $query = $em->getRepository(Pacientes::class)->findAll();
+        dump($query);
+        $datosPacientesPaginados = $paginator->paginate(
+            $query, // Consulta que quiero paginar,
+            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+            5 // Número de elementos por página
+        );
 
         // Se envia a pagina enviando los datos de los pacientes
         return $this->render('administrativo/busquedaPaciente.html.twig', [
-            'datosPacientes' => $pacientes,
+            'datosPacientes' => $datosPacientesPaginados,
         ]);
     }
 
     // Buscar Perfil Paciente por Apellido
-    #[Route('/buscarperfilpacienteApellido', name: 'buscarPerfilPacienteApellido', methods: ['GET', 'POST'])]
+    #[Route('/buscarperfilpacienteApellido', name: 'buscarPerfilPacienteApellidoAdmin', methods: ['GET', 'POST'])]
     public function buscarPerfilPacienteApellido(
         Request $request,
         PacientesRepository $pacientesRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
-        // $em = $this->getDoctrine()->getManager();
-        // $query = $em->getRepository(Pacientes::class)>findAll();
-
-        // $pagination = $paginator->paginate(
-        //     $query /* query NOT result */,
-        //     $request->query->getInt('page', 1) /*page number*/,
-        //     10 /*limit per page*/
-        // );
-
-        // // parameters to template
-        // return $this->render('pacientes/mostrarPerfil.html.twig', [
-        //     'datosPacientes' => $pagination,
-        // ]);
-
         // Recogemos datos de formulario con Get dado que es una busqueda
         // $busquedaapellido = $request->request->get('txtApellido');
         $busquedaapellido = $request->query->get('txtApellido');
@@ -411,6 +394,7 @@ class AdministrativoController extends AbstractController
 
         // Si se ha rellenado la busqueda por Apellido
         if ($busquedaapellido) {
+            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT p FROM App\Entity\Pacientes p WHERE p.apellido1 like :parametro'
             );
@@ -418,63 +402,76 @@ class AdministrativoController extends AbstractController
             $query->setParameter('parametro', $busquedaapellido . '%');
             dump($query);
             // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            $pacientes = $query->getResult();
-            dump($pacientes);
+            // $pacientes = $query->getResult();
+            // dump($pacientes);
+            $datosPacientesPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         } else {
-            // Si no se relleno se recuperan todos los Pacientes
-            $pacientes = $em->getRepository(Pacientes::class)->findAll();
+            // Si no se relleno se recuperan todos los Pacientes con Paginacion
+            // $em = $this->getDoctrine()->getManager();
+            $query = $em->getRepository(Pacientes::class)->findAll();
+            dump($query);
+            $datosPacientesPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         }
 
         return $this->render('administrativo/busquedaPaciente.html.twig', [
-            'datosPacientes' => $pacientes,
+            'datosPacientes' => $datosPacientesPaginados,
         ]);
     }
 
     // Buscar Perfil Paciente por Telefono
-    #[Route('/buscarperfilpacienteTelefono', name: 'buscarPerfilPacienteTelefono', methods: ['GET', 'POST'])]
+    #[Route('/buscarperfilpacienteTelefono', name: 'buscarPerfilPacienteTelefonoAdmin', methods: ['GET', 'POST'])]
     public function buscarPerfilPacienteTelefono(
         Request $request,
         PacientesRepository $pacientesRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
-        // $em = $this->getDoctrine()->getManager();
-        // $query = $em->getRepository(Pacientes::class)>findAll();
-
-        // $pagination = $paginator->paginate(
-        //     $query /* query NOT result */,
-        //     $request->query->getInt('page', 1) /*page number*/,
-        //     10 /*limit per page*/
-        // );
-
-        // // parameters to template
-        // return $this->render('pacientes/mostrarPerfil.html.twig', [
-        //     'datosPacientes' => $pagination,
-        // ]);
-
-        /// Recogemos datos de formulario con Get dado que es una busqueda
+        // Recogemos datos de formulario con Get dado que es una busqueda
         //$busquedatelefono = $request->request->get('txtTelefono');
         $busquedatelefono = $request->query->get('txtTelefono');
         dump($busquedatelefono);
 
         // Si se ha rellenado busqueda telefono
         if ($busquedatelefono) {
-            // Select de Pacientes con Where mandado por parametro
+            // Si no se relleno se recuperan todos los Pacientes con Paginacion
+            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT p FROM App\Entity\Pacientes p WHERE p.telefono = :dato'
             );
             // Asigno valor del parametro dato
             $query->setParameter('dato', $busquedatelefono);
+            dump($query);
             // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            $pacientes = $query->getResult();
-            dump($pacientes);
+            //$pacientes = $query->getResult();
+            //dump($pacientes);
+            $datosPacientesPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         } else {
-            // Si no se relleno se recuperan todos los Pacientes
-            $pacientes = $em->getRepository(Pacientes::class)->findAll();
+            // Si no se relleno se recuperan todos los Pacientes con Paginacion
+            // $em = $this->getDoctrine()->getManager();
+            $query = $em->getRepository(Pacientes::class)->findAll();
+            dump($query);
+            $datosPacientesPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         }
 
         // Enviamos a la pagina con los datos de Pacientes recuperados
         return $this->render('administrativo/busquedaPaciente.html.twig', [
-            'datosPacientes' => $pacientes,
+            'datosPacientes' => $datosPacientesPaginados,
         ]);
     }
 
@@ -614,28 +611,22 @@ class AdministrativoController extends AbstractController
     public function buscarPerfilFacultativo(
         Request $request,
         FacultativosRepository $facultativosRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
+        // Si no se relleno se recuperan todos los Facultativos con Paginacion
         // $em = $this->getDoctrine()->getManager();
-        // $query = $em->getRepository(Pacientes::class)>findAll();
-
-        // $pagination = $paginator->paginate(
-        //     $query /* query NOT result */,
-        //     $request->query->getInt('page', 1) /*page number*/,
-        //     10 /*limit per page*/
-        // );
-
-        // // parameters to template
-        // return $this->render('pacientes/mostrarPerfil.html.twig', [
-        //     'datosPacientes' => $pagination,
-        // ]);
-
-        // Recupero todos los Facultativos
-        $facultativos = $em->getRepository(Facultativos::class)->findAll();
+        $query = $em->getRepository(Facultativos::class)->findAll();
+        dump($query);
+        $datosFacultativosPaginados = $paginator->paginate(
+            $query, // Consulta que quiero paginar,
+            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+            5 // Número de elementos por página
+        );
 
         // Se envia a pagina enviando los datos de los facultativos
         return $this->render('administrativo/busquedaFacultativo.html.twig', [
-            'datosFacultativos' => $facultativos,
+            'datosFacultativos' => $datosFacultativosPaginados,
         ]);
     }
 
@@ -644,22 +635,9 @@ class AdministrativoController extends AbstractController
     public function buscarPerfilFacultativoApellido(
         Request $request,
         PacientesRepository $pacientesRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
-        // $em = $this->getDoctrine()->getManager();
-        // $query = $em->getRepository(Pacientes::class)>findAll();
-
-        // $pagination = $paginator->paginate(
-        //     $query /* query NOT result */,
-        //     $request->query->getInt('page', 1) /*page number*/,
-        //     10 /*limit per page*/
-        // );
-
-        // // parameters to template
-        // return $this->render('pacientes/mostrarPerfil.html.twig', [
-        //     'datosPacientes' => $pagination,
-        // ]);
-
         // Recogemos datos de formulario con Get dado que es una busqueda
         // $busquedaapellido = $request->request->get('txtApellido');
         $busquedaapellido = $request->query->get('txtApellido');
@@ -667,6 +645,8 @@ class AdministrativoController extends AbstractController
 
         // Si se ha rellenado la busqueda por Apellido
         if ($busquedaapellido) {
+            // Si no se relleno se recuperan todos los Facultativos con Paginacion
+            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT f FROM App\Entity\Facultativos f WHERE f.apellido1 like :parametro'
             );
@@ -674,15 +654,27 @@ class AdministrativoController extends AbstractController
             $query->setParameter('parametro', $busquedaapellido . '%');
             dump($query);
             // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            $facultativos = $query->getResult();
-            dump($facultativos);
+            // $facultativos = $query->getResult();
+            // dump($facultativos);
+            $datosFacultativosPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         } else {
-            // Si no se relleno se recuperan todos los Pacientes
-            $facultativos = $em->getRepository(Facultativos::class)->findAll();
+            // Si no se relleno se recuperan todos los Facultativos con Paginacion
+            // $em = $this->getDoctrine()->getManager();
+            $query = $em->getRepository(Facultativos::class)->findAll();
+            dump($query);
+            $datosFacultativosPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         }
 
         return $this->render('administrativo/busquedaFacultativo.html.twig', [
-            'datosFacultativos' => $facultativos,
+            'datosFacultativos' => $datosFacultativosPaginados,
         ]);
     }
 
@@ -691,46 +683,48 @@ class AdministrativoController extends AbstractController
     public function buscarPerfilFacultativoTelefono(
         Request $request,
         FacultativosRepository $facultativosRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
-        // $em = $this->getDoctrine()->getManager();
-        // $query = $em->getRepository(Pacientes::class)>findAll();
-
-        // $pagination = $paginator->paginate(
-        //     $query /* query NOT result */,
-        //     $request->query->getInt('page', 1) /*page number*/,
-        //     10 /*limit per page*/
-        // );
-
-        // // parameters to template
-        // return $this->render('pacientes/mostrarPerfil.html.twig', [
-        //     'datosPacientes' => $pagination,
-        // ]);
-
-        /// Recogemos datos de formulario con Get dado que es una busqueda
+        // Recogemos datos de formulario con Get dado que es una busqueda
         //$busquedatelefono = $request->request->get('txtTelefono');
         $busquedatelefono = $request->query->get('txtTelefono');
         dump($busquedatelefono);
 
         // Si se ha rellenado busqueda telefono
         if ($busquedatelefono) {
+            // Si no se relleno se recuperan todos los Facultativos con Paginacion
+            // $em = $this->getDoctrine()->getManager();
             // Select de Pacientes con Where mandado por parametro
             $query = $em->createQuery(
                 'SELECT f FROM App\Entity\Facultativos f WHERE f.telefono = :dato'
             );
             // Asigno valor del parametro dato
             $query->setParameter('dato', $busquedatelefono);
+            dump($query);
             // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            $facultativos = $query->getResult();
-            dump($facultativos);
+            // $facultativos = $query->getResult();
+            // dump($facultativos);
+            $datosFacultativosPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         } else {
-            // Si no se relleno se recuperan todos los Pacientes
-            $facultativos = $em->getRepository(Facultativos::class)->findAll();
+            // Si no se relleno se recuperan todos los Facultativos con Paginacion
+            // $em = $this->getDoctrine()->getManager();
+            $query = $em->getRepository(Facultativos::class)->findAll();
+            dump($query);
+            $datosFacultativosPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         }
 
         // Enviamos a la pagina con los datos de Pacientes recuperados
         return $this->render('administrativo/busquedaFacultativo.html.twig', [
-            'datosFacultativos' => $facultativos,
+            'datosFacultativos' => $datosFacultativosPaginados,
         ]);
     }
 

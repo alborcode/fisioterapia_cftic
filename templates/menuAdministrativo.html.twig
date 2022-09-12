@@ -6,7 +6,7 @@
                 <a class="nav-link active dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Pacientes</a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="{{ path('altaPacienteAdmin') }}">Alta Paciente</a></li>
-                    <li><a class="dropdown-item" href="{{ path('buscarPerfilPaciente') }}">Modificar Perfil Paciente</a></li>
+                    <li><a class="dropdown-item" href="{{ path('buscarPerfilPacienteAdmin') }}">Modificar Perfil Paciente</a></li>
                     <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{{ path('buscarCitasFacultativoAdmin') }}">Pedir Cita Paciente</a></li>
                 </ul>
@@ -21,7 +21,7 @@
                     <li><a class="dropdown-item" href="{{ path('buscarVacacionesFacultativo') }}">Gestion Vacaciones</a></li>
                     <li><a class="dropdown-item" href="{{ path('buscarTurnosFacultativo') }}">Gestion Turnos</a></li>
                 <li><hr class="dropdown-divider"></li>
-                 <li><a class="dropdown-item" href="{{ path('buscarFacultativoCitasD') }}">Alta Citas Disponibles</a></li>
+                 <li><a class="dropdown-item" href="{{ path('buscarFacultativoCitasD') }}">Gestion Citas Disponibles</a></li>
             </ul>
         </li>
         {# Menu de Administrativos #}
@@ -29,9 +29,6 @@
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Administrativos</a>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="{{ path('altaAdministrativo') }}">Alta Administrativo</a></li>
-                <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{{ path('altaEspecialidad') }}">Alta Especialidades</a></li>
-                    <li><a class="dropdown-item" href="{{ path('buscarEspecialidaModificar') }}">Modificar Datos Especialidad</a></li>
             </ul>
         </li>
 

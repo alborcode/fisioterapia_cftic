@@ -62,7 +62,9 @@
                                     </div>
                                     
                                     <div class="row mb-2 mb-lg-2">
-                                        Alta de Citas Disponibles de Facultativo para mes desde la fecha actual
+                                        <small>Alta Citas Disponibles Facultativo Segun Turnos para mes desde fecha actual </small>
+                                    </div>    
+                                    <div class="row mb-2 mb-lg-2">
                                         <button type="submit" class="btn btn-primary col-sm-3" name="actualizar" value="actualizar">
                                             <i class="fa fa-snowflake-o" aria-hidden="true"></i> Alta Citas
                                         </button>
@@ -114,7 +116,11 @@
                                                 </tr>
                                             {% endfor %}
                                         </tbody>
-                                    </table> 
+                                    </table>
+                                    {# Mostramos Paginacion #}
+                                    <div>
+                                        {{ knp_pagination_render(datosCitasDisponibles) }}
+                                    </div>    
                                 </div>
 
                             </div>

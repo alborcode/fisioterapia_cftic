@@ -21,7 +21,7 @@
                             <div class="form-group row mb-4 mb-lg-5">
                                 {# Formulario Busqueda Paciente por Apellido #}
                                 {# {{ form_start(buscarPacienteApellidoForm,{'action':path('buscarPerfilPaciente'),'method':'GET'}) }}  #}
-                                <form method="GET" action="{{ path('buscarPerfilPacienteApellido') }}">
+                                <form method="GET" action="{{ path('buscarPerfilPacienteApellidoAdmin') }}">
                                     <div class="form-group row">
                                         <div class="col-sm-3">
                                             {# {{ form_row(buscarPacienteForm.apellido1, {label: 'Primer Apellido'}) }} #}
@@ -34,7 +34,7 @@
                                 {# {{ form_end(buscarPacienteForm) }} #}
                                 </form>
                                 {# Formulario Busqueda Paciente por Telefono #}
-                                <form method="GET" action="{{ path('buscarPerfilPacienteTelefono') }}">
+                                <form method="GET" action="{{ path('buscarPerfilPacienteTelefonoAdmin') }}">
                                     <div class="form-group row my-3">
                                         <div class="col-sm-3">
                                             <input type="number" class="form-control" placeholder="Telefono" name="txtTelefono" class="form-control" id="txtTelefono">
@@ -70,10 +70,12 @@
                                             </tr>
                                         {% endfor %}
                                     </div>
-
                                 </tbody>
                             </table>
-
+                            {# Mostramos Paginacion #}
+                            <div>
+                                {{ knp_pagination_render(datosPacientes) }}
+                            </div>    
                         </div>
                     </div>
                 </div>

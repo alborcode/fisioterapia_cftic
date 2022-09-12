@@ -91,10 +91,12 @@
                                             </tr>
                                         {% endfor %}
                                     </div>
-
                                 </tbody>
                             </table>
-
+                            {# Mostramos Paginacion #}
+                            <div>
+                                {{ knp_pagination_render(datosPacientes) }}
+                            </div>   
                         </div>
                     </div>
                 </div>

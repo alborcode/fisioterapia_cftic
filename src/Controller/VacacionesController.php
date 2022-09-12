@@ -29,6 +29,9 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
+// Use necesario para usar las funciones de paginacion
+use Knp\Component\Pager\PaginatorInterface;
+
 #[Route('/vacaciones')]
 class VacacionesController extends AbstractController
 {
@@ -39,31 +42,25 @@ class VacacionesController extends AbstractController
     public function buscarVacacionesFacultativo(
         Request $request,
         FacultativosRepository $facultativosRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
+        // Si no se relleno se recuperan todos los Facultativos con Paginacion
         // $em = $this->getDoctrine()->getManager();
-        // $query = $em->getRepository(Pacientes::class)>findAll();
+        $query = $em->getRepository(Facultativos::class)->findAll();
+        dump($query);
+        $datosFacultativosPaginados = $paginator->paginate(
+            $query, // Consulta que quiero paginar,
+            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+            10 // Número de elementos por página
+        );
 
-        // $pagination = $paginator->paginate(
-        //     $query /* query NOT result */,
-        //     $request->query->getInt('page', 1) /*page number*/,
-        //     10 /*limit per page*/
-        // );
-
-        // // parameters to template
-        // return $this->render('pacientes/mostrarPerfil.html.twig', [
-        //     'datosPacientes' => $pagination,
-        // ]);
-
-        // Recupero todos los Facultativos
-        $facultativos = $em->getRepository(Facultativos::class)->findAll();
-        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
         dump($especialidades);
 
         // Se envia a pagina enviando los datos de los facultativos
         return $this->render('vacaciones/busquedaFacultativo.html.twig', [
-            'datosFacultativos' => $facultativos,
+            'datosFacultativos' => $datosFacultativosPaginados,
             'datosEspecialidades' => $especialidades,
         ]);
     }
@@ -73,22 +70,9 @@ class VacacionesController extends AbstractController
     public function buscarVacacionesFacultativoApellido(
         Request $request,
         FacultativosRepository $facultativosRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
-        // $em = $this->getDoctrine()->getManager();
-        // $query = $em->getRepository(Pacientes::class)>findAll();
-
-        // $pagination = $paginator->paginate(
-        //     $query /* query NOT result */,
-        //     $request->query->getInt('page', 1) /*page number*/,
-        //     10 /*limit per page*/
-        // );
-
-        // // parameters to template
-        // return $this->render('pacientes/mostrarPerfil.html.twig', [
-        //     'datosPacientes' => $pagination,
-        // ]);
-
         // Recogemos datos de formulario con Get dado que es una busqueda
         // $busquedaapellido = $request->request->get('txtApellido');
         $busquedaapellido = $request->query->get('txtApellido');
@@ -96,6 +80,8 @@ class VacacionesController extends AbstractController
 
         // Si se ha rellenado la busqueda por Apellido
         if ($busquedaapellido) {
+            // Si no se relleno se recuperan todos los Facultativos con Paginacion
+            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT f FROM App\Entity\Facultativos f WHERE f.apellido1 like :parametro'
             );
@@ -103,11 +89,23 @@ class VacacionesController extends AbstractController
             $query->setParameter('parametro', $busquedaapellido . '%');
             dump($query);
             // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            $facultativos = $query->getResult();
-            dump($facultativos);
+            // $facultativos = $query->getResult();
+            // dump($facultativos);
+            $datosFacultativosPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                10 // Número de elementos por página
+            );
         } else {
-            // Si no se relleno se recuperan todos los Pacientes
-            $facultativos = $em->getRepository(Facultativos::class)->findAll();
+            // Si no se relleno se recuperan todos los Facultativos con Paginacion
+            // $em = $this->getDoctrine()->getManager();
+            $query = $em->getRepository(Facultativos::class)->findAll();
+            dump($query);
+            $datosFacultativosPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                10 // Número de elementos por página
+            );
         }
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
@@ -115,7 +113,7 @@ class VacacionesController extends AbstractController
         dump($especialidades);
 
         return $this->render('vacaciones/busquedaFacultativo.html.twig', [
-            'datosFacultativos' => $facultativos,
+            'datosFacultativos' => $datosFacultativosPaginados,
             'datosEspecialidades' => $especialidades,
         ]);
     }
@@ -125,41 +123,42 @@ class VacacionesController extends AbstractController
     public function buscarVacacionesFacultativoTelefono(
         Request $request,
         FacultativosRepository $facultativosRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
-        // $em = $this->getDoctrine()->getManager();
-        // $query = $em->getRepository(Pacientes::class)>findAll();
-
-        // $pagination = $paginator->paginate(
-        //     $query /* query NOT result */,
-        //     $request->query->getInt('page', 1) /*page number*/,
-        //     10 /*limit per page*/
-        // );
-
-        // // parameters to template
-        // return $this->render('pacientes/mostrarPerfil.html.twig', [
-        //     'datosPacientes' => $pagination,
-        // ]);
-
-        /// Recogemos datos de formulario con Get dado que es una busqueda
+        // Recogemos datos de formulario con Get dado que es una busqueda
         //$busquedatelefono = $request->request->get('txtTelefono');
         $busquedatelefono = $request->query->get('txtTelefono');
         dump($busquedatelefono);
 
         // Si se ha rellenado busqueda telefono
         if ($busquedatelefono) {
-            // Select de Pacientes con Where mandado por parametro
+            // Si no se relleno se recuperan todos los Facultativos con Paginacion
+            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT f FROM App\Entity\Facultativos f WHERE f.telefono = :dato'
             );
             // Asigno valor del parametro dato
             $query->setParameter('dato', $busquedatelefono);
+            dump($query);
             // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            $facultativos = $query->getResult();
-            dump($facultativos);
+            // $facultativos = $query->getResult();
+            // dump($facultativos);
+            $datosFacultativosPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                10 // Número de elementos por página
+            );
         } else {
-            // Si no se relleno se recuperan todos los Pacientes
-            $facultativos = $em->getRepository(Facultativos::class)->findAll();
+            // Si no se relleno se recuperan todos los Facultativos con Paginacion
+            // $em = $this->getDoctrine()->getManager();
+            $query = $em->getRepository(Facultativos::class)->findAll();
+            dump($query);
+            $datosFacultativosPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                10 // Número de elementos por página
+            );
         }
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
@@ -168,7 +167,7 @@ class VacacionesController extends AbstractController
 
         // Enviamos a la pagina con los datos de Pacientes recuperados
         return $this->render('vacaciones/busquedaFacultativo.html.twig', [
-            'datosFacultativos' => $facultativos,
+            'datosFacultativos' => $datosFacultativosPaginados,
             'datosEspecialidades' => $especialidades,
         ]);
     }
@@ -178,7 +177,8 @@ class VacacionesController extends AbstractController
     public function mostrarVacacionesAdmin(
         Request $request,
         FacultativosRepository $facultativosRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
         // Recupero el Facultativo que me llega
         // $idfacultativo = $request->request->get('idfacultativo');
@@ -191,11 +191,17 @@ class VacacionesController extends AbstractController
             ->findOneByIdfacultativo($idfacultativo);
         dump($facultativo);
 
-        // Recupero vacaciones de facultativo ordenadas por fecha para enviar los Values a Formulario
-        $vacacionesfacultativo = $em
+        // Recupero vacaciones de facultativo ordenadas por fecha para enviar los Values con Paginacion
+        // $em = $this->getDoctrine()->getManager();
+        $query = $em
             ->getRepository(Vacaciones::class)
             ->findBy(['idfacultativo' => $idfacultativo], ['fecha' => 'ASC']);
-        dump($vacacionesfacultativo);
+        dump($query);
+        $datosVacacionesPaginados = $paginator->paginate(
+            $query, // Consulta que quiero paginar,
+            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+            10 // Número de elementos por página
+        );
 
         // Recuperar Fecha minima y maxima
         $anio = date('Y');
@@ -233,7 +239,7 @@ class VacacionesController extends AbstractController
         return $this->render('vacaciones/altaVacacionesAdmin.html.twig', [
             'datosFacultativo' => $facultativo,
             'datosEspecialidades' => $especialidades,
-            'datosVacaciones' => $vacacionesfacultativo,
+            'datosVacaciones' => $datosVacacionesPaginados,
             'fechaini' => $fechaini,
             'fechafin' => $fechafin,
             'fechadia' => $fechadia,
@@ -247,7 +253,8 @@ class VacacionesController extends AbstractController
         Request $request,
         FacultativosRepository $facultativosRepository,
         VacacionesRepository $vacacionesRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idfacultativo = $request->query->get('idfacultativo');
@@ -352,22 +359,24 @@ class VacacionesController extends AbstractController
             }
         }
 
-        // // Devuelvo control a Pagina Inicio de Administrador mandando mensaje
-        // return $this->render('dashboard/dashboardAdministrativo.html.twig', [
-        //     'mensaje' => $mensaje,
-        // ]);
-
         // Recupero datos de facultativo para enviar los Values a Formulario
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
         dump($facultativo);
 
-        // Recupero vacaciones de facultativo ordenadas por fecha para enviar los Values a Formulario
-        $vacacionesfacultativo = $em
+        // Recupero vacaciones de facultativo ordenadas por fecha para enviar los Values con Paginacion
+        // $em = $this->getDoctrine()->getManager();
+        $query = $em
             ->getRepository(Vacaciones::class)
             ->findBy(['idfacultativo' => $idfacultativo], ['fecha' => 'ASC']);
-        dump($vacacionesfacultativo);
+        dump($query);
+        $datosVacacionesPaginados = $paginator->paginate(
+            $query, // Consulta que quiero paginar,
+            $request->query->getInt('page', 10), // Definir el parámetro de la página recogida por GET
+            3 // Número de elementos por página
+        );
+
         // Recuperar Año actual
         $anio = date('Y');
         $fechaini = $anio . '-01' . '-01';
@@ -400,7 +409,7 @@ class VacacionesController extends AbstractController
         return $this->render('vacaciones/altaVacacionesAdmin.html.twig', [
             'datosFacultativo' => $facultativo,
             'datosEspecialidades' => $especialidades,
-            'datosVacaciones' => $vacacionesfacultativo,
+            'datosVacaciones' => $datosVacacionesPaginados,
             'fechaini' => $fechaini,
             'fechafin' => $fechafin,
             'fechadia' => $fechadia,
@@ -417,7 +426,8 @@ class VacacionesController extends AbstractController
     public function mostrarVacacionesFacultativo(
         Request $request,
         FacultativosRepository $facultativosRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
         // Recupero las variables de sesion de usuario y facultativo
         $idusuario = $request->getSession()->get('idusuario');
@@ -435,11 +445,18 @@ class VacacionesController extends AbstractController
             ->findOneByIdfacultativo($idfacultativo);
         dump($facultativo);
 
-        // Recupero vacaciones de facultativo ordenadas por fecha para enviar los Values a Formulario
-        $vacacionesfacultativo = $em
+        // Recupero vacaciones de facultativo ordenadas por fecha para enviar los Values con Paginacion
+        // $em = $this->getDoctrine()->getManager();
+        $query = $em
             ->getRepository(Vacaciones::class)
             ->findBy(['idfacultativo' => $idfacultativo], ['fecha' => 'ASC']);
-        dump($vacacionesfacultativo);
+        dump($query);
+        $datosVacacionesPaginados = $paginator->paginate(
+            $query, // Consulta que quiero paginar,
+            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+            10 // Número de elementos por página
+        );
+
         // Recuperar Año actual
         $anio = date('Y');
         $fechaini = $anio . '-01' . '-01';
@@ -472,7 +489,7 @@ class VacacionesController extends AbstractController
         return $this->render('vacaciones/altaVacacionesFacultativo.html.twig', [
             'datosFacultativo' => $facultativo,
             'datosEspecialidades' => $especialidades,
-            'datosVacaciones' => $vacacionesfacultativo,
+            'datosVacaciones' => $datosVacacionesPaginados,
             'fechaini' => $fechaini,
             'fechafin' => $fechafin,
             'fechadia' => $fechadia,
@@ -486,7 +503,8 @@ class VacacionesController extends AbstractController
         Request $request,
         FacultativosRepository $facultativosRepository,
         VacacionesRepository $vacacionesRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idfacultativo = $request->query->get('idfacultativo');
@@ -583,22 +601,24 @@ class VacacionesController extends AbstractController
             }
         }
 
-        // // Devuelvo control a Pagina Inicio de Fcaultativo mandando mensaje
-        // return $this->render('dashboard/dashboardFacultativo.html.twig', [
-        //     'mensaje' => $mensaje,
-        // ]);
-
         // Recupero datos de facultativo para enviar los Values a Formulario
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
         dump($facultativo);
 
-        // Recupero vacaciones de facultativo ordenadas por fecha para enviar los Values a Formulario
-        $vacacionesfacultativo = $em
+        // Recupero vacaciones de facultativo ordenadas por fecha para enviar los Values con Paginacion
+        // $em = $this->getDoctrine()->getManager();
+        $query = $em
             ->getRepository(Vacaciones::class)
             ->findBy(['idfacultativo' => $idfacultativo], ['fecha' => 'ASC']);
-        dump($vacacionesfacultativo);
+        dump($query);
+        $datosVacacionesPaginados = $paginator->paginate(
+            $query, // Consulta que quiero paginar,
+            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+            10 // Número de elementos por página
+        );
+
         // Recuperar Año actual
         $anio = date('Y');
         $fechaini = $anio . '-01' . '-01';
@@ -631,7 +651,7 @@ class VacacionesController extends AbstractController
         return $this->render('vacaciones/altaVacacionesFacultativo.html.twig', [
             'datosFacultativo' => $facultativo,
             'datosEspecialidades' => $especialidades,
-            'datosVacaciones' => $vacacionesfacultativo,
+            'datosVacaciones' => $datosVacacionesPaginados,
             'fechaini' => $fechaini,
             'fechafin' => $fechafin,
             'fechadia' => $fechadia,

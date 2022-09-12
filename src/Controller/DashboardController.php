@@ -26,7 +26,8 @@ class DashboardController extends AbstractController
 
         // Se recupera el id del usuario y rol de UserInterface para poder acceder a Pacientes y Facultativos
         $rol = $this->getUser()->getRoles()[0];
-        $idusuario = $this->getUser()->getUserIdentifier();
+        //$idusuario = $this->getUser()->getUserIdentifier();
+        $idusuario = $this->getUser()->getIdUsuario();
         dump($rol);
         dump($idusuario);
 

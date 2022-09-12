@@ -29,6 +29,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+// Use necesario para usar las funciones de paginacion
+use Knp\Component\Pager\PaginatorInterface;
+
 #[Route('/informes')]
 class InformesController extends AbstractController
 {
@@ -39,14 +42,21 @@ class InformesController extends AbstractController
     public function buscarpacienteInformeAlta(
         Request $request,
         InformesRepository $informesRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
-        // Recupero todos los Pacientes para seleccionar el que se quiere dar Informe de alta
-        $pacientes = $em->getRepository(Pacientes::class)->findAll();
-        dump($pacientes);
+        // Recupero todos los Pacientes para seleccionar el que se quiere dar Informe de alta con Paginacion
+        // $em = $this->getDoctrine()->getManager();
+        $query = $em->getRepository(Pacientes::class)->findAll();
+        dump($query);
+        $datosPacientesPaginados = $paginator->paginate(
+            $query, // Consulta que quiero paginar,
+            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+            5 // Número de elementos por página
+        );
 
         return $this->render('informes/busquedaPaciente.html.twig', [
-            'datosPacientes' => $pacientes,
+            'datosPacientes' => $datosPacientesPaginados,
         ]);
     }
 
@@ -55,22 +65,9 @@ class InformesController extends AbstractController
     public function buscarPerfilPacienteApellido(
         Request $request,
         PacientesRepository $pacientesRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
-        // $em = $this->getDoctrine()->getManager();
-        // $query = $em->getRepository(Pacientes::class)>findAll();
-
-        // $pagination = $paginator->paginate(
-        //     $query /* query NOT result */,
-        //     $request->query->getInt('page', 1) /*page number*/,
-        //     10 /*limit per page*/
-        // );
-
-        // // parameters to template
-        // return $this->render('pacientes/mostrarPerfil.html.twig', [
-        //     'datosPacientes' => $pagination,
-        // ]);
-
         // Recogemos datos de formulario con Get dado que es una busqueda
         // $busquedaapellido = $request->request->get('txtApellido');
         $busquedaapellido = $request->query->get('txtApellido');
@@ -78,6 +75,8 @@ class InformesController extends AbstractController
 
         // Si se ha rellenado la busqueda por Apellido
         if ($busquedaapellido) {
+            // Recupero todos los Pacientes para seleccionar el que se quiere dar Informe de alta con Paginacion
+            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT p FROM App\Entity\Pacientes p WHERE p.apellido1 like :parametro'
             );
@@ -85,15 +84,27 @@ class InformesController extends AbstractController
             $query->setParameter('parametro', $busquedaapellido . '%');
             dump($query);
             // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            $pacientes = $query->getResult();
-            dump($pacientes);
+            // $pacientes = $query->getResult();
+            // dump($pacientes);
+            $datosPacientesPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         } else {
-            // Si no se relleno se recuperan todos los Pacientes
-            $pacientes = $em->getRepository(Pacientes::class)->findAll();
+            // Si no se relleno se recuperan todos los Pacientes con Paginacion
+            // $em = $this->getDoctrine()->getManager();
+            $query = $em->getRepository(Pacientes::class)->findAll();
+            dump($query);
+            $datosPacientesPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         }
 
         return $this->render('informes/busquedaPaciente.html.twig', [
-            'datosPacientes' => $pacientes,
+            'datosPacientes' => $datosPacientesPaginados,
         ]);
     }
 
@@ -102,46 +113,46 @@ class InformesController extends AbstractController
     public function buscarPerfilPacienteTelefono(
         Request $request,
         PacientesRepository $pacientesRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
-        // $em = $this->getDoctrine()->getManager();
-        // $query = $em->getRepository(Pacientes::class)>findAll();
-
-        // $pagination = $paginator->paginate(
-        //     $query /* query NOT result */,
-        //     $request->query->getInt('page', 1) /*page number*/,
-        //     10 /*limit per page*/
-        // );
-
-        // // parameters to template
-        // return $this->render('pacientes/mostrarPerfil.html.twig', [
-        //     'datosPacientes' => $pagination,
-        // ]);
-
-        /// Recogemos datos de formulario con Get dado que es una busqueda
+        // Recogemos datos de formulario con Get dado que es una busqueda
         //$busquedatelefono = $request->request->get('txtTelefono');
         $busquedatelefono = $request->query->get('txtTelefono');
         dump($busquedatelefono);
 
         // Si se ha rellenado busqueda telefono
         if ($busquedatelefono) {
-            // Select de Pacientes con Where mandado por parametro
+            // Si no se relleno se recuperan todos los Pacientes con Paginacion
+            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT p FROM App\Entity\Pacientes p WHERE p.telefono = :dato'
             );
             // Asigno valor del parametro dato
             $query->setParameter('dato', $busquedatelefono);
+            dump($query);
             // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            $pacientes = $query->getResult();
-            dump($pacientes);
+            // $pacientes = $query->getResult();
+            $datosPacientesPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         } else {
-            // Si no se relleno se recuperan todos los Pacientes
-            $pacientes = $em->getRepository(Pacientes::class)->findAll();
+            // Si no se relleno se recuperan todos los Pacientes con Paginacion
+            // $em = $this->getDoctrine()->getManager();
+            $query = $em->getRepository(Pacientes::class)->findAll();
+            dump($query);
+            $datosPacientesPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         }
 
         // Enviamos a la pagina con los datos de Pacientes recuperados
         return $this->render('informes/busquedaPaciente.html.twig', [
-            'datosPacientes' => $pacientes,
+            'datosPacientes' => $datosPacientesPaginados,
         ]);
     }
 
@@ -193,7 +204,8 @@ class InformesController extends AbstractController
     public function altaInforme(
         Request $request,
         FacultativosRepository $facultativosRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
         // Recupero las variable de sesion de facultativo
         $idfacultativo = $request->getSession()->get('idfacultativo');
@@ -249,12 +261,18 @@ class InformesController extends AbstractController
             'Se ha añadido un nuevo Informe para el Paciente ' . $idpaciente;
 
         // Recupero todos los Pacientes para enviar al formulario
-        $pacientes = $em->getRepository(Pacientes::class)->findAll();
-        dump($pacientes);
+        // $em = $this->getDoctrine()->getManager();
+        $query = $em->getRepository(Pacientes::class)->findAll();
+        dump($query);
+        $datosPacientesPaginados = $paginator->paginate(
+            $query, // Consulta que quiero paginar,
+            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+            5 // Número de elementos por página
+        );
 
         // Enviamos a la pagina con los datos de Pacientes recuperados
         return $this->render('informes/busquedaPaciente.html.twig', [
-            'datosPacientes' => $pacientes,
+            'datosPacientes' => $datosPacientesPaginados,
             'mensaje' => $mensaje,
         ]);
     }
@@ -266,7 +284,8 @@ class InformesController extends AbstractController
     public function mostrarListadoInformes(
         Request $request,
         InformesRepository $informesRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idpaciente = $request->query->get('idpaciente');
@@ -280,15 +299,21 @@ class InformesController extends AbstractController
             ->findOneByIdpaciente($idpaciente);
         dump($paciente);
 
-        // Recupero todos los Informes del Paciente (no hace falta que sean del mismo facultativo)
-        $informespaciente = $em
+        // Si no se relleno se recuperan todos los Informes del Pacientes con Paginacion
+        // $em = $this->getDoctrine()->getManager();
+        $query = $em
             ->getRepository(Informes::class)
             ->findByIdpaciente($idpaciente);
-        dump($informespaciente);
+        dump($query);
+        $datosInformesPaginados = $paginator->paginate(
+            $query, // Consulta que quiero paginar,
+            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+            5 // Número de elementos por página
+        );
 
         return $this->render('informes/mostrarlistadoinformes.html.twig', [
             'datosPaciente' => $paciente,
-            'datosInformes' => $informespaciente,
+            'datosInformes' => $datosInformesPaginados,
         ]);
     }
 
@@ -389,7 +414,8 @@ class InformesController extends AbstractController
     public function modificarInforme(
         Request $request,
         FacultativosRepository $facultativosRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
         // Recupero las variable de sesion de facultativo
         $idfacultativo = $request->getSession()->get('idfacultativo');
@@ -444,16 +470,22 @@ class InformesController extends AbstractController
             ->findOneByIdpaciente($idpaciente);
         dump($paciente);
 
-        // Recupero todos los Informes del Paciente (no hace falta que sean del mismo facultativo)
-        $informespaciente = $em
+        // Recupero todos los Informes del Paciente con Paginacion
+        // $em = $this->getDoctrine()->getManager();
+        $query = $em
             ->getRepository(Informes::class)
             ->findByIdpaciente($idpaciente);
-        dump($informespaciente);
+        dump($query);
+        $datosInformesPaginados = $paginator->paginate(
+            $query, // Consulta que quiero paginar,
+            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+            10 // Número de elementos por página
+        );
 
         // Enviamos a la pagina con los datos de Pacientes recuperados
         return $this->render('informes/mostrarlistadoinformes.html.twig', [
             'datosPaciente' => $paciente,
-            'datosInformes' => $informespaciente,
+            'datosInformes' => $datosInformesPaginados,
             'mensaje' => $mensaje,
         ]);
     }

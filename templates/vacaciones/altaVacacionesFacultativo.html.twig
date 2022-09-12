@@ -121,9 +121,12 @@
                                                 {% endfor %}
                                             {% endif %}
                                         </tbody>
-                                    </table> 
+                                    </table>
+                                    {# Mostramos Paginacion #}
+                                    <div>
+                                        {{ knp_pagination_render(datosVacaciones) }}
+                                    </div>     
                                 </div>
-
                             </div>
                         </div>
                     </div>
