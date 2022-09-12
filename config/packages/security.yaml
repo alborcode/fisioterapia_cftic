@@ -34,7 +34,9 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
         # allow unauthenticated users to access the login form
-        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/, roles: PUBLIC_ACCESS }
+        - { path: ^/reset-password, roles: PUBLIC_ACCESS }
+        - { path: ^/register, roles: PUBLIC_ACCESS }
         # - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         # Dashboard segun perfil
         - { path: ^/pacientes, roles: [ROLE_PACIENTE, ROLE_FACULTATIVO, ROLE_ADMINISTRATIVO] }
