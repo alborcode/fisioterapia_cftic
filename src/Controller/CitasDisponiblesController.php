@@ -303,10 +303,14 @@ class CitasDisponiblesController extends AbstractController
         // Fijamos Fechas de Inicio y de Fin
         // Recupero Fecha del Dia
         $fechadia = date('Y-m-d');
-        // Sumo un mes a la Fecha del dia para fijar fecha de fin
-        $fechafin = date('Y-m-d', strtotime($fechadia . '+ 1 month'));
+        // Sumo un año a la Fecha del dia para fijar fecha de fin
+        //$fechafin = date('Y-m-d', strtotime($fechadia . '+ 1 year'));
+        // Recuperar Año actual
+        $anio = date('Y');
+        $fechafin = $anio . '-12' . '-31';
         dump($fechadia);
         dump($fechafin);
+
         // Inicializo variables a usar en bucles
         $horainicio = null;
         $horafin = null;

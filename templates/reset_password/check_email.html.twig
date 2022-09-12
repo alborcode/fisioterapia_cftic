@@ -3,9 +3,41 @@
 {% block title %}Email para resetear Password{% endblock %}
 
 {% block body %}
-    <p>
-        Si tu cuenta coincide con email existente, se enviará email que contendrá un link para resetear tu password.
-        Este link espira en {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
-    </p>
-    <p>Si no recibes un email, por favor revisa tu carpeta de spam o <a href="{{ path('app_forgot_password_request') }}">intentalo de nuevo</a>.</p>
+<section class="py-5 mt-5">
+        <div class="container py-5">
+            <div class="row mb-2 mb-lg-2">
+                <div class="col-md-8 col-xl-6 text-center mx-auto">
+                    <p class="fw-bold text-success mb-2">Resetear Contraseña</p>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 col-xl-6">
+                    <div class="card">
+                        <div class="card-body text-center d-flex flex-column align-items-center">
+                            <div class="svg-wrapper bg-image shadow-1-strong rounded-lg my-4">
+                               <img class="img-responsive" src="{{ asset ('img/svg/reset.svg') }}" style="text-align: center;" width="50%" height="50%"/> 
+                            </div>
+                            
+                            <p>
+                                Si tu cuenta coincide con email existente, se enviará email que contendrá un link para resetear tu password.
+                                Este link espira en {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+                            </p>
+                            <p>
+                                Si no recibes un email, por favor revisa tu carpeta de spam o <a href="{{ path('app_forgot_password_request') }}">intentalo de nuevo</a>.
+                            </p>
+
+                            <div class="row mb-2 mb-lg-2">
+                                <div class="mb-3">
+                                    <a  href="{{ path('app_login') }}"> Conectarse </a>
+                                    <span> / </span>
+                                    <a  href="{{ path('app_register') }}"> Registrarse </a>
+                                </div>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <section>
+
 {% endblock %}

@@ -20,7 +20,7 @@
                             </div>
                             <div class="form-group row mb-4 mb-lg-5">
                                 {# Formulario Busqueda Facultativo por Apellido #}
-                                <form method="GET" action="{{ path('buscarVacacionesFacultativoApellido') }}">
+                                <form method="GET" action="{{ path('buscarFacultativoCitaApellidoAdmin') }}">
                                     <div class="form-group row">
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control" placeholder="Primer Apellido" name="txtApellido" class="form-control" id="txtApellido">
@@ -31,7 +31,7 @@
                                     </div>                                    
                                 </form>
                                 {# Formulario Busqueda Facultativo por Telefono #}
-                                <form method="GET" action="{{ path('buscarVacacionesFacultativoTelefono') }}">
+                                <form method="GET" action="{{ path('buscarFacultativoCitaTelefonoAdmin') }}">
                                     <div class="form-group row my-3">
                                         <div class="col-sm-3">
                                             <input type="number" class="form-control" placeholder="Telefono" name="txtTelefono" class="form-control" id="txtTelefono">
@@ -72,7 +72,7 @@
                                                 <td scope="row">{{ Facultativo.Nombre | capitalize}} {{ Facultativo.Apellido1 | capitalize}} {{ Facultativo.Apellido2 | capitalize}}</td>
                                                 <td>{{ Facultativo.Telefono}}</td>
                                                 <td>
-                                                    <a class="btn btn-info" href="{{ path('buscarPacienteCita', {idfacultativo: Facultativo.idfacultativo }) }}">Pedir Cita</a>
+                                                    <a class="btn btn-info" href="{{ path('buscarPacienteCitaAdmin', {idfacultativo: Facultativo.idfacultativo }) }}">Pedir Cita</a>
                                                 </td>
                                             </tr>
                                         {% endfor %}
@@ -80,7 +80,7 @@
                                 </tbody>
                             </table>
                             <div>
-                                {{ knp_pagination_render(datosPacientes) }}
+                                {{ knp_pagination_render(datosFacultativos) }}
                             </div> 
                         </div>
                     </div>

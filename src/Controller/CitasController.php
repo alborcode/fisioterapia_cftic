@@ -47,31 +47,40 @@ class CitasController extends AbstractController
     //******************************************************************************
     // Alta/Modificacion de Citas de Paciente por parte del Administrativo *
     //******************************************************************************
-    #[Route('/buscarfacultativoAdmin', name: 'buscarCitasFacultativoAdmin', methods: ['GET', 'POST'])]
-    public function buscarCitasFacultativoAdmin(
+    #[Route('/buscarfacultativo', name: 'buscarCitasFacultativoCitaAdmin', methods: ['GET', 'POST'])]
+    public function buscarCitasFacultativoCitaAdmin(
         Request $request,
         FacultativosRepository $facultativosRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
-        // Recupero todos los Facultativos
-        $facultativos = $em->getRepository(Facultativos::class)->findAll();
-        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
+        // Recupero todos los Facultativos con Paginacion
+        // $em = $this->getDoctrine()->getManager();
+        $query = $em->getRepository(Facultativos::class)->findAll();
+        dump($query);
+        $datosFacultativosPaginados = $paginator->paginate(
+            $query, // Consulta que quiero paginar,
+            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+            5 // Número de elementos por página
+        );
+
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
         dump($especialidades);
 
         // Se envia a pagina enviando los datos de los facultativos para su seleccion
         return $this->render('citas/busquedaFacultativo.html.twig', [
-            'datosFacultativos' => $facultativos,
+            'datosFacultativos' => $datosFacultativosPaginados,
             'datosEspecialidades' => $especialidades,
         ]);
     }
 
     // Buscar Facultativo por Apellido para seleccion Citas
-    #[Route('/buscarfacultativoApellidoAdmin', name: 'buscarFacultativoApellidoAdmin', methods: ['GET', 'POST'])]
-    public function buscarFacultativoApellidoAdmin(
+    #[Route('/buscarfacultativoApellido', name: 'buscarFacultativoCitaApellidoAdmin', methods: ['GET', 'POST'])]
+    public function buscarFacultativoCitaApellidoAdmin(
         Request $request,
         PacientesRepository $pacientesRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
         // Recogemos datos de formulario con Get dado que es una busqueda
         // $busquedaapellido = $request->request->get('txtApellido');
@@ -80,6 +89,8 @@ class CitasController extends AbstractController
 
         // Si se ha rellenado la busqueda por Apellido
         if ($busquedaapellido) {
+            // Recupero todos los Facultativos con Paginacion
+            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT f FROM App\Entity\Facultativos f WHERE f.apellido1 like :parametro'
             );
@@ -87,11 +98,23 @@ class CitasController extends AbstractController
             $query->setParameter('parametro', $busquedaapellido . '%');
             dump($query);
             // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            $facultativos = $query->getResult();
-            dump($facultativos);
+            // $facultativos = $query->getResult();
+            // dump($facultativos);
+            $datosFacultativosPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         } else {
-            // Si no se relleno se recuperan todos los Pacientes
-            $facultativos = $em->getRepository(Facultativos::class)->findAll();
+            // Recupero todos los Facultativos con Paginacion
+            // $em = $this->getDoctrine()->getManager();
+            $query = $em->getRepository(Facultativos::class)->findAll();
+            dump($query);
+            $datosFacultativosPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         }
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
@@ -99,17 +122,18 @@ class CitasController extends AbstractController
         dump($especialidades);
 
         return $this->render('citas/busquedaFacultativo.html.twig', [
-            'datosFacultativos' => $facultativos,
+            'datosFacultativos' => $datosFacultativosPaginados,
             'datosEspecialidades' => $especialidades,
         ]);
     }
 
     // Buscar Facultativo por Telefono para seleccion Citas
-    #[Route('/buscarfacultativoTelefono', name: 'buscarFacultativoTelefonoAdmin', methods: ['GET', 'POST'])]
-    public function buscarFacultativoTelefonoAdmin(
+    #[Route('/buscarfacultativoTelefono', name: 'buscarFacultativoCitaTelefonoAdmin', methods: ['GET', 'POST'])]
+    public function buscarFacultativoCitaTelefonoAdmin(
         Request $request,
         FacultativosRepository $facultativosRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
         // Recogemos datos de formulario con Get dado que es una busqueda
         //$busquedatelefono = $request->request->get('txtTelefono');
@@ -118,18 +142,32 @@ class CitasController extends AbstractController
 
         // Si se ha rellenado busqueda telefono
         if ($busquedatelefono) {
-            // Select de Pacientes con Where mandado por parametro
+            // Select de Pacientes con Where mandado por parametro con Paginacion
+            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT f FROM App\Entity\Facultativos f WHERE f.telefono = :dato'
             );
             // Asigno valor del parametro dato
             $query->setParameter('dato', $busquedatelefono);
+            dump($query);
             // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            $facultativos = $query->getResult();
-            dump($facultativos);
+            // $facultativos = $query->getResult();
+            // dump($facultativos);
+            $datosFacultativosPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         } else {
-            // Si no se relleno se recuperan todos los Pacientes
-            $facultativos = $em->getRepository(Facultativos::class)->findAll();
+            // Recupero todos los Facultativos con Paginacion
+            // $em = $this->getDoctrine()->getManager();
+            $query = $em->getRepository(Facultativos::class)->findAll();
+            dump($query);
+            $datosFacultativosPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         }
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
@@ -138,17 +176,18 @@ class CitasController extends AbstractController
 
         // Enviamos a la pagina con los datos de Pacientes recuperados
         return $this->render('citas/busquedaFacultativo.html.twig', [
-            'datosFacultativos' => $facultativos,
+            'datosFacultativos' => $datosFacultativosPaginados,
             'datosEspecialidades' => $especialidades,
         ]);
     }
 
     // Mostrar todos los Pacientes para seleccionar
-    #[Route('/buscarpacientecita', name: 'buscarPacienteCita', methods: ['GET', 'POST'])]
-    public function buscarPacienteAdmin(
+    #[Route('/buscarpacientecita', name: 'buscarPacienteCitaAdmin', methods: ['GET', 'POST'])]
+    public function buscarPacienteCitaAdmin(
         Request $request,
         PacientesRepository $pacientesRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
         // Recupero el Facultativo ue me llega
         // $idfacultativo = $request->request->get('idfacultativo');
@@ -165,24 +204,31 @@ class CitasController extends AbstractController
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
         dump($especialidades);
 
-        // Recupero todos los Pacientes
-        $pacientes = $em->getRepository(Pacientes::class)->findAll();
-        dump($pacientes);
+        // Recupero todos los Pacientes con Paginacion
+        // $em = $this->getDoctrine()->getManager();
+        $query = $em->getRepository(Pacientes::class)->findAll();
+        dump($query);
+        $datosPacientesPaginados = $paginator->paginate(
+            $query, // Consulta que quiero paginar,
+            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+            5 // Número de elementos por página
+        );
 
         // Se envia a pagina enviando los datos de los pacientes
         return $this->render('citas/busquedaPaciente.html.twig', [
             'datosFacultativo' => $facultativo,
             'datosEspecialidades' => $especialidades,
-            'datosPacientes' => $pacientes,
+            'datosPacientes' => $datosPacientesPaginados,
         ]);
     }
 
     // Buscar Paciente por Apellido para seleccion Citas
-    #[Route('/buscarpacientecitaapellido', name: 'buscarPacienteCitaApellido', methods: ['GET', 'POST'])]
-    public function buscarPerfilPacienteApellido(
+    #[Route('/buscarpacientecitaapellido', name: 'buscarPacienteCitaApellidoAdmin', methods: ['GET', 'POST'])]
+    public function buscarPacienteCitaApellidoAdmin(
         Request $request,
         PacientesRepository $pacientesRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
         // Recupero el Facultativo que me llega
         // $idfacultativo = $request->request->get('idfacultativo');
@@ -206,6 +252,8 @@ class CitasController extends AbstractController
 
         // Si se ha rellenado la busqueda por Apellido
         if ($busquedaapellido) {
+            // Se recuperan los Pacientes con Paginacion
+            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT p FROM App\Entity\Pacientes p WHERE p.apellido1 like :parametro'
             );
@@ -213,26 +261,39 @@ class CitasController extends AbstractController
             $query->setParameter('parametro', $busquedaapellido . '%');
             dump($query);
             // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            $pacientes = $query->getResult();
-            dump($pacientes);
+            // $pacientes = $query->getResult();
+            // dump($pacientes);
+            $datosPacientesPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         } else {
-            // Si no se relleno se recuperan todos los Pacientes
-            $pacientes = $em->getRepository(Pacientes::class)->findAll();
+            // Si no se relleno se recuperan todos los Pacientes con Paginacion
+            // $em = $this->getDoctrine()->getManager();
+            $query = $em->getRepository(Pacientes::class)->findAll();
+            dump($query);
+            $datosPacientesPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         }
 
         return $this->render('citas/busquedaPaciente.html.twig', [
             'datosFacultativo' => $facultativo,
             'datosEspecialidades' => $especialidades,
-            'datosPacientes' => $pacientes,
+            'datosPacientes' => $datosPacientesPaginados,
         ]);
     }
 
     // Buscar Paciente por Telefono para seleccion Citas
-    #[Route('/buscarpacientecitatelefono', name: 'buscarPacienteCitaTelefono', methods: ['GET', 'POST'])]
-    public function buscarPerfilPacienteTelefono(
+    #[Route('/buscarpacientecitatelefono', name: 'buscarPacienteCitaTelefonoAdmin', methods: ['GET', 'POST'])]
+    public function buscarPacienteCitaTelefonoAdmin(
         Request $request,
         PacientesRepository $pacientesRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
         // Recupero el Facultativo que me llega
         // $idfacultativo = $request->request->get('idfacultativo');
@@ -256,25 +317,39 @@ class CitasController extends AbstractController
 
         // Si se ha rellenado busqueda telefono
         if ($busquedatelefono) {
-            // Select de Pacientes con Where mandado por parametro
+            // Si no se relleno se recuperan los Pacientes con Paginacion
+            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT p FROM App\Entity\Pacientes p WHERE p.telefono = :dato'
             );
             // Asigno valor del parametro dato
             $query->setParameter('dato', $busquedatelefono);
+            dump($query);
             // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            $pacientes = $query->getResult();
-            dump($pacientes);
+            // $pacientes = $query->getResult();
+            // dump($pacientes);
+            $datosPacientesPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         } else {
-            // Si no se relleno se recuperan todos los Pacientes
-            $pacientes = $em->getRepository(Pacientes::class)->findAll();
+            // Si no se relleno se recuperan todos los Pacientes con Paginacion
+            // $em = $this->getDoctrine()->getManager();
+            $query = $em->getRepository(Pacientes::class)->findAll();
+            dump($query);
+            $datosPacientesPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
         }
 
         // Enviamos a la pagina con los datos de Pacientes recuperados
         return $this->render('citas/busquedaPaciente.html.twig', [
             'datosFacultativo' => $facultativo,
             'datosEspecialidades' => $especialidades,
-            'datosPacientes' => $pacientes,
+            'datosPacientes' => $datosPacientesPaginados,
         ]);
     }
 
@@ -287,7 +362,8 @@ class CitasController extends AbstractController
         TurnosRepository $turnosRepository,
         VacacionesRepository $vacacionesRepository,
         CitasRepository $citasRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
     ) {
         // Defino variables para Serializar
         $encoders = [new XmlEncoder(), new JsonEncoder()];
@@ -317,11 +393,17 @@ class CitasController extends AbstractController
             ->findOneByIdpaciente($idpaciente);
         dump($paciente);
 
-        // Recupero citas de paciente ordenadas por fecha para enviar los Values a Formulario
-        $citaspaciente = $em
+        // Si no se relleno se recuperan todos los Pacientes con Paginacion
+        // $em = $this->getDoctrine()->getManager();
+        $query = $em
             ->getRepository(Citas::class)
             ->findBy(['idpaciente' => $idpaciente], ['fecha' => 'ASC']);
-        dump($citaspaciente);
+        dump($query);
+        $datosCitasPaginados = $paginator->paginate(
+            $query, // Consulta que quiero paginar,
+            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+            5 // Número de elementos por página
+        );
 
         // Recupero vacaciones de facultativo para tratamiento fechas disponibles
         // $vacacionesfacultativo = $em
@@ -337,12 +419,6 @@ class CitasController extends AbstractController
         dump($query);
         $vacacionesfacultativo = $query->getResult();
         dump($vacacionesfacultativo);
-
-        // Recupero turnos de facultativo para tratamiento horas disponibles
-        // $turnosfacultativo = $em
-        //     ->getRepository(Turnos::class)
-        //     ->findByIdfacultativo($idfacultativo);
-        // dump($turnosfacultativo);
 
         // Recupero citas disponibles de facultativo para ver si existen o se da error
         $citasdisponiblesfacultativo = $em
@@ -374,17 +450,29 @@ class CitasController extends AbstractController
                     $fechaactual
                 );
                 dump($diaconvertido);
-                // Recupero citas disponibles de ese ese facultativo que esten disponibles para el dia del bucle
-                $citasdisponiblesbucle = $em
-                    ->getRepository(CitasDisponibles::class)
-                    ->findBy([
-                        'idfacultativo' => $idfacultativo,
-                        'fecha' => $diaconvertido,
-                        'disponible' => true,
-                    ]);
-                dump($citasdisponiblesbucle);
-                // Si no se encuentran citas disponibles para ese dia se añade fecha al Array no disponible
-                if (!$citasdisponiblesbucle) {
+                // Recupero dia de la semana de la fecha
+                $diasemana = date('l', strtotime($fechaactual));
+                dump($diasemana);
+                // Si dia de bucle es laborable
+                if ($diasemana != 'Sunday' && $diasemana != 'Saturday') {
+                    // Recupero citas disponibles de ese ese facultativo que esten disponibles para el dia del bucle
+                    $citasdisponiblesbucle = $em
+                        ->getRepository(CitasDisponibles::class)
+                        ->findBy([
+                            'idfacultativo' => $idfacultativo,
+                            'fecha' => $diaconvertido,
+                            'disponible' => true,
+                        ]);
+                    dump($citasdisponiblesbucle);
+                    // Si no se encuentran citas disponibles para ese dia se añade fecha al Array no disponible
+                    if (!$citasdisponiblesbucle) {
+                        $fechaarray = date('Y-m-d', strtotime($fechaactual));
+                        array_push($arraynodisponible, $fechaarray);
+                        dump($arraynodisponible);
+                    }
+                }
+                // Añadimos los fines de semana como dias No Disponibles
+                else {
                     $fechaarray = date('Y-m-d', strtotime($fechaactual));
                     array_push($arraynodisponible, $fechaarray);
                     dump($arraynodisponible);
@@ -397,31 +485,22 @@ class CitasController extends AbstractController
                 );
             endwhile;
 
+            dump('Array Fechas no Disponibles:');
+            dump($arraynodisponible);
+
             // Recupero en Array solo las Fechas de Vacaciones
-            // $vacacionesarray = array_column($vacacionesfacultativo, 'fecha');
-            // dump($vacacionesarray);
-            // $tmpObject = new DoctrineObject(
-            //     $this->entityManager,
-            //     Vacaciones::class
-            // );
-            // $data = $tmpObject->extract($vacacionesfacultativo);
-            // dump($data);
+            $vacacionesarray = array_column($vacacionesfacultativo, 'fecha');
+            dump($vacacionesarray);
 
-            $jsonContent = $serializer->serialize(
-                $vacacionesfacultativo,
-                'json'
-            );
-            dump($jsonContent);
-
+            // Convierto array de Fechas de Vacaciones formato DateTime a Array fechas formato 'AAAA-MM-DD'
             $arrayvacaciones = [];
-            foreach ($vacacionesfacultativo as $valor) {
+            foreach ($vacacionesarray as $valor) {
                 dump($valor);
-                $fechaarray = date('Y-m-d', strtotime($valor));
-                //$fechaarray = \DateTime::createFromFormat('Y-m-d', $valor);
+                $fechaarray = $valor->format('Y-m-d');
                 dump($fechaarray);
                 array_push($arrayvacaciones, $fechaarray);
-                dump($arrayvacaciones);
             }
+            dump('Array Vacaciones: ');
             dump($arrayvacaciones);
 
             // Recupero de API los Festivos de la Comunidad de Madrid (fecha_festivo dara las fechas en formato Y-m-d)
@@ -437,16 +516,21 @@ class CitasController extends AbstractController
 
             // Recupero en Array solo de las Fechas de Festivos
             $festivosarray = array_column($festivosregionales, 'fecha_festivo');
+            dump('Array Festivos:');
             dump($festivosarray);
 
-            // Junto arrays de festivos con Array de Vacaciones para enviar fechas no disponibles
-            $fechasnodisponibles = array_push($festivosarray, $arrayvacaciones);
-            dump($fechasnodisponibles);
-            // Junto al Array anterior las fechas no disponibles del facultativo
-            $fechasnodisponibles = array_push(
-                $arraynodisponible,
-                $fechasnodisponibles
+            // Junto arrays de festivos con Array de Vacaciones con fechas no disponibles para enviar fechas no disponibles
+            $arrayjuntarfechas = array_merge(
+                $festivosarray,
+                $arrayvacaciones,
+                $arraynodisponible
             );
+            dump($arrayjuntarfechas);
+            // Eliminamos Fechas Duplicadas
+            $fechasnodisponibles = array_unique($arrayjuntarfechas);
+            dump($fechasnodisponibles);
+            // Ordeno Array por Fechas
+            sort($fechasnodisponibles);
             dump($fechasnodisponibles);
 
             // Envio a la vista de Citas, Datos Facultativo y Especialidades, Datos Pacientes, Citas y Fechas no disponibles
@@ -454,7 +538,7 @@ class CitasController extends AbstractController
                 'datosFacultativo' => $facultativo,
                 'datosEspecialidades' => $especialidades,
                 'datosPaciente' => $paciente,
-                'datosCitas' => $citaspaciente,
+                'datosCitas' => $datosCitasPaginados,
                 'fechaini' => $fechaini,
                 'fechafin' => $fechafin,
                 'fechadia' => $fechaini,
@@ -468,7 +552,6 @@ class CitasController extends AbstractController
         ]);
     }
 
-    // ****
     // Recogemos Datos Formulario para borrar Citas si ya existen o Darlas de Alta si no existen
     #[Route('/altacitasadmin', name: 'altaCitasAdmin', methods: ['GET', 'POST'])]
     public function altaCitasAdmin(
@@ -696,37 +779,5 @@ class CitasController extends AbstractController
             'mensaje' => $mensaje,
             'mensajewarning' => $mensajewarning,
         ]);
-    }
-
-    //***********************
-    // Funciones de Usuario *
-    //***********************
-    function devolverdia($fecha)
-    {
-        $diasemana = $fecha('l');
-        switch ($diasemana) {
-            case 'Sunday':
-                $diasemanaformat = 'DOMINGO';
-                break;
-            case 'Monday':
-                $diasemanaformat = 'LUNES';
-                break;
-            case 'Tuesday':
-                $diasemanaformat = 'MARTES';
-                break;
-            case 'Wednesday':
-                $diasemanaformat = 'MIERCOLES';
-                break;
-            case 'Thursday':
-                $diasemanaformat = 'JUEVES';
-                break;
-            case 'Friday':
-                $diasemanaformat = 'VIERNES';
-                break;
-            case 'Saturday':
-                $diasemanaformat = 'SABADO';
-                break;
-        }
-        return $diasemanaformat;
     }
 }

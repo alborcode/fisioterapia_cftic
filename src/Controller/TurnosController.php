@@ -299,7 +299,8 @@ class TurnosController extends AbstractController
                 $mensajelunes =
                     'Se ha modificado el Turno del Lunes' .
                     ' para el facultativo ' .
-                    $idfacultativo;
+                    $idfacultativo .
+                    'Vuelva a dar de alta las Citas Disponibles a partir de los turnos actuales';
                 // Si no existen los Turnos del Facultativo se dan de alta (uno por dia recuperados en Formulario)
             } else {
                 // Declaro variable de clase entidad Turno
@@ -316,7 +317,8 @@ class TurnosController extends AbstractController
                 $mensaje =
                     'Se ha dado de alta los Turno del ' .
                     ' facultativo ' .
-                    $idfacultativo;
+                    $idfacultativo .
+                    'Vuelva a dar de alta las Citas Disponibles a partir de los turnos actuales';
             }
         }
 
@@ -340,7 +342,8 @@ class TurnosController extends AbstractController
                 $mensaje =
                     'Se ha dado de alta los Turno del ' .
                     ' facultativo ' .
-                    $idfacultativo;
+                    $idfacultativo .
+                    'Vuelva a dar de alta las Citas Disponibles a partir de los turnos actuales';
                 // Si no existen los Turnos del Facultativo se dan de alta (uno por dia recuperados en Formulario)
             } else {
                 // Declaro variable de clase entidad Turno
@@ -357,7 +360,8 @@ class TurnosController extends AbstractController
                 $mensaje =
                     'Se ha dado de alta los Turno del ' .
                     ' facultativo ' .
-                    $idfacultativo;
+                    $idfacultativo .
+                    'Vuelva a dar de alta las Citas Disponibles a partir de los turnos actuales';
             }
         }
 
@@ -381,7 +385,8 @@ class TurnosController extends AbstractController
                 $mensaje =
                     'Se ha dado de alta los Turno del ' .
                     ' facultativo ' .
-                    $idfacultativo;
+                    $idfacultativo .
+                    'Vuelva a dar de alta las Citas Disponibles a partir de los turnos actuales';
                 // Si no existen los Turnos del Facultativo se dan de alta (uno por dia recuperados en Formulario)
             } else {
                 // Declaro variable de clase entidad Turno
@@ -398,7 +403,8 @@ class TurnosController extends AbstractController
                 $mensaje =
                     'Se ha dado de alta los Turno del ' .
                     ' facultativo ' .
-                    $idfacultativo;
+                    $idfacultativo .
+                    'Vuelva a dar de alta las Citas Disponibles a partir de los turnos actuales';
             }
         }
 
@@ -422,7 +428,8 @@ class TurnosController extends AbstractController
                 $mensaje =
                     'Se ha dado de alta los Turno del ' .
                     ' facultativo ' .
-                    $idfacultativo;
+                    $idfacultativo .
+                    'Vuelva a dar de alta las Citas Disponibles a partir de los turnos actuales';
                 // Si no existen los Turnos del Facultativo se dan de alta (uno por dia recuperados en Formulario)
             } else {
                 // Declaro variable de clase entidad Turno
@@ -439,7 +446,8 @@ class TurnosController extends AbstractController
                 $mensaje =
                     'Se ha dado de alta los Turno del ' .
                     ' facultativo ' .
-                    $idfacultativo;
+                    $idfacultativo .
+                    'Vuelva a dar de alta las Citas Disponibles a partir de los turnos actuales';
             }
         }
 
@@ -463,7 +471,8 @@ class TurnosController extends AbstractController
                 $mensaje =
                     'Se ha dado de alta los Turno del ' .
                     ' facultativo ' .
-                    $idfacultativo;
+                    $idfacultativo .
+                    'Vuelva a dar de alta las Citas Disponibles a partir de los turnos actuales';
                 // Si no existen los Turnos del Facultativo se dan de alta (uno por dia recuperados en Formulario)
             } else {
                 // Declaro variable de clase entidad Turno
@@ -480,7 +489,8 @@ class TurnosController extends AbstractController
                 $mensaje =
                     'Se ha dado de alta los Turno del ' .
                     ' facultativo ' .
-                    $idfacultativo;
+                    $idfacultativo .
+                    'Vuelva a dar de alta las Citas Disponibles a partir de los turnos actuales';
             }
         }
 
