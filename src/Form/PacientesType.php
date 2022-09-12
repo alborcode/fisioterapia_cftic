@@ -39,7 +39,7 @@ class PacientesType extends AbstractType
             ->add('nombre', TextType::class, [
                 'attr' => [
                     'placeholder' => 'Nombre',
-                    'pattern' => '[a-zA-Z-\'áéíóúüÁÉÍÓÚÜ]{3,40}',
+                    'pattern' => '[a-zA-Z-\'áéíóúüÁÉÍÓÚÜ ]{3,40}',
                     'class' => 'form-control',
                     'autofocus' => true,
                     'required' => true,
@@ -54,7 +54,7 @@ class PacientesType extends AbstractType
             ->add('apellido1', TextType::class, [
                 'attr' => [
                     'placeholder' => 'Apellido',
-                    'pattern' => '[a-zA-Z-\'áéíóúüÁÉÍÓÚÜ]{3,40}',
+                    'pattern' => '[a-zA-Z-\'áéíóúüÁÉÍÓÚÜ ]{3,40}',
                     'class' => 'form-control',
                     'required' => true,
                 ],

@@ -63,11 +63,15 @@
                                 </div>
                                 {# <p class="text-muted">Olvidaste tu Password</p> #}
                             </form>
-
-                            <div class="mb-3">
-                                    <h6> Si no tiene una cuenta de click en<h6>
-                                    <a  href="{{ path('app_register') }}"> Registrarse </a>
-                            </div>    
+                            
+                            <div class="row mb-2 mb-lg-2">
+                                <div class="mb-3">
+                                        <a  href="{{ path('app_register') }}"> Registrarse </a>
+                                </div>    
+                                <div class="mb-3">
+                                        <a  href="{{ path('app_forgot_password_request') }}"> Contraseña olvidada </a>
+                                </div>    
+                            </div>        
                         </div>
                     </div>
                 </div>

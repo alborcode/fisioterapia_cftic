@@ -72,7 +72,7 @@ class VacacionesController extends AbstractController
     #[Route('/buscarvacacionesfacultativoApellido', name: 'buscarVacacionesFacultativoApellido', methods: ['GET', 'POST'])]
     public function buscarVacacionesFacultativoApellido(
         Request $request,
-        PacientesRepository $pacientesRepository,
+        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em
     ) {
         // $em = $this->getDoctrine()->getManager();

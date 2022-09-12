@@ -497,6 +497,16 @@ class CitasController extends AbstractController
         $horaconvertida = \DateTime::createFromFormat('H:m:s', $horacita);
         dump($horaconvertida);
 
+        // Recupero unicamente las fechas de vacaciones
+        $query = $em->createQuery(
+            'SELECT v.fecha FROM App\Entity\Vacaciones v WHERE v.idfacultativo =:parametro'
+        );
+        // Defino el parametro
+        $query->setParameter('parametro', $idfacultativo);
+        dump($query);
+        $vacacionesfacultativo = $query->getResult();
+        dump($vacacionesfacultativo);
+
         $mensaje = null;
         $mensajewarning = null;
 
@@ -513,7 +523,6 @@ class CitasController extends AbstractController
                 // Declaro variable de clase entidad Vacaciones
                 $nuevacita = new Citas();
                 // Añado valores a cada uno de los campos para el registro del Lunes
-                $nuevacita->setDisponible('false');
                 $nuevacita->setFecha($diaconvertido);
                 $nuevacita->setHora($horaconvertida);
 
@@ -531,7 +540,7 @@ class CitasController extends AbstractController
                 // Añado el Facultativo
                 $nuevacita->setIdfacultativo($facultativo);
                 // Añado el Paciente
-                $nuevacita->setIdfpaciente($paciente);
+                $nuevacita->setIdpaciente($paciente);
                 dump($nuevacita);
 
                 // Inserto registro en la tabla de Citas
@@ -579,7 +588,7 @@ class CitasController extends AbstractController
                 $em->remove($existecita);
                 $em->flush();
 
-                $mensajedia = strtotime($diavacaciones);
+                $mensajedia = strtotime($diaconvertido);
                 $diaformateado = date('d-m-Y', $mensajedia);
                 $mensajehora = strtotime($horacita);
                 $horaformateada = date('H:M', $mensajehora);
@@ -592,7 +601,7 @@ class CitasController extends AbstractController
                     $idpaciente;
                 // Si no existe la cita se manda mensaje de error
             } else {
-                $mensajedia = strtotime($diavacaciones);
+                $mensajedia = strtotime($diaconvertido);
                 $diaformateado = date('d-m-Y', $mensajedia);
                 $mensajehora = strtotime($horacita);
                 $horaformateada = date('H:M', $mensajehora);
@@ -644,11 +653,11 @@ class CitasController extends AbstractController
         $fechaini = $anio . '-' . $mes . '-01';
         dump($fechaini);
 
-        $fechafin = date_add(
-            $fechaini,
-            date_interval_create_from_date_string('2 months')
-        );
-        dump($fechafin);
+        // $fechafin = date_add(
+        //     $fechaini,
+        //     date_interval_create_from_date_string('2 months')
+        // );
+        // dump($fechafin);
 
         // Recupero de API los Festivos de la Comunidad de Madrid (fecha_festivo dara las fechas en formato Y-m-d)
         $datos = file_get_contents(
@@ -677,9 +686,8 @@ class CitasController extends AbstractController
             'datosEspecialidades' => $especialidades,
             'datosPaciente' => $paciente,
             'datosCitas' => $citaspaciente,
-            'datosTurnos' => $turnosfacultativo,
             'fechaini' => $fechaini,
-            'fechafin' => $fechafin,
+            // 'fechafin' => $fechafin,
             'fechadia' => $fechadia,
             'fechasnodisponibles' => $fechasnodisponibles,
             'mensaje' => $mensaje,

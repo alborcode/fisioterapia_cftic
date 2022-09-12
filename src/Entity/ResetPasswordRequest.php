@@ -15,25 +15,21 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $idusuario = null;
+    private ?int $id = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false, name:"idusuario", referencedColumnName:"idusuario")]
+    #[ORM\JoinColumn(nullable: false, name:"user", referencedColumnName:"idusuario")]
     private ?Usuarios $user = null;
 
-    public function __construct(
-        object $user,
-        \DateTimeInterface $expiresAt,
-        string $selector,
-        string $hashedToken
-    ) {
+    public function __construct(object $user, \DateTimeInterface $expiresAt, string $selector, string $hashedToken)
+    {
         $this->user = $user;
         $this->initialize($expiresAt, $selector, $hashedToken);
     }
 
-    public function getIdusuario(): ?int
+    public function getId(): ?int
     {
-        return $this->idusuario;
+        return $this->id;
     }
 
     public function getUser(): object

@@ -78,7 +78,7 @@ class TurnosController extends AbstractController
     #[Route('/buscarturnosfacultativoApellido', name: 'buscarTurnosFacultativoApellido', methods: ['GET', 'POST'])]
     public function buscarTurnosFacultativoApellido(
         Request $request,
-        PacientesRepository $pacientesRepository,
+        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em
     ) {
         // $em = $this->getDoctrine()->getManager();

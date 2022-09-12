@@ -54,6 +54,8 @@ class UsuariosRepository extends ServiceEntityRepository implements PasswordUpgr
         $user->setPassword($newHashedPassword);
 
         $this->add($user, true);
+        // execute the queries on the database
+        // $this->getEntityManager()->flush();
     }
 
 //    /**

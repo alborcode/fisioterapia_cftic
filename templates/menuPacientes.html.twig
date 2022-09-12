@@ -5,11 +5,10 @@
                 <a class="nav-link active dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Citas</a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="{{ path('buscarDatosPaciente') }}">Modificar Datos Paciente</a></li>
+                    <li><a class="dropdown-item" href="{{ path('buscarCitasFacultativoAdmin') }}">Pedir Cita Paciente</a></li>
+                    {# <li><a class="dropdown-item" href="{{ path('app_citas_index') }}">Historial de Citas</a></li> #}
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{{ path('app_citas_new') }}">Pedir Cita</a></li>
-                    <li><a class="dropdown-item" href="{{ path('app_citas_index') }}">Historial de Citas</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{{ path('app_citas_justificante') }}">Imprimir Justificante</a></li>
+                    {# <li><a class="dropdown-item" href="{{ path('app_citas_justificante') }}">Imprimir Justificante</a></li> #}
                 </ul>
         </li>
 {#         <li class="nav-item">

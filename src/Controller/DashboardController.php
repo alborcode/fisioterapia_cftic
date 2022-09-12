@@ -11,6 +11,8 @@ use App\Entity\Pacientes;
 use App\Repository\PacientesRepository;
 use App\Entity\Facultativos;
 use App\Repository\FacultativosRepository;
+use App\Entity\Usuarios;
+use App\Repository\UsuariosRepository;
 
 class DashboardController extends AbstractController
 {
@@ -24,7 +26,7 @@ class DashboardController extends AbstractController
 
         // Se recupera el id del usuario y rol de UserInterface para poder acceder a Pacientes y Facultativos
         $rol = $this->getUser()->getRoles()[0];
-        $idusuario = $this->getUser()->getIdusuario();
+        $idusuario = $this->getUser()->getUserIdentifier();
         dump($rol);
         dump($idusuario);
 
