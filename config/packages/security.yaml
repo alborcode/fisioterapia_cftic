@@ -42,6 +42,7 @@ security:
         - { path: ^/pacientes, roles: [ROLE_PACIENTE, ROLE_FACULTATIVO, ROLE_ADMINISTRATIVO] }
         - { path: ^/facultativos, roles: [ROLE_FACULTATIVO, ROLE_ADMINISTRATIVO] }
         - { path: ^/vacaciones, roles: [ROLE_FACULTATIVO, ROLE_ADMINISTRATIVO] }
+        - { path: ^/citas, roles: [ROLE_PACIENTE, ROLE_ADMINISTRATIVO] }
         - { path: ^/informes, roles: [ROLE_FACULTATIVO] }
         - { path: ^/turnos, roles: ROLE_ADMINISTRATIVO }
         - { path: ^/citasdisponibles, roles: ROLE_ADMINISTRATIVO }  
