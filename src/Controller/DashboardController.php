@@ -26,10 +26,8 @@ class DashboardController extends AbstractController
 
         // Se recupera el id del usuario y rol de UserInterface para poder acceder a Pacientes y Facultativos
         $rol = $this->getUser()->getRoles()[0];
-        $idusuario = $this->getUser()->getUserIdentifier();
         //$idusuario = $this->getUser()->getIdUsuario();
-        dump($rol);
-        dump($idusuario);
+        $idusuario = $this->getUser()->getUserIdentifier();
 
         // Recupero Identificador de sesion (Token) del usuario de la peticion
         $session = $request->getSession();
@@ -44,24 +42,17 @@ class DashboardController extends AbstractController
             $paciente = $em
                 ->getRepository(Pacientes::class)
                 ->findOneByIdusuario($idusuario);
-            dump($paciente);
+
             // Si no existe datos es que no hay un paciente dado de alta para ese usuario
             if (!$paciente) {
                 // Se envia a plantilla de Alta de Paciente mandando el codigo usuario
-                // redirecttoRoute manda los parametros por Get y no por Post
-                // return $this->redirectToRoute('insertarPaciente', [
-                //     'usuario' => $usuario,
-                //     'rol' => $rol,
-                // ]);
                 return $this->redirectToRoute('insertarPaciente');
                 // Si no ya existe paciente y se carga pagina de inicio de Pacientes
             } else {
                 $idpaciente = $paciente->getIdpaciente();
-                dump($idpaciente);
                 // Guardo Paciente en Session
                 $session->set('idpaciente', $idpaciente);
                 $paginainicio = 'dashboard/dashboardPaciente.html.twig';
-                dump($paginainicio);
             }
         }
 
@@ -70,16 +61,12 @@ class DashboardController extends AbstractController
             $facultativo = $em
                 ->getRepository(Facultativos::class)
                 ->findOneByIdusuario($idusuario);
-            dump($facultativo);
-            $idfacultativo = $facultativo->getIdfacultativo();
-            dump($idfacultativo);
 
+            $idfacultativo = $facultativo->getIdfacultativo();
             // Guardo Facultativo en Session
             $session->set('idfacultativo', $idfacultativo);
-
             //Se carga pagina de inicio de Facultativos
             $paginainicio = 'dashboard/dashboardFacultativo.html.twig';
-            dump($paginainicio);
         }
 
         if ($rol == 'ROLE_ADMINISTRATIVO') {

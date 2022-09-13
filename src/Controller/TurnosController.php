@@ -52,9 +52,8 @@ class TurnosController extends AbstractController
         PaginatorInterface $paginator
     ) {
         // Si no se relleno se recuperan todos los Facultativos con Paginacion
-        // $em = $this->getDoctrine()->getManager();
         $query = $em->getRepository(Facultativos::class)->findAll();
-        dump($query);
+
         $datosFacultativosPaginados = $paginator->paginate(
             $query, // Consulta que quiero paginar,
             $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -63,7 +62,6 @@ class TurnosController extends AbstractController
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Se envia a pagina enviando los datos de los facultativos
         return $this->render('turnos/busquedaFacultativo.html.twig', [
@@ -81,23 +79,18 @@ class TurnosController extends AbstractController
         PaginatorInterface $paginator
     ) {
         // Recogemos datos de formulario con Get dado que es una busqueda
-        // $busquedaapellido = $request->request->get('txtApellido');
         $busquedaapellido = $request->query->get('txtApellido');
         dump($busquedaapellido);
 
         // Si se ha rellenado la busqueda por Apellido
         if ($busquedaapellido) {
             // Se recuperan todos los Facultativos con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT f FROM App\Entity\Facultativos f WHERE f.apellido1 like :parametro'
             );
             // Concateno la variable a buscar y el % del Like
             $query->setParameter('parametro', $busquedaapellido . '%');
-            dump($query);
-            // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            // $facultativos = $query->getResult();
-            // dump($facultativos);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -105,9 +98,8 @@ class TurnosController extends AbstractController
             );
         } else {
             // Si no se relleno se recuperan todos los Facultativos con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->getRepository(Facultativos::class)->findAll();
-            dump($query);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -117,7 +109,6 @@ class TurnosController extends AbstractController
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         return $this->render('turnos/busquedaFacultativo.html.twig', [
             'datosFacultativos' => $facultativos,
@@ -134,23 +125,17 @@ class TurnosController extends AbstractController
         PaginatorInterface $paginator
     ) {
         // Recogemos datos de formulario con Get dado que es una busqueda
-        //$busquedatelefono = $request->request->get('txtTelefono');
         $busquedatelefono = $request->query->get('txtTelefono');
-        dump($busquedatelefono);
 
         // Si se ha rellenado busqueda telefono
         if ($busquedatelefono) {
             // Se recuperan todos los Facultativos con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT f FROM App\Entity\Facultativos f WHERE f.telefono = :dato'
             );
             // Asigno valor del parametro dato
             $query->setParameter('dato', $busquedatelefono);
-            dump($query);
-            // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            // $facultativos = $query->getResult();
-            // dump($facultativos);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -158,9 +143,8 @@ class TurnosController extends AbstractController
             );
         } else {
             // Si no se relleno se recuperan todos los Facultativos con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->getRepository(Facultativos::class)->findAll();
-            dump($query);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -170,7 +154,6 @@ class TurnosController extends AbstractController
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Enviamos a la pagina con los datos de Pacientes recuperados
         return $this->render('turnos/busquedaFacultativo.html.twig', [
@@ -189,23 +172,19 @@ class TurnosController extends AbstractController
         // Recupero el Facultativo que me llega
         // $idfacultativo = $request->request->get('idfacultativo');
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
 
         // Recupero datos de facultativo para enviar los Values a Formulario
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
 
         // Recupero datos de turnos de facultativo para enviar los Values a Formulario
         $turnosfacultativo = $em
             ->getRepository(Turnos::class)
             ->findByIdfacultativo($idfacultativo);
-        dump($turnosfacultativo);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Envio a la vista de Datos Turnos Facultativo y Datos de Facultativo
         return $this->render('turnos/modificarTurnosFacultativo.html.twig', [
@@ -228,38 +207,27 @@ class TurnosController extends AbstractController
 
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
 
         // Recogemos datos de formulario con Post de cada uno de los turnos de los dias de la semana
         $lunesseleccionado = $request->request->get('txtLunes');
-        dump($lunesseleccionado);
         $horainiciolunes = $request->request->get('txtHorainiciolunes');
         $horafinlunes = $request->request->get('txtHorafinlunes');
-        dump(' De ' . $horainiciolunes . ' a ' . $horafinlunes);
 
         $martesseleccionado = $request->request->get('txtMartes');
-        dump($martesseleccionado);
         $horainiciomartes = $request->request->get('txtHorainiciomartes');
         $horafinmartes = $request->request->get('txtHorafinmartes');
-        dump(' De ' . $horainiciomartes . ' a ' . $horafinmartes);
 
         $miercolesseleccionado = $request->request->get('txtMiercoles');
-        dump($miercolesseleccionado);
         $horainiciomiercoles = $request->request->get('txtHorainiciomiercoles');
         $horafinmiercoles = $request->request->get('txtHorafinmiercoles');
-        dump(' De ' . $horainiciomiercoles . ' a ' . $horafinmiercoles);
 
         $juevesseleccionado = $request->request->get('txtJueves');
-        dump($juevesseleccionado);
         $horainiciojueves = $request->request->get('txtHorainiciojueves');
         $horafinjueves = $request->request->get('txtHorafinjueves');
-        dump(' De ' . $horainiciojueves . ' a ' . $horafinjueves);
 
         $viernesseleccionado = $request->request->get('txtViernes');
-        dump($viernesseleccionado);
         $horainicioviernes = $request->request->get('txtHorainicioviernes');
         $horafinviernes = $request->request->get('txtHorafinviernes');
-        dump(' De ' . $horainicioviernes . ' a ' . $horafinviernes);
 
         $horainicio = null;
         $horafin = null;
@@ -268,15 +236,6 @@ class TurnosController extends AbstractController
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
-
-        // $userinfo->setBirthday(new \DateTime($norm_date));
-        // $userinfo->setBirthday(new \DateTime('now'));
-        // $userinfo->setBirthday(new \DateTime('2013-01-15'));
-        // $userinfo->setBirthday(new \DateTime('+2 days'), new \DateTimeZone('UCT'));
-        // $lastmonth = mktime(0, 0, 0, date("m")-1, date("d"),   date("Y"));
-        // $today = date("H:i:s");                         // 17:16:18
-        // $today = date("Y-m-d H:i:s");                   // 2001-03-10 17:16:18 (the MySQL DATETIME format)
 
         // Si el dia esta seleccionado
         if ($lunesseleccionado === 'true') {
@@ -292,7 +251,7 @@ class TurnosController extends AbstractController
                 $turnosfacultativo->setHorainicio($horainiciolunes);
                 $turnosfacultativo->setHorafin($horafinlunes);
                 $turnosfacultativo->setIdfacultativo($facultativo);
-                dump($turnosfacultativo);
+
                 // Modifico registro en la tabla de Turnos
                 $em->persist($turnosfacultativo);
                 $em->flush();
@@ -310,7 +269,7 @@ class TurnosController extends AbstractController
                 $nuevoturno->setHorainicio($horainiciolunes);
                 $nuevoturno->setHorafin($horafinlunes);
                 $nuevoturno->setIdfacultativo($facultativo);
-                dump($nuevoturno);
+
                 // Inserto registro en la tabla de Turnos
                 $em->persist($nuevoturno);
                 $em->flush();
@@ -335,7 +294,7 @@ class TurnosController extends AbstractController
                 $turnosfacultativo->setHorainicio($horainiciomartes);
                 $turnosfacultativo->setHorafin($horafinmartes);
                 $turnosfacultativo->setIdfacultativo($facultativo);
-                dump($turnosfacultativo);
+
                 // Modifico registro en la tabla de Turnos
                 $em->persist($turnosfacultativo);
                 $em->flush();
@@ -353,7 +312,7 @@ class TurnosController extends AbstractController
                 $nuevoturno->setHorainicio($horainiciomartes);
                 $nuevoturno->setHorafin($horafinmartes);
                 $nuevoturno->setIdfacultativo($facultativo);
-                dump($nuevoturno);
+
                 // Inserto registro en la tabla de Turnos
                 $em->persist($nuevoturno);
                 $em->flush();
@@ -378,7 +337,7 @@ class TurnosController extends AbstractController
                 $turnosfacultativo->setHorainicio($horainiciomiercoles);
                 $turnosfacultativo->setHorafin($horafinmiercoles);
                 $turnosfacultativo->setIdfacultativo($facultativo);
-                dump($turnosfacultativo);
+
                 // Modifico registro en la tabla de Turnos
                 $em->persist($turnosfacultativo);
                 $em->flush();
@@ -396,7 +355,7 @@ class TurnosController extends AbstractController
                 $nuevoturno->setHorainicio($horainiciomiercoles);
                 $nuevoturno->setHorafin($horafinmiercoles);
                 $nuevoturno->setIdfacultativo($facultativo);
-                dump($nuevoturno);
+
                 // Inserto registro en la tabla de Turnos
                 $em->persist($nuevoturno);
                 $em->flush();
@@ -421,7 +380,7 @@ class TurnosController extends AbstractController
                 $turnosfacultativo->setHorainicio($horainiciojueves);
                 $turnosfacultativo->setHorafin($horafinjueves);
                 $turnosfacultativo->setIdfacultativo($facultativo);
-                dump($turnosfacultativo);
+
                 // Modifico registro en la tabla de Turnos
                 $em->persist($turnosfacultativo);
                 $em->flush();
@@ -439,7 +398,7 @@ class TurnosController extends AbstractController
                 $nuevoturno->setHorainicio($horainiciojueves);
                 $nuevoturno->setHorafin($horafinjueves);
                 $nuevoturno->setIdfacultativo($facultativo);
-                dump($nuevoturno);
+
                 // Inserto registro en la tabla de Turnos
                 $em->persist($nuevoturno);
                 $em->flush();
@@ -464,7 +423,7 @@ class TurnosController extends AbstractController
                 $turnosfacultativo->setHorainicio($horainicioviernes);
                 $turnosfacultativo->setHorafin($horafinviernes);
                 $turnosfacultativo->setIdfacultativo($facultativo);
-                dump($turnosfacultativo);
+
                 // Modifico registro en la tabla de Turnos
                 $em->persist($turnosfacultativo);
                 $em->flush();
@@ -482,7 +441,7 @@ class TurnosController extends AbstractController
                 $nuevoturno->setHorainicio($horainicioviernes);
                 $nuevoturno->setHorafin($horafinviernes);
                 $nuevoturno->setIdfacultativo($facultativo);
-                dump($nuevoturno);
+
                 // Inserto registro en la tabla de Turnos
                 $em->persist($nuevoturno);
                 $em->flush();

@@ -48,7 +48,7 @@ class InformesController extends AbstractController
         // Recupero todos los Pacientes para seleccionar el que se quiere dar Informe de alta con Paginacion
         // $em = $this->getDoctrine()->getManager();
         $query = $em->getRepository(Pacientes::class)->findAll();
-        dump($query);
+
         $datosPacientesPaginados = $paginator->paginate(
             $query, // Consulta que quiero paginar,
             $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -69,23 +69,17 @@ class InformesController extends AbstractController
         PaginatorInterface $paginator
     ) {
         // Recogemos datos de formulario con Get dado que es una busqueda
-        // $busquedaapellido = $request->request->get('txtApellido');
         $busquedaapellido = $request->query->get('txtApellido');
-        dump($busquedaapellido);
 
         // Si se ha rellenado la busqueda por Apellido
         if ($busquedaapellido) {
             // Recupero todos los Pacientes para seleccionar el que se quiere dar Informe de alta con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT p FROM App\Entity\Pacientes p WHERE p.apellido1 like :parametro'
             );
             // Concateno la variable a buscar y el % del Like
             $query->setParameter('parametro', $busquedaapellido . '%');
-            dump($query);
-            // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            // $pacientes = $query->getResult();
-            // dump($pacientes);
+
             $datosPacientesPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -93,9 +87,8 @@ class InformesController extends AbstractController
             );
         } else {
             // Si no se relleno se recuperan todos los Pacientes con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->getRepository(Pacientes::class)->findAll();
-            dump($query);
+
             $datosPacientesPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -117,22 +110,17 @@ class InformesController extends AbstractController
         PaginatorInterface $paginator
     ) {
         // Recogemos datos de formulario con Get dado que es una busqueda
-        //$busquedatelefono = $request->request->get('txtTelefono');
         $busquedatelefono = $request->query->get('txtTelefono');
-        dump($busquedatelefono);
 
         // Si se ha rellenado busqueda telefono
         if ($busquedatelefono) {
             // Si no se relleno se recuperan todos los Pacientes con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT p FROM App\Entity\Pacientes p WHERE p.telefono = :dato'
             );
             // Asigno valor del parametro dato
             $query->setParameter('dato', $busquedatelefono);
-            dump($query);
-            // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            // $pacientes = $query->getResult();
+
             $datosPacientesPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -140,9 +128,7 @@ class InformesController extends AbstractController
             );
         } else {
             // Si no se relleno se recuperan todos los Pacientes con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->getRepository(Pacientes::class)->findAll();
-            dump($query);
             $datosPacientesPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -164,17 +150,14 @@ class InformesController extends AbstractController
     ) {
         // Recupero las variable de sesion de facultativo
         $idfacultativo = $request->getSession()->get('idfacultativo');
-        dump($idfacultativo);
 
         // Recupero el paciente que se envia
         $idpaciente = $request->query->get('idpaciente');
-        dump($idpaciente);
 
         // Recupero datos de facultativo para enviar los Values a Formulario
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
 
         // Recupero datos de paciente para enviar los Values a Formulario
         $paciente = $em
@@ -184,11 +167,9 @@ class InformesController extends AbstractController
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Recupero Fecha del Dia
         $fechadia = new \DateTime('@' . strtotime('now'));
-        dump($fechadia);
 
         // Envio a la vista de Datos Perfil Paciente
         return $this->render('informes/altaInforme.html.twig', [
@@ -209,33 +190,25 @@ class InformesController extends AbstractController
     ) {
         // Recupero las variable de sesion de facultativo
         $idfacultativo = $request->getSession()->get('idfacultativo');
-        dump($idfacultativo);
 
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idpaciente = $request->query->get('idpaciente');
-        dump($idpaciente);
 
         // Recupero datos de objeto Paciente con el idpaciente
         $paciente = $em
             ->getRepository(Pacientes::class)
             ->findOneByIdpaciente($idpaciente);
-        dump($paciente);
 
         // Recupero datos de objeto Facultativo con el idfacultativo
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
 
         // Recogemos datos de formulario
         $fecha = $request->request->get('txtFechaInforme');
-        dump($fecha);
         $diaconvertido = \DateTime::createFromFormat('Y-m-d', $fecha);
-        dump($diaconvertido);
         $tipoinforme = $request->request->get('comboTipoInforme');
-        dump($tipoinforme);
         $observaciones = $request->request->get('txtObservaciones');
-        dump($observaciones);
 
         // Declaro variable de clase entidad Informe
         $nuevoinforme = new Informes();
@@ -250,7 +223,6 @@ class InformesController extends AbstractController
         $nuevoinforme->setIdpaciente($paciente);
         // Guardo el facultativo antes de guardar el Informe con el objeto facultativo
         $nuevoinforme->setIdfacultativo($facultativo);
-        dump($nuevoinforme);
 
         // Insertamos el Informe
         $em->persist($nuevoinforme);
@@ -261,9 +233,8 @@ class InformesController extends AbstractController
             'Se ha añadido un nuevo Informe para el Paciente ' . $idpaciente;
 
         // Recupero todos los Pacientes para enviar al formulario
-        // $em = $this->getDoctrine()->getManager();
         $query = $em->getRepository(Pacientes::class)->findAll();
-        dump($query);
+
         $datosPacientesPaginados = $paginator->paginate(
             $query, // Consulta que quiero paginar,
             $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -289,22 +260,19 @@ class InformesController extends AbstractController
     ) {
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idpaciente = $request->query->get('idpaciente');
-        dump($idpaciente);
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
 
         // Recupero datos de objeto Paciente con el idpaciente
         $paciente = $em
             ->getRepository(Pacientes::class)
             ->findOneByIdpaciente($idpaciente);
-        dump($paciente);
 
         // Si no se relleno se recuperan todos los Informes del Pacientes con Paginacion
         // $em = $this->getDoctrine()->getManager();
         $query = $em
             ->getRepository(Informes::class)
             ->findByIdpaciente($idpaciente);
-        dump($query);
+
         $datosInformesPaginados = $paginator->paginate(
             $query, // Consulta que quiero paginar,
             $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -328,29 +296,23 @@ class InformesController extends AbstractController
     ) {
         // Recupero las variable de sesion de facultativo
         $idfacultativo = $request->getSession()->get('idfacultativo');
-        dump($idfacultativo);
 
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idpaciente = $request->query->get('idpaciente');
-        dump($idpaciente);
         $idinforme = $request->query->get('idinforme');
-        dump($idinforme);
 
         // Recupero datos de objeto Paciente con el idpaciente
         $paciente = $em
             ->getRepository(Pacientes::class)
             ->findOneByIdpaciente($idpaciente);
-        dump($paciente);
 
         // Recupero el Informe del Paciente
         $informe = $em
             ->getRepository(Informes::class)
             ->findOneByIdinforme($idinforme);
-        dump($informe);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         return $this->render('informes/detalleInforme.html.twig', [
             'datosPaciente' => $paciente,
@@ -370,35 +332,28 @@ class InformesController extends AbstractController
     ) {
         // Recupero las variable de sesion de facultativo
         $idfacultativo = $request->getSession()->get('idfacultativo');
-        dump($idfacultativo);
 
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idpaciente = $request->query->get('idpaciente');
-        dump($idpaciente);
         $idinforme = $request->query->get('idinforme');
-        dump($idinforme);
 
         // Recupero datos de facultativo para enviar los Values a Formulario
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
 
         // Recupero datos de paciente para enviar los Values a Formulario
         $paciente = $em
             ->getRepository(Pacientes::class)
             ->findOneByIdpaciente($idpaciente);
-        dump($paciente);
 
         // Recupero datos de Informe para enviar los Values a Formulario
         $informe = $em
             ->getRepository(Informes::class)
             ->findOneByIdinforme($idinforme);
-        dump($informe);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Envio a la vista de Datos
         return $this->render('informes/modificarInforme.html.twig', [
@@ -419,36 +374,21 @@ class InformesController extends AbstractController
     ) {
         // Recupero las variable de sesion de facultativo
         $idfacultativo = $request->getSession()->get('idfacultativo');
-        dump($idfacultativo);
 
         // Recupero Parametros con Get
         $idinforme = $request->query->get('idinforme');
-        dump($idinforme);
         $idpaciente = $request->query->get('idpaciente');
-        dump($idpaciente);
 
         // Recupero el Informe a modificar con el idinforme
         $modificarinforme = $em
             ->getRepository(Informes::class)
             ->findOneByIdinforme($idinforme);
-        dump($modificarinforme);
-
-        // Recogemos el idpaciente del Informe recuperado
-        //$idpaciente = $modificarinforme->getIdpaciente();
 
         // Recogemos datos de formulario
-        // $fecha = $request->request->get('txtFechaInforme');
-        // dump($fecha);
-        // $diaconvertido = \DateTime::createFromFormat('Y-m-d', $fecha);
-        // dump($diaconvertido);
         $tipoinforme = $request->request->get('comboTipoInforme');
-        dump($tipoinforme);
         $observaciones = $request->request->get('txtObservaciones');
-        dump($observaciones);
 
         // Modificamos los valores del Informe con los datos del Formulario, el ID no se puede modificar es clave
-        // $modificarinforme->setIdinforme($idinforme);
-        // $modificarinforme->setFecha($diaconvertido);
         $modificarinforme->setTipoinforme($tipoinforme);
         $modificarinforme->setDetalle($observaciones);
         dump($modificarinforme);
@@ -468,14 +408,12 @@ class InformesController extends AbstractController
         $paciente = $em
             ->getRepository(Pacientes::class)
             ->findOneByIdpaciente($idpaciente);
-        dump($paciente);
 
         // Recupero todos los Informes del Paciente con Paginacion
-        // $em = $this->getDoctrine()->getManager();
         $query = $em
             ->getRepository(Informes::class)
             ->findByIdpaciente($idpaciente);
-        dump($query);
+
         $datosInformesPaginados = $paginator->paginate(
             $query, // Consulta que quiero paginar,
             $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET

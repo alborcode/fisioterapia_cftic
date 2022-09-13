@@ -48,7 +48,7 @@ class VacacionesController extends AbstractController
         // Si no se relleno se recuperan todos los Facultativos con Paginacion
         // $em = $this->getDoctrine()->getManager();
         $query = $em->getRepository(Facultativos::class)->findAll();
-        dump($query);
+
         $datosFacultativosPaginados = $paginator->paginate(
             $query, // Consulta que quiero paginar,
             $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -56,7 +56,6 @@ class VacacionesController extends AbstractController
         );
 
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Se envia a pagina enviando los datos de los facultativos
         return $this->render('vacaciones/busquedaFacultativo.html.twig', [
@@ -76,7 +75,6 @@ class VacacionesController extends AbstractController
         // Recogemos datos de formulario con Get dado que es una busqueda
         // $busquedaapellido = $request->request->get('txtApellido');
         $busquedaapellido = $request->query->get('txtApellido');
-        dump($busquedaapellido);
 
         // Si se ha rellenado la busqueda por Apellido
         if ($busquedaapellido) {
@@ -87,10 +85,7 @@ class VacacionesController extends AbstractController
             );
             // Concateno la variable a buscar y el % del Like
             $query->setParameter('parametro', $busquedaapellido . '%');
-            dump($query);
-            // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            // $facultativos = $query->getResult();
-            // dump($facultativos);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -100,7 +95,7 @@ class VacacionesController extends AbstractController
             // Si no se relleno se recuperan todos los Facultativos con Paginacion
             // $em = $this->getDoctrine()->getManager();
             $query = $em->getRepository(Facultativos::class)->findAll();
-            dump($query);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -129,7 +124,6 @@ class VacacionesController extends AbstractController
         // Recogemos datos de formulario con Get dado que es una busqueda
         //$busquedatelefono = $request->request->get('txtTelefono');
         $busquedatelefono = $request->query->get('txtTelefono');
-        dump($busquedatelefono);
 
         // Si se ha rellenado busqueda telefono
         if ($busquedatelefono) {
@@ -140,10 +134,7 @@ class VacacionesController extends AbstractController
             );
             // Asigno valor del parametro dato
             $query->setParameter('dato', $busquedatelefono);
-            dump($query);
-            // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            // $facultativos = $query->getResult();
-            // dump($facultativos);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -153,7 +144,7 @@ class VacacionesController extends AbstractController
             // Si no se relleno se recuperan todos los Facultativos con Paginacion
             // $em = $this->getDoctrine()->getManager();
             $query = $em->getRepository(Facultativos::class)->findAll();
-            dump($query);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -163,7 +154,6 @@ class VacacionesController extends AbstractController
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Enviamos a la pagina con los datos de Pacientes recuperados
         return $this->render('vacaciones/busquedaFacultativo.html.twig', [
@@ -183,20 +173,18 @@ class VacacionesController extends AbstractController
         // Recupero el Facultativo que me llega
         // $idfacultativo = $request->request->get('idfacultativo');
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
 
         // Recupero datos de facultativo para enviar los Values a Formulario
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
 
         // Recupero vacaciones de facultativo ordenadas por fecha para enviar los Values con Paginacion
         // $em = $this->getDoctrine()->getManager();
         $query = $em
             ->getRepository(Vacaciones::class)
             ->findBy(['idfacultativo' => $idfacultativo], ['fecha' => 'ASC']);
-        dump($query);
+
         $datosVacacionesPaginados = $paginator->paginate(
             $query, // Consulta que quiero paginar,
             $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -207,8 +195,6 @@ class VacacionesController extends AbstractController
         $anio = date('Y');
         $fechaini = $anio . '-01' . '-01';
         $fechafin = $anio . '-12' . '-31';
-        dump($fechaini);
-        dump($fechafin);
         // Recupero Fecha del Dia
         $fechadia = date('Y-m-d');
         dump($fechadia);
@@ -218,22 +204,13 @@ class VacacionesController extends AbstractController
             'https://datos.comunidad.madrid/catalogo/dataset/2f422c9b-47df-407f-902d-4a2f44dd435e/resource/453162e0-bd61-4f52-8699-7ed5f33168f6/download/festivos_regionales.json'
         );
         $datosjson = json_decode($datos, true);
-        dump($datosjson);
-
         // En el Array guardo los datos Json de data con los registros
         $festivosregionales = $datosjson['data'];
-        dump($festivosregionales);
-
         // Recupero un Array solo de las Fechas de Festivos
         $festivosarray = array_column($festivosregionales, 'fecha_festivo');
-        dump($festivosarray);
-
-        // $festivos = $festivosregionales['fecha_festivo'];
-        // dump($festivos);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Envio a la vista de Vacaciones, Datos Facultativo y Especialidades
         return $this->render('vacaciones/altaVacacionesAdmin.html.twig', [
@@ -258,18 +235,13 @@ class VacacionesController extends AbstractController
     ) {
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
 
         // Recogemos boton pulsado
         $boton = $request->request->get('operacion');
 
         // Recogemos datos de formulario con Post del día de vacaciones
-        //$diavacaciones = $request->request->get('txtfecha');
-        //$diavacaciones = $request->query->get('txtfecha');
         $diavacaciones = $request->request->get('txFecha');
-        dump($diavacaciones);
         $diaconvertido = \DateTime::createFromFormat('Y-m-d', $diavacaciones);
-        dump($diaconvertido);
 
         $mensaje = null;
         $mensajewarning = null;
@@ -295,11 +267,9 @@ class VacacionesController extends AbstractController
                 $facultativo = $em
                     ->getRepository(Facultativos::class)
                     ->findOneByIdfacultativo($idfacultativo);
-                dump($facultativo);
                 // Añado el Facultativo
                 $nuevodiavacaciones->setIdfacultativo($facultativo);
 
-                dump($nuevodiavacaciones);
                 // Inserto registro en la tabla de Turnos
                 $em->persist($nuevodiavacaciones);
                 $em->flush();
@@ -363,14 +333,13 @@ class VacacionesController extends AbstractController
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
 
         // Recupero vacaciones de facultativo ordenadas por fecha para enviar los Values con Paginacion
         // $em = $this->getDoctrine()->getManager();
         $query = $em
             ->getRepository(Vacaciones::class)
             ->findBy(['idfacultativo' => $idfacultativo], ['fecha' => 'ASC']);
-        dump($query);
+
         $datosVacacionesPaginados = $paginator->paginate(
             $query, // Consulta que quiero paginar,
             $request->query->getInt('page', 10), // Definir el parámetro de la página recogida por GET
@@ -381,29 +350,21 @@ class VacacionesController extends AbstractController
         $anio = date('Y');
         $fechaini = $anio . '-01' . '-01';
         $fechafin = $anio . '-12' . '-31';
-        dump($fechaini);
-        dump($fechafin);
         // Recupero Fecha del Dia
         $fechadia = date('Y-m-d');
-        dump($fechadia);
 
         // Recupero de API los Festivos de la Comunidad de Madrid (fecha_festivo dara las fechas en formato Y-m-d)
         $datos = file_get_contents(
             'https://datos.comunidad.madrid/catalogo/dataset/2f422c9b-47df-407f-902d-4a2f44dd435e/resource/453162e0-bd61-4f52-8699-7ed5f33168f6/download/festivos_regionales.json'
         );
         $datosjson = json_decode($datos, true);
-        dump($datosjson);
-
         // En el Array guardo los datos Json de data con los registros
         $festivosregionales = $datosjson['data'];
-        dump($festivosregionales);
         // Recupero un Array solo de las Fechas de Festivos
         $festivosarray = array_column($festivosregionales, 'fecha_festivo');
-        dump($festivosarray);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Envio a la vista de Vacaciones, Datos Facultativo y Especialidades
         return $this->render('vacaciones/altaVacacionesAdmin.html.twig', [
@@ -432,25 +393,21 @@ class VacacionesController extends AbstractController
         // Recupero las variables de sesion de usuario y facultativo
         $idusuario = $request->getSession()->get('idusuario');
         $idfacultativo = $request->getSession()->get('idfacultativo');
-        dump($idusuario);
-        dump($idfacultativo);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Recupero datos de facultativo para enviar los Values a Formulario
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
 
         // Recupero vacaciones de facultativo ordenadas por fecha para enviar los Values con Paginacion
         // $em = $this->getDoctrine()->getManager();
         $query = $em
             ->getRepository(Vacaciones::class)
             ->findBy(['idfacultativo' => $idfacultativo], ['fecha' => 'ASC']);
-        dump($query);
+
         $datosVacacionesPaginados = $paginator->paginate(
             $query, // Consulta que quiero paginar,
             $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -461,29 +418,21 @@ class VacacionesController extends AbstractController
         $anio = date('Y');
         $fechaini = $anio . '-01' . '-01';
         $fechafin = $anio . '-12' . '-31';
-        dump($fechaini);
-        dump($fechafin);
         // Recupero Fecha del Dia
         $fechadia = date('Y-m-d');
-        dump($fechadia);
 
         // Recupero de API los Festivos de la Comunidad de Madrid (fecha_festivo dara las fechas en formato Y-m-d)
         $datos = file_get_contents(
             'https://datos.comunidad.madrid/catalogo/dataset/2f422c9b-47df-407f-902d-4a2f44dd435e/resource/453162e0-bd61-4f52-8699-7ed5f33168f6/download/festivos_regionales.json'
         );
         $datosjson = json_decode($datos, true);
-        dump($datosjson);
-
         // En el Array guardo los datos Json de data con los registros
         $festivosregionales = $datosjson['data'];
-        dump($festivosregionales);
         // Recupero un Array solo de las Fechas de Festivos
         $festivosarray = array_column($festivosregionales, 'fecha_festivo');
-        dump($festivosarray);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Envio a la vista de Datos Turnos Facultativo y Datos de Facultativo
         return $this->render('vacaciones/altaVacacionesFacultativo.html.twig', [
@@ -508,16 +457,13 @@ class VacacionesController extends AbstractController
     ) {
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
 
         // Recogemos boton pulsado
         $boton = $request->request->get('operacion');
 
         // Recogemos datos de formulario con Post del día de vacaciones
         $diavacaciones = $request->request->get('txFecha');
-        dump($diavacaciones);
         $diaconvertido = \DateTime::createFromFormat('Y-m-d', $diavacaciones);
-        dump($diaconvertido);
 
         $mensaje = null;
         $mensajewarning = null;
@@ -543,11 +489,10 @@ class VacacionesController extends AbstractController
                 $facultativo = $em
                     ->getRepository(Facultativos::class)
                     ->findOneByIdfacultativo($idfacultativo);
-                dump($facultativo);
+
                 // Añado el Facultativo
                 $nuevodiavacaciones->setIdfacultativo($facultativo);
 
-                dump($nuevodiavacaciones);
                 // Inserto registro en la tabla de Turnos
                 $em->persist($nuevodiavacaciones);
                 $em->flush();
@@ -605,14 +550,12 @@ class VacacionesController extends AbstractController
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
 
         // Recupero vacaciones de facultativo ordenadas por fecha para enviar los Values con Paginacion
-        // $em = $this->getDoctrine()->getManager();
         $query = $em
             ->getRepository(Vacaciones::class)
             ->findBy(['idfacultativo' => $idfacultativo], ['fecha' => 'ASC']);
-        dump($query);
+
         $datosVacacionesPaginados = $paginator->paginate(
             $query, // Consulta que quiero paginar,
             $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -623,29 +566,21 @@ class VacacionesController extends AbstractController
         $anio = date('Y');
         $fechaini = $anio . '-01' . '-01';
         $fechafin = $anio . '-12' . '-31';
-        dump($fechaini);
-        dump($fechafin);
         // Recupero Fecha del Dia
         $fechadia = date('Y-m-d');
-        dump($fechadia);
 
         // Recupero de API los Festivos de la Comunidad de Madrid (fecha_festivo dara las fechas en formato Y-m-d)
         $datos = file_get_contents(
             'https://datos.comunidad.madrid/catalogo/dataset/2f422c9b-47df-407f-902d-4a2f44dd435e/resource/453162e0-bd61-4f52-8699-7ed5f33168f6/download/festivos_regionales.json'
         );
         $datosjson = json_decode($datos, true);
-        dump($datosjson);
-
         // En el Array guardo los datos Json de data con los registros
         $festivosregionales = $datosjson['data'];
-        dump($festivosregionales);
         // Recupero un Array solo de las Fechas de Festivos
         $festivosarray = array_column($festivosregionales, 'fecha_festivo');
-        dump($festivosarray);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Envio a la vista de Datos Turnos Facultativo y Datos de Facultativo
         return $this->render('vacaciones/altaVacacionesFacultativo.html.twig', [

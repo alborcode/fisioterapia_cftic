@@ -90,7 +90,6 @@ class AdministrativoController extends AbstractController
             // No se puede acceder con getUser porque recupera el usuario conectado.
             // $idusuario = $this->getUser()->getIdusuario();
             $idusuario = $usuario->getIdusuario();
-            dump('idusuario:' . $idusuario);
             // No se guardan variables de Sesion porque estamos dando de alta un usuario diferente al conectado
             // Se redirige a Formulario de Datos Paciente para dar Alta paciente pero en ruta Admin
             // para no realizar ciertas acciones y mandar el objeto usuario
@@ -112,8 +111,6 @@ class AdministrativoController extends AbstractController
     ) {
         // Recupero el Usuario que me llega con Get (por seguridad deberia ser con Post no con Get)
         $idusuario = $request->query->get('idusuario');
-        // Imprimo el objeto usuario
-        dump($idusuario);
 
         $paciente = new Pacientes();
         $formularioPaciente = $this->createForm(
@@ -128,8 +125,6 @@ class AdministrativoController extends AbstractController
             $formularioPaciente->isSubmitted() &&
             $formularioPaciente->isValid()
         ) {
-            dump($paciente);
-            dump($formularioPaciente);
             // Declaramos el Array datosformulario que contendra los diferentes campos recuperados
             $datosformulario = $formularioPaciente->getData();
 
@@ -139,25 +134,13 @@ class AdministrativoController extends AbstractController
             $usuario = $em
                 ->getRepository(Usuarios::class)
                 ->findOneByIdusuario($idusuario);
-            dump($usuario);
+
             // Guardo el usuario antes de guardar Paciente con el objeto usuario
             $paciente->setIdusuario($usuario);
-            dump($paciente);
-
-            // // Recuperamos de formulario el idprovincia guardado
-            // $idprovincia = $datosformulario[provincia];
-            // // Se accede al objeto provincia para guardarlo en Tabla Pacientes
-            // $provincia = $em
-            //     ->getRepository(Provincias::class)
-            //     ->findOneByIdusuario($idprovincia);
-            // dump($provincia);
-            // // Guardo el usuario antes de guardar Paciente con el objeto usuario
-            // $paciente->setIdprovincia($provincia);
-            // dump($paciente);
 
             $em->persist($paciente);
             $em->flush();
-            //$pacientesRepository->add($paciente, true);
+
             // Recupero el Id del Paciente guardado
             $idpaciente = $paciente->getIdpaciente();
 
@@ -222,7 +205,7 @@ class AdministrativoController extends AbstractController
             // No se puede acceder con getUser porque recupera el usuario conectado.
             // $idusuario = $this->getUser()->getIdusuario();
             $idusuario = $usuario->getIdusuario();
-            dump('idusuario:' . $idusuario);
+
             // No se guardan variables de Sesion porque estamos dando de alta un usuario diferente al conectado
             // Se redirige a Formulario de Datos Facultativo para dar Alta facultativo
             return $this->redirectToRoute('insertarFacultativoAdmin', [
@@ -243,9 +226,6 @@ class AdministrativoController extends AbstractController
     ) {
         // Recupero el Usuario que me llega con Get (por seguridad deberia ser con Post)
         $idusuario = $request->query->get('idusuario');
-        //$idusuario = $request->request->get('idusuario');
-        // Imprimo el objeto usuario
-        dump($idusuario);
 
         $facultativo = new Facultativos();
         $formularioFacultativo = $this->createForm(
@@ -260,20 +240,18 @@ class AdministrativoController extends AbstractController
             $formularioFacultativo->isSubmitted() &&
             $formularioFacultativo->isValid()
         ) {
-            dump($facultativo);
-            dump($formularioFacultativo);
             // No se puede acceder con getRepository porque recupera el usuario conectado. Hacemos select
             $usuario = $em
                 ->getRepository(Usuarios::class)
                 ->findOneByIdusuario($idusuario);
             dump($usuario);
+
             // Guardo el usuario antes de guardar Facultativo con el objeto usuario
             $facultativo->setIdusuario($usuario);
-            dump($facultativo);
 
             $em->persist($facultativo);
             $em->flush();
-            //$pacientesRepository->add($paciente, true);
+
             // Recupero el Id del Facultativo guardado
             $idfacultativo = $facultativo->getIdfacultativo();
 
@@ -332,7 +310,7 @@ class AdministrativoController extends AbstractController
             // No se puede acceder con getUser porque recupera el usuario conectado.
             // $idusuario = $this->getUser()->getIdusuario();
             $idusuario = $user->getIdusuario();
-            dump('idusuario:' . $idusuario);
+
             // No se guardan variables de Sesion porque estamos dando de alta un usuario diferente al conectado
             // Se redirige a Formulario Dashboard Administrativo mandando mensaje
             $mensaje =
@@ -364,9 +342,7 @@ class AdministrativoController extends AbstractController
         PaginatorInterface $paginator
     ) {
         // Recupero datos de Paccientes para enviar los Values a Formulario con Paginacion
-        // $em = $this->getDoctrine()->getManager();
         $query = $em->getRepository(Pacientes::class)->findAll();
-        dump($query);
         $datosPacientesPaginados = $paginator->paginate(
             $query, // Consulta que quiero paginar,
             $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -388,7 +364,6 @@ class AdministrativoController extends AbstractController
         PaginatorInterface $paginator
     ) {
         // Recogemos datos de formulario con Get dado que es una busqueda
-        // $busquedaapellido = $request->request->get('txtApellido');
         $busquedaapellido = $request->query->get('txtApellido');
         dump($busquedaapellido);
 
@@ -400,10 +375,7 @@ class AdministrativoController extends AbstractController
             );
             // Concateno la variable a buscar y el % del Like
             $query->setParameter('parametro', $busquedaapellido . '%');
-            dump($query);
-            // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            // $pacientes = $query->getResult();
-            // dump($pacientes);
+
             $datosPacientesPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -411,9 +383,8 @@ class AdministrativoController extends AbstractController
             );
         } else {
             // Si no se relleno se recuperan todos los Pacientes con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->getRepository(Pacientes::class)->findAll();
-            dump($query);
+
             $datosPacientesPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -437,7 +408,6 @@ class AdministrativoController extends AbstractController
         // Recogemos datos de formulario con Get dado que es una busqueda
         //$busquedatelefono = $request->request->get('txtTelefono');
         $busquedatelefono = $request->query->get('txtTelefono');
-        dump($busquedatelefono);
 
         // Si se ha rellenado busqueda telefono
         if ($busquedatelefono) {
@@ -448,10 +418,7 @@ class AdministrativoController extends AbstractController
             );
             // Asigno valor del parametro dato
             $query->setParameter('dato', $busquedatelefono);
-            dump($query);
-            // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            //$pacientes = $query->getResult();
-            //dump($pacientes);
+
             $datosPacientesPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -461,7 +428,7 @@ class AdministrativoController extends AbstractController
             // Si no se relleno se recuperan todos los Pacientes con Paginacion
             // $em = $this->getDoctrine()->getManager();
             $query = $em->getRepository(Pacientes::class)->findAll();
-            dump($query);
+
             $datosPacientesPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -483,29 +450,23 @@ class AdministrativoController extends AbstractController
         EntityManagerInterface $em
     ) {
         // Recupero el Paciente que me llega
-        // $idpaciente = $request->request->get('idpaciente');
         $idpaciente = $request->query->get('idpaciente');
-        dump($idpaciente);
 
         // Recupero datos de paciente para enviar los Values a Formulario
         $pacientemodificar = $em
             ->getRepository(Pacientes::class)
             ->findOneByIdpaciente($idpaciente);
-        dump($pacientemodificar);
 
         // Recupero el Id del Usuario de ese Paciente
         $idusuario = $pacientemodificar->getIdusuario();
-        dump($idusuario);
 
         // Recupero datos de usuario para enviar los Values a Formulario
         $usuariomodificar = $em
             ->getRepository(Usuarios::class)
             ->findOneByIdusuario($idusuario);
-        dump($usuariomodificar);
 
         // Recupero todas las Provincias para combo Seleccion (Recupera Array)
         $provincias = $em->getRepository(Provincias::class)->findAll();
-        dump($provincias);
 
         // Envio a la vista de Datos Perfil Paciente
         return $this->render(
@@ -527,14 +488,9 @@ class AdministrativoController extends AbstractController
     ) {
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idusuario = $request->query->get('idusuario');
-        dump($idusuario);
         $idpaciente = $request->query->get('idpaciente');
-        dump($idpaciente);
 
         /// Recogemos datos de formulario con Post
-        //$idusuario = $request->request->get('txtIdusuario');
-        //dump($idusuario);
-        // $email = $request->query->get('txtEmail');
         $email = $request->request->get('txtEmail');
         dump($email);
         $nombre = $request->request->get('txtNombre');
@@ -558,16 +514,14 @@ class AdministrativoController extends AbstractController
         $provincia = $em
             ->getRepository(Provincias::class)
             ->findOneByIdprovincia($idprovincia);
-        dump($provincia);
 
         // Recupero datos de objeto Usuario con el idusuario
         $usuariomodificar = $em
             ->getRepository(Usuarios::class)
             ->findOneByIdusuario($idusuario);
-        dump($usuariomodificar);
+
         // Modifico el Email del usuario con el recibido en formulario
         $usuariomodificar->setEmail($email);
-        dump($usuariomodificar);
 
         // Recupero el registro a modificar
         $pacientemodificar = $em
@@ -575,7 +529,6 @@ class AdministrativoController extends AbstractController
             ->find($idpaciente);
 
         // Modificamos los valores de Paciente con los datos del Formulario, el ID no se puede modificar es clave
-        // $pacientemodificar->setIdpaciente($idpaciente);
         $pacientemodificar->setNombre($nombre);
         $pacientemodificar->setApellido1($apellido1);
         $pacientemodificar->setApellido2($apellido2);
@@ -585,7 +538,6 @@ class AdministrativoController extends AbstractController
         $pacientemodificar->setProvincia($provincia);
         // Guardo el usuario antes de guardar Paciente con el objeto usuario
         $pacientemodificar->setIdusuario($usuariomodificar);
-        dump($pacientemodificar);
 
         // Modificamos el Usuario
         $em->persist($usuariomodificar);
@@ -615,9 +567,8 @@ class AdministrativoController extends AbstractController
         PaginatorInterface $paginator
     ) {
         // Si no se relleno se recuperan todos los Facultativos con Paginacion
-        // $em = $this->getDoctrine()->getManager();
         $query = $em->getRepository(Facultativos::class)->findAll();
-        dump($query);
+
         $datosFacultativosPaginados = $paginator->paginate(
             $query, // Consulta que quiero paginar,
             $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -639,23 +590,17 @@ class AdministrativoController extends AbstractController
         PaginatorInterface $paginator
     ) {
         // Recogemos datos de formulario con Get dado que es una busqueda
-        // $busquedaapellido = $request->request->get('txtApellido');
         $busquedaapellido = $request->query->get('txtApellido');
-        dump($busquedaapellido);
 
         // Si se ha rellenado la busqueda por Apellido
         if ($busquedaapellido) {
             // Si no se relleno se recuperan todos los Facultativos con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT f FROM App\Entity\Facultativos f WHERE f.apellido1 like :parametro'
             );
             // Concateno la variable a buscar y el % del Like
             $query->setParameter('parametro', $busquedaapellido . '%');
-            dump($query);
-            // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            // $facultativos = $query->getResult();
-            // dump($facultativos);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -663,7 +608,6 @@ class AdministrativoController extends AbstractController
             );
         } else {
             // Si no se relleno se recuperan todos los Facultativos con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->getRepository(Facultativos::class)->findAll();
             dump($query);
             $datosFacultativosPaginados = $paginator->paginate(
@@ -689,22 +633,17 @@ class AdministrativoController extends AbstractController
         // Recogemos datos de formulario con Get dado que es una busqueda
         //$busquedatelefono = $request->request->get('txtTelefono');
         $busquedatelefono = $request->query->get('txtTelefono');
-        dump($busquedatelefono);
 
         // Si se ha rellenado busqueda telefono
         if ($busquedatelefono) {
             // Si no se relleno se recuperan todos los Facultativos con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             // Select de Pacientes con Where mandado por parametro
             $query = $em->createQuery(
                 'SELECT f FROM App\Entity\Facultativos f WHERE f.telefono = :dato'
             );
             // Asigno valor del parametro dato
             $query->setParameter('dato', $busquedatelefono);
-            dump($query);
-            // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            // $facultativos = $query->getResult();
-            // dump($facultativos);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -712,9 +651,8 @@ class AdministrativoController extends AbstractController
             );
         } else {
             // Si no se relleno se recuperan todos los Facultativos con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->getRepository(Facultativos::class)->findAll();
-            dump($query);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -736,29 +674,23 @@ class AdministrativoController extends AbstractController
         EntityManagerInterface $em
     ) {
         // Recupero el Facultativo que me llega
-        // $idfacultativo = $request->request->get('idfacultativo');
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
 
         // Recupero datos de facultativo para enviar los Values a Formulario
         $facultativomodificar = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativomodificar);
 
         // Recupero el Id del Usuario de ese Facultativo
         $idusuario = $facultativomodificar->getIdusuario();
-        dump($idusuario);
 
         // Recupero datos de usuario para enviar los Values a Formulario
         $usuariomodificar = $em
             ->getRepository(Usuarios::class)
             ->findOneByIdusuario($idusuario);
-        dump($usuariomodificar);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Envio a la vista de Datos Perfil Paciente
         return $this->render(
@@ -780,14 +712,9 @@ class AdministrativoController extends AbstractController
     ) {
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idusuario = $request->query->get('idusuario');
-        dump($idusuario);
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
 
         /// Recogemos datos de formulario con Post
-        //$idusuario = $request->request->get('txtIdusuario');
-        //dump($idusuario);
-        // $email = $request->query->get('txtEmail');
         $email = $request->request->get('txtEmail');
         dump($email);
         $nombre = $request->request->get('txtNombre');
@@ -805,16 +732,14 @@ class AdministrativoController extends AbstractController
         $especialidad = $em
             ->getRepository(Especialidades::class)
             ->findOneByIdespecialidad($idespecialidad);
-        dump($especialidad);
 
         // Recupero datos de objeto Usuario con el idusuario
         $usuariomodificar = $em
             ->getRepository(Usuarios::class)
             ->findOneByIdusuario($idusuario);
-        dump($usuariomodificar);
+
         // Modifico el Email del usuario con el recibido en formulario
         $usuariomodificar->setEmail($email);
-        dump($usuariomodificar);
 
         // Recupero el registro a modificar
         $facultativomodificar = $em
@@ -822,7 +747,6 @@ class AdministrativoController extends AbstractController
             ->find($idfacultativo);
 
         // Modificamos los valores de Facultativo con los datos del Formulario, el ID no se puede modificar es clave
-        // $pacientemodificar->setIdpaciente($idpaciente);
         $facultativomodificar->setNombre($nombre);
         $facultativomodificar->setApellido1($apellido1);
         $facultativomodificar->setApellido2($apellido2);
@@ -830,7 +754,6 @@ class AdministrativoController extends AbstractController
         $facultativomodificar->setEspecialidad($especialidad);
         // Guardo el usuario antes de guardar Paciente con el objeto usuario
         $facultativomodificar->setIdusuario($usuariomodificar);
-        dump($facultativomodificar);
 
         // Modificamos el Usuario
         $em->persist($usuariomodificar);

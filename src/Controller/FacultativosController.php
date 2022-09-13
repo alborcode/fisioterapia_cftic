@@ -36,24 +36,19 @@ class FacultativosController extends AbstractController
         // Recupero las variables de sesion de usuario y facultativo
         $idusuario = $request->getSession()->get('idusuario');
         $idfacultativo = $request->getSession()->get('idfacultativo');
-        dump($idusuario);
-        dump($idfacultativo);
 
         // Recupero datos de facultativo para enviar los Values a Formulario
         $facultativomodificar = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativomodificar);
 
         // Recupero datos de usuario para enviar los Values a Formulario
         $usuariomodificar = $em
             ->getRepository(Usuarios::class)
             ->findOneByIdusuario($idusuario);
-        dump($usuariomodificar);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Envio a la vista de Datos Perfil Paciente
         return $this->render(
@@ -75,14 +70,9 @@ class FacultativosController extends AbstractController
     ) {
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idusuario = $request->query->get('idusuario');
-        dump($idusuario);
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
 
-        /// Recogemos datos de formulario con Post
-        //$idusuario = $request->request->get('txtIdusuario');
-        //dump($idusuario);
-        // $email = $request->query->get('txtEmail');
+        // Recogemos datos de formulario con Post
         $email = $request->request->get('txtEmail');
         dump($email);
         $nombre = $request->request->get('txtNombre');
@@ -100,17 +90,14 @@ class FacultativosController extends AbstractController
         $especialidad = $em
             ->getRepository(Especialidades::class)
             ->findOneByIdespecialidad($idespecialidad);
-        dump($especialidad);
 
         // Recupero datos de objeto Usuario con el idusuario
         $usuariomodificar = $em
             ->getRepository(Usuarios::class)
             ->findOneByIdusuario($idusuario);
-        dump($usuariomodificar);
 
         // Modifico el Email del usuario con el recibido en formulario
         $usuariomodificar->setEmail($email);
-        dump($usuariomodificar);
 
         // Recupero el registro a modificar
         $facultativomodificar = $em
@@ -118,7 +105,6 @@ class FacultativosController extends AbstractController
             ->find($idfacultativo);
 
         // Modificamos los valores de Facultativo con los datos del Formulario, el ID no se puede modificar es clave
-        // $pacientemodificar->setIdpaciente($idpaciente);
         $facultativomodificar->setNombre($nombre);
         $facultativomodificar->setApellido1($apellido1);
         $facultativomodificar->setApellido2($apellido2);
@@ -126,7 +112,6 @@ class FacultativosController extends AbstractController
         $facultativomodificar->setEspecialidad($especialidad);
         // Guardo el usuario antes de guardar Paciente con el objeto usuario
         $facultativomodificar->setIdusuario($usuariomodificar);
-        dump($facultativomodificar);
 
         // Modificamos el Usuario
         $em->persist($usuariomodificar);
