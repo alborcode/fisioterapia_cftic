@@ -365,11 +365,6 @@ class CitasController extends AbstractController
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
-        // Defino variables para Serializar
-        $encoders = [new XmlEncoder(), new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
-
         // Recupero el Facultativo y el Paciente que me llega
         // $idfacultativo = $request->request->get('idfacultativo');
         $idfacultativo = $request->query->get('idfacultativo');
@@ -381,24 +376,20 @@ class CitasController extends AbstractController
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Recupero datos de paciente para enviar los Values a Formulario
         $paciente = $em
             ->getRepository(Pacientes::class)
             ->findOneByIdpaciente($idpaciente);
-        dump($paciente);
 
         // Si no se relleno se recuperan todos los Pacientes con Paginacion
         // $em = $this->getDoctrine()->getManager();
         $query = $em
             ->getRepository(Citas::class)
             ->findBy(['idpaciente' => $idpaciente], ['fecha' => 'ASC']);
-        dump($query);
         $datosCitasPaginados = $paginator->paginate(
             $query, // Consulta que quiero paginar,
             $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -406,19 +397,12 @@ class CitasController extends AbstractController
         );
 
         // Recupero vacaciones de facultativo para tratamiento fechas disponibles
-        // $vacacionesfacultativo = $em
-        //     ->getRepository(Vacaciones::class)
-        //     ->findByIdfacultativo($idfacultativo);
-        // dump($vacacionesfacultativo);
-        // Recupero unicamente las fechas de vacaciones
         $query = $em->createQuery(
             'SELECT v.fecha FROM App\Entity\Vacaciones v WHERE v.idfacultativo =:parametro'
         );
         // Defino el parametro
         $query->setParameter('parametro', $idfacultativo);
-        dump($query);
         $vacacionesfacultativo = $query->getResult();
-        dump($vacacionesfacultativo);
 
         // Recupero citas disponibles de facultativo para ver si existen o se da error
         $citasdisponiblesfacultativo = $em
@@ -426,7 +410,6 @@ class CitasController extends AbstractController
             ->findBy([
                 'idfacultativo' => $idfacultativo,
             ]);
-        dump($citasdisponiblesfacultativo);
 
         // Si no existen citas disponibles se manda warning
         if (!$citasdisponiblesfacultativo) {
@@ -437,9 +420,7 @@ class CitasController extends AbstractController
         else {
             // Recupero Fecha del Dia y Fecha en un mes
             $fechaini = date('Y-m-d');
-            dump($fechaini);
             $fechafin = date('Y-m-d', strtotime($fechaini . '+ 1 month'));
-            dump($fechafin);
             $fechaactual = $fechaini;
             $fechafintramo = $fechafin;
             $arraynodisponible = [];
@@ -449,10 +430,8 @@ class CitasController extends AbstractController
                     'Y-m-d',
                     $fechaactual
                 );
-                dump($diaconvertido);
                 // Recupero dia de la semana de la fecha
                 $diasemana = date('l', strtotime($fechaactual));
-                dump($diasemana);
                 // Si dia de bucle es laborable
                 if ($diasemana != 'Sunday' && $diasemana != 'Saturday') {
                     // Recupero citas disponibles de ese ese facultativo que esten disponibles para el dia del bucle
@@ -463,19 +442,16 @@ class CitasController extends AbstractController
                             'fecha' => $diaconvertido,
                             'disponible' => true,
                         ]);
-                    dump($citasdisponiblesbucle);
                     // Si no se encuentran citas disponibles para ese dia se añade fecha al Array no disponible
                     if (!$citasdisponiblesbucle) {
                         $fechaarray = date('Y-m-d', strtotime($fechaactual));
                         array_push($arraynodisponible, $fechaarray);
-                        dump($arraynodisponible);
                     }
                 }
                 // Añadimos los fines de semana como dias No Disponibles
                 else {
                     $fechaarray = date('Y-m-d', strtotime($fechaactual));
-                    array_push($arraynodisponible, $fechaarray);
-                    dump($arraynodisponible);
+                    array_push($arraynodisponible, $fechaarray);;
                 }
 
                 // Sumo un dia a la Fecha del bucle
@@ -485,39 +461,27 @@ class CitasController extends AbstractController
                 );
             endwhile;
 
-            dump('Array Fechas no Disponibles:');
-            dump($arraynodisponible);
-
             // Recupero en Array solo las Fechas de Vacaciones
             $vacacionesarray = array_column($vacacionesfacultativo, 'fecha');
-            dump($vacacionesarray);
 
             // Convierto array de Fechas de Vacaciones formato DateTime a Array fechas formato 'AAAA-MM-DD'
             $arrayvacaciones = [];
             foreach ($vacacionesarray as $valor) {
-                dump($valor);
                 $fechaarray = $valor->format('Y-m-d');
-                dump($fechaarray);
                 array_push($arrayvacaciones, $fechaarray);
             }
-            dump('Array Vacaciones: ');
-            dump($arrayvacaciones);
 
             // Recupero de API los Festivos de la Comunidad de Madrid (fecha_festivo dara las fechas en formato Y-m-d)
             $datos = file_get_contents(
                 'https://datos.comunidad.madrid/catalogo/dataset/2f422c9b-47df-407f-902d-4a2f44dd435e/resource/453162e0-bd61-4f52-8699-7ed5f33168f6/download/festivos_regionales.json'
             );
             $datosjson = json_decode($datos, true);
-            dump($datosjson);
 
             // En el Array guardo los datos Json de data con los registros
             $festivosregionales = $datosjson['data'];
-            dump($festivosregionales);
 
             // Recupero en Array solo de las Fechas de Festivos
             $festivosarray = array_column($festivosregionales, 'fecha_festivo');
-            dump('Array Festivos:');
-            dump($festivosarray);
 
             // Junto arrays de festivos con Array de Vacaciones con fechas no disponibles para enviar fechas no disponibles
             $arrayjuntarfechas = array_merge(
@@ -528,13 +492,11 @@ class CitasController extends AbstractController
             dump($arrayjuntarfechas);
             // Eliminamos Fechas Duplicadas
             $fechasnodisponibles = array_unique($arrayjuntarfechas);
-            dump($fechasnodisponibles);
             // Ordeno Array por Fechas
             sort($fechasnodisponibles);
-            dump($fechasnodisponibles);
 
             // Envio a la vista de Citas, Datos Facultativo y Especialidades, Datos Pacientes, Citas y Fechas no disponibles
-            return $this->render('citas/altaCitasAdmin.html.twig', [
+            return $this->render('citas/mostrarCitasAdmin.html.twig', [
                 'datosFacultativo' => $facultativo,
                 'datosEspecialidades' => $especialidades,
                 'datosPaciente' => $paciente,
@@ -552,6 +514,59 @@ class CitasController extends AbstractController
         ]);
     }
 
+        // Formulario para mostrar Citas disponibles junto a fecha seleccionada y datos de Facultativos y de Pacientes
+        #[Route('/seleccionhorascitaadmin', name: 'seleccionhoraCitasAdmin', methods: ['GET', 'POST'])]
+        public function seleccionhoraCitasAdmin(
+            Request $request,
+            FacultativosRepository $facultativosRepository,
+            PacientesRepository $pacientesRepository,
+            CitasDisponiblesRepository $citasDisponiblesRepository,
+            EntityManagerInterface $em,
+            PaginatorInterface $paginator
+        ) {
+            // Recupero el Facultativo y el Paciente que me llega
+            // $idfacultativo = $request->request->get('idfacultativo');
+            $idfacultativo = $request->query->get('idfacultativo');
+            dump($idfacultativo);
+            $idpaciente = $request->query->get('idpaciente');
+            dump($idpaciente);
+            // Recupero Fecha Seleccionada de Cita
+            $fechacita = $request->query->get('txFecha');
+            dump($fechacita);
+    
+            // Recupero datos de facultativo para enviar los Values a Formulario
+            $facultativo = $em
+                ->getRepository(Facultativos::class)
+                ->findOneByIdfacultativo($idfacultativo);
+    
+            // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
+            $especialidades = $em->getRepository(Especialidades::class)->findAll();
+    
+            // Recupero datos de paciente para enviar los Values a Formulario
+            $paciente = $em
+                ->getRepository(Pacientes::class)
+                ->findOneByIdpaciente($idpaciente);
+
+            // Recupero citas disponibles de ese facultativo en esa fecha
+            $citasdisponiblesfacultativo = $em
+                ->getRepository(CitasDisponibles::class)
+                ->findBy([
+                    'idfacultativo' => $idfacultativo,
+                    'fecha' => '$fechacita',
+                    'disponible' => 'true',
+                ]);
+    
+            // Envio a la vista de Seleccion de Horas, Datos Facultativo-Especialidades, Datos Pacientes, Citas Disponibles
+            return $this->render('citas/mostrarCitasAdmin.html.twig', [
+                'datosFacultativo' => $facultativo,
+                'datosEspecialidades' => $especialidades,
+                'datosPaciente' => $paciente,
+                'citasDisponibles' => $citasdisponiblesfacultativo,
+            ]);
+            
+        }
+
+    // *** ALTA
     // Recogemos Datos Formulario para borrar Citas si ya existen o Darlas de Alta si no existen
     #[Route('/altacitasadmin', name: 'altaCitasAdmin', methods: ['GET', 'POST'])]
     public function altaCitasAdmin(

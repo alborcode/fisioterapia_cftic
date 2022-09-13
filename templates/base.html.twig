@@ -21,6 +21,10 @@
     </head>
     <body {{ stimulus_controller('symfony/ux-swup/swup', {
             containers: ['#swup'],
+            animateHistoryBrowsing: true,
+            animationSelector: '[class*="transition-"]',
+            cache: true,
+            linkSelector: '...',
         }) }}
     >
         {% block body %}{% endblock %}

@@ -12,7 +12,7 @@ class CitasDisponibles
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private ?int $idcita = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $fecha = null;
@@ -28,9 +28,9 @@ class CitasDisponibles
     #[ORM\JoinColumn(nullable: false, name:"idfacultativo", referencedColumnName:"idfacultativo")]
     private ?Facultativos $idfacultativo = null;
 
-    public function getId(): ?int
+    public function getIdCita(): ?int
     {
-        return $this->id;
+        return $this->idcita;
     }
 
     public function getFecha(): ?\DateTimeInterface
