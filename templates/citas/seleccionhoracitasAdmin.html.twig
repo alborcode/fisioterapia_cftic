@@ -10,7 +10,7 @@
                 <div class="col-md-6 col-xl-12">
                     <div class="card">
                         <div class="card-body text-center d-flex flex-column align-items-center">
-                            <div class="row mb-4 mb-lg-5">
+                            <div class="row mb-1 mb-lg-1">
                                 <p class="fw-bold text-success mb-2">Intranet - Menu Administrativo</p>
                                 <h3 class="fw-bold">Seleccionar Hora Cita</h3>
                             </div>
@@ -41,41 +41,25 @@
                                     <div class="row mb-2 mb-lg-2">
                                         <div class="col-sm-9">
                                             Paciente
-                                            <input type="text" name="txtNombre" value="{{datosPaciente.nombre}} {{datosPaciente.apellido1}} {{datosPaciente.apellido2}}" class="form-control" id="txtNombre">
+                                            <input type="text" name="txtNombre" value="{{datosPaciente.nombre}} {{datosPaciente.apellido1}} {{datosPaciente.apellido2}}" class="form-control" readonly="readonly" disabled="disabled" id="txtNombre">
                                         </div>
                                         <div class="col-sm-3">
                                             Teléfono
-                                            <input type="tel" name="txtTelefono" value="{{datosPaciente.telefono}}" class="form-control" id="txtTelefono" pattern="(\+34|0034|34)?[ -]*(6|7|8|9)[ -]*([0-9][ -]*){8}">
+                                            <input type="tel" name="txtTelefono" value="{{datosPaciente.telefono}}" class="form-control" readonly="readonly" disabled="disabled" id="txtTelefono" pattern="(\+34|0034|34)?[ -]*(6|7|8|9)[ -]*([0-9][ -]*){8}">
                                         </div>
                                     </div>  
  
                                     <div class="row mb-2 mb-lg-2">
                                         <div class="col-sm-3">
-                                            <input type="date" class="form-control mb-lg-2 py-2" id="txFecha" name="txFecha" value="{{fechaseleccionada}}" readonly="readonly" disabled="disabled" >
+                                            {{diadelasemana}}
+                                            <input type="date" class="form-control" id="txFecha" name="txFecha" value="{{fechaseleccionada}}" readonly="readonly" disabled="disabled" >
                                         </div>
-                                    </div> 
-                                    <div class="row mb-2 mb-lg-2">
-                                        <div class="col-sm-3">
-                                            {# Si esta definida la variable muestra los datos de las citas disponibles del facultativo #}
-                                            {% if citasDisponibles is defined %}
-                                                {% for horadisponible in citasDisponibles %}    
-                                                    <tr>
-                                                        <td scope="row">{{ citasDisponibles.horadisponible }}:00 a {{ citasDisponibles.horadisponible + 1 }}:00</td>
-                                                        <td>
-                                                            <a class="btn btn-info" href="{{ path('bajaCitaAdmin', {idfacultativo: Facultativo.idfacultativo, idpaciente: datosPaciente.idpaciente, idcita: citasDisponibles,idcita }) }}">Seleccionar</a>
-                                                        </td>
-                                                    </tr>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <button type="submit" class="btn btn-primary" name="operacion" value="insertar">
-                                                <i class="fa fa-chevron-circle-down" aria-hidden="true"></i> Alta Cita
-                                            </button>
+                                        <div class="col-sm-6">
+                                            {# Incluimos Boton Volver #}
+                                            {% include 'menuVolverOtraFecha.html.twig' %}
                                         </div>
                                     </div> 
                                 </form>
-
                                 <HR>
                                 {% if mensaje is defined %}
                                     {% if mensaje is not null %}
@@ -94,8 +78,34 @@
                                     {% endif %}
                                 {% endif %}     
 
-                                </div>
-                            </div>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Hora Disponible</th>
+                                            <th>Accion</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <div id="swup">
+                                            {# Si esta definida la variable muestra los datos de las citas disponibles del facultativo #}
+                                            {% if citasDisponibles is defined %}
+                                                {% for horadisponible in citasDisponibles %}
+                                                    <tr>
+                                                        <td scope="row">
+                                                            <select name="comboEspecialidad" class="form-control mb-3" id="comboEspecialidad" readonly="readonly" disabled="disabled">
+                                                                <option value="{{ horadisponible.hora }}"> De {{ horadisponible.hora }}:00 a {{ horadisponible.hora + 1 }}:00</option>
+                                                            </select>
+                                                        </td> 
+                                                        <td>
+                                                            <a class="btn btn-info" href="{{ path('altaCitasAdmin', {idfacultativo: datosFacultativo.idfacultativo, idpaciente: datosPaciente.idpaciente, hora: horadisponible.hora, fecha: fechaseleccionada }) }}">Pedir Cita</a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </tbody>
+                                </table>
+                            </div>       
                         </div>
                     </div>
                 </div>

@@ -105,7 +105,9 @@
                                                 <td>{{ Paciente.Nombre | capitalize}} {{ Paciente.Apellido1 | capitalize}} {{ Paciente.Apellido2 | capitalize}}</td>
                                                 <td>{{ Paciente.Telefono}}</td>
                                                 <td>
-                                                    <a class="btn btn-info" href="{{ path('mostrarCitasAdmin', {idpaciente: Paciente.idpaciente, idfacultativo: datosFacultativo.idfacultativo }) }}">Gestion Citas</a>
+                                                    <a class="btn btn-info" href="{{ path('mostrarCitasAdmin', {idpaciente: Paciente.idpaciente, idfacultativo: datosFacultativo.idfacultativo }) }}">Alta Cita</a>
+                                                    <span>  </span>
+                                                    <a class="btn btn-warning" href="{{ path('historialCitasAdmin', {idpaciente: Paciente.idpaciente, idfacultativo: datosFacultativo.idfacultativo }) }}">Historial Citas</a>
                                                 </td>
                                             </tr>
                                         {% endfor %}

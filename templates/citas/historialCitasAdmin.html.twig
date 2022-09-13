@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Historial Citas Paciente{% endblock %}
+
+{% block body %}
+
+    <section class="py-5 mt-5">
+        <div class="container py-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 col-xl-12">
+                    <div class="card">
+                        <div class="card-body text-center d-flex flex-column align-items-center">
+                            <div class="row mb-4 mb-lg-5">
+                                <p class="fw-bold text-success mb-2">Intranet - Menu Administrativo</p>
+                                <h3 class="fw-bold">Historial Citas</h3>
+                            </div>
+                            <div class="row mb-4 mb-lg-2">
+                                {# Incluimos Boton Volver #}
+                                {% include 'menuVolver.html.twig' %}
+                            </div>
+                            <div class="form-group col-sm-8">
+                                {# Formulario Para Mostrar Datos de Paciente #}
+                                <form> 
+                                    <div class="row mb-2 mb-lg-2">
+                                        <div class="col-sm-9">
+                                            Paciente
+                                            <input type="text" name="txtNombreP" value="{{datosPaciente.nombre}} {{datosPaciente.apellido1}} {{datosPaciente.apellido2}}" readonly="readonly" disabled="disabled" class="form-control" id="txtNombreP">
+                                        </div>
+                                    </div>     
+                                </form>
+
+                                {% if mensaje is defined %}
+                                    {% if mensaje is not null %}
+                                        <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
+                                            {{mensaje}}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                                {% if mensajewarning is defined %}        
+                                    {% if mensajewarning is not null %}
+                                        <div class="alert alert-warning d-flex align-items-center alert-dismissible fade show" role="alert">
+                                            {{mensajewarning}}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                                
+                                <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Fecha</th>
+                                        <th>Hora</th>
+                                    </tr>
+                                </thead>
+                                <tbody>                                   
+                                    <div id="swup">
+                                        {# Si esta definida la variable muestra los datos de los pacientes #}
+                                        {% for Cita in historialCitas %}    
+                                            <tr>
+                                                <td scope="row">{{ Cita.Idcita}}</td>
+                                                <td>{{ Cita.Fecha |date('d-m-Y')}} </td>
+                                                <td>{{ Cita.Hora}}:00</td>
+                                                <td>
+                                                    <a class="btn btn-info" href="{{ path('imprimirJustificanteAdmin', {idcita: Cita.idcita }) }}">Justificante</a>
+                                                    <span>  </span>
+                                                    {# Mostramos el boton de baja solo si la cita es del dia de hoy o mayor #}
+                                                    {% if fechadia <= Cita.fecha %}
+                                                        <a class="btn btn-warning" href="{{ path('bajaCitaAdmin', {idcita: Cita.idcita }) }}">Baja</a>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </div>
+                                </tbody>
+                            </table>
+                            <div>
+                                {{ knp_pagination_render(historialCitas) }}
+                            </div> 
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    
+{% endblock %}
