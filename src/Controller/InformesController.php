@@ -6,27 +6,12 @@ use App\Repository\PacientesRepository;
 use App\Entity\Facultativos;
 use App\Repository\FacultativosRepository;
 use App\Entity\Especialidades;
-use App\Repository\EspecialidadesRepository;
 use App\Entity\Informes;
 use App\Repository\InformesRepository;
-use App\Form\InformesType;
 use Doctrine\ORM\EntityManagerInterface;
-
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TelType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Doctrine\ORM\EntityRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 // Use necesario para usar las funciones de paginacion
@@ -41,7 +26,6 @@ class InformesController extends AbstractController
     #[Route('/buscarpacientealta', name: 'buscarpacienteInformeAlta', methods: ['GET', 'POST'])]
     public function buscarpacienteInformeAlta(
         Request $request,
-        InformesRepository $informesRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -64,7 +48,6 @@ class InformesController extends AbstractController
     #[Route('/buscarperfilpacienteApellido', name: 'buscarPerfilPacienteApellido', methods: ['GET', 'POST'])]
     public function buscarPerfilPacienteApellido(
         Request $request,
-        PacientesRepository $pacientesRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -105,7 +88,6 @@ class InformesController extends AbstractController
     #[Route('/buscarperfilpacienteTelefono', name: 'buscarPerfilPacienteTelefono', methods: ['GET', 'POST'])]
     public function buscarPerfilPacienteTelefono(
         Request $request,
-        PacientesRepository $pacientesRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -145,7 +127,6 @@ class InformesController extends AbstractController
     #[Route('/mostrarfacultativopaciente', name: 'mostrarDatosFacultativoPaciente', methods: ['GET', 'POST'])]
     public function mostrarDatosFacultativoPaciente(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em
     ) {
         // Recupero las variable de sesion de facultativo
@@ -184,7 +165,6 @@ class InformesController extends AbstractController
     #[Route('/altainfome', name: 'altaInforme', methods: ['GET', 'POST'])]
     public function altaInforme(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -254,7 +234,6 @@ class InformesController extends AbstractController
     #[Route('/mostrarlistadoinformes', name: 'mostrarListadoInformes', methods: ['GET', 'POST'])]
     public function mostrarListadoInformes(
         Request $request,
-        InformesRepository $informesRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -291,7 +270,6 @@ class InformesController extends AbstractController
     #[Route('/detalleinforme', name: 'detalleInforme', methods: ['GET', 'POST'])]
     public function detalleInforme(
         Request $request,
-        InformesRepository $informesRepository,
         EntityManagerInterface $em
     ) {
         // Recupero las variable de sesion de facultativo
@@ -327,7 +305,6 @@ class InformesController extends AbstractController
     #[Route('/formulariomodificar', name: 'formularioModificar', methods: ['GET', 'POST'])]
     public function formularioModificar(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em
     ) {
         // Recupero las variable de sesion de facultativo
@@ -368,7 +345,6 @@ class InformesController extends AbstractController
     #[Route('/modificarinfome', name: 'modificarInforme', methods: ['GET', 'POST'])]
     public function modificarInforme(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {

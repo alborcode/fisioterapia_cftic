@@ -1,37 +1,19 @@
 <?php
 namespace App\Controller;
 
-use App\Entity\Citas;
-use App\Form\CitasType;
-use App\Repository\CitasRepository;
 use App\Entity\CitasDisponibles;
-use App\Repository\CitasDisponiblesRepository;
 use App\Entity\Facultativos;
-use App\Form\FacultativosType;
 use App\Repository\FacultativosRepository;
 use App\Entity\Especialidades;
-use App\Repository\EspecialidadesRepository;
-use App\Entity\Pacientes;
-use App\Form\PacientesType;
 use App\Repository\PacientesRepository;
 use App\Entity\Turnos;
-use App\Form\TurnosType;
 use App\Repository\TurnosRepository;
-use App\Entity\Vacaciones;
-use App\Form\VacacionesType;
-use App\Repository\VacacionesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\TimeType;
 
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 // Use necesario para usar las funciones de paginacion
 use Knp\Component\Pager\PaginatorInterface;
@@ -45,7 +27,6 @@ class CitasDisponiblesController extends AbstractController
     #[Route('/buscarfacultativocitasd', name: 'buscarFacultativoCitasD', methods: ['GET', 'POST'])]
     public function buscarFacultativoCitasD(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -74,7 +55,6 @@ class CitasDisponiblesController extends AbstractController
     #[Route('/buscarfacultativocitasDapellido', name: 'buscarFacultativoCitasDApellido', methods: ['GET', 'POST'])]
     public function buscarFacultativoCitasDApellido(
         Request $request,
-        PacientesRepository $pacientesRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -124,7 +104,6 @@ class CitasDisponiblesController extends AbstractController
     #[Route('/buscarfacultativocitasDtelefono', name: 'buscarFacultativoCitasDTelefono', methods: ['GET', 'POST'])]
     public function buscarFacultativoCitasDTelefono(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -174,7 +153,6 @@ class CitasDisponiblesController extends AbstractController
     #[Route('/mostrarcitasdisponiblesfacultativo', name: 'mostrarCitasDisponiblesFacultativo', methods: ['GET', 'POST'])]
     public function mostrarCitasDisponiblesFacultativo(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -216,8 +194,6 @@ class CitasDisponiblesController extends AbstractController
     #[Route('/altacitasDfacultativo', name: 'altaCitasDFacultativo', methods: ['GET', 'POST'])]
     public function modificarFacultativoAdmin(
         Request $request,
-        FacultativosRepository $facultativosRepository,
-        TurnosRepository $turnosRepository,
         EntityManagerInterface $em
     ) {
         $mensaje = null;

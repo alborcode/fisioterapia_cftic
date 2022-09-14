@@ -3,7 +3,6 @@ namespace App\Controller;
 
 use App\Entity\Usuarios;
 use App\Form\RegistrationFormType;
-use App\Repository\UsuariosRepository;
 use App\Entity\Pacientes;
 use App\Form\PacientesType;
 use App\Repository\PacientesRepository;
@@ -11,36 +10,17 @@ use App\Entity\Facultativos;
 use App\Form\FacultativosType;
 use App\Repository\FacultativosRepository;
 use App\Entity\Provincias;
-use App\Form\ProvinciasType;
 use App\Entity\Especialidades;
-use App\Form\EspecialidadesType;
 use Doctrine\ORM\EntityManagerInterface;
 
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TelType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Doctrine\ORM\EntityRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-
-use App\Security\EmailVerifier;
 use App\Security\FisioterapiaAuthenticator;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
 
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 // Use necesario para usar las funciones de paginacion
 use Knp\Component\Pager\PaginatorInterface;

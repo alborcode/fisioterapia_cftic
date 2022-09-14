@@ -2,32 +2,15 @@
 namespace App\Controller;
 
 use App\Entity\Vacaciones;
-use App\Form\VacacionesType;
-use App\Repository\VacacionesRepository;
 use App\Entity\Facultativos;
-use App\Form\FacultativosType;
-use App\Repository\FacultativosRepository;
 use App\Entity\Especialidades;
-use App\Repository\EspecialidadesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-use App\Security\EmailVerifier;
-use App\Security\FisioterapiaAuthenticator;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
 
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\TimeType;
-
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 // Use necesario para usar las funciones de paginacion
 use Knp\Component\Pager\PaginatorInterface;
@@ -41,7 +24,6 @@ class VacacionesController extends AbstractController
     #[Route('/buscarvacacionesfacultativo', name: 'buscarVacacionesFacultativo', methods: ['GET', 'POST'])]
     public function buscarVacacionesFacultativo(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -68,7 +50,6 @@ class VacacionesController extends AbstractController
     #[Route('/buscarvacacionesfacultativoApellido', name: 'buscarVacacionesFacultativoApellido', methods: ['GET', 'POST'])]
     public function buscarVacacionesFacultativoApellido(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -117,7 +98,6 @@ class VacacionesController extends AbstractController
     #[Route('/buscarvacacionesfacultativoTelefono', name: 'buscarVacacionesFacultativoTelefono', methods: ['GET', 'POST'])]
     public function buscarVacacionesFacultativoTelefono(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -166,7 +146,6 @@ class VacacionesController extends AbstractController
     #[Route('/mostrarvacacionesadmin', name: 'mostrarVacacionesAdmin', methods: ['GET', 'POST'])]
     public function mostrarVacacionesAdmin(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -228,8 +207,6 @@ class VacacionesController extends AbstractController
     #[Route('/altavacacionesadmin', name: 'altaVacacionesAdmin', methods: ['GET', 'POST'])]
     public function altaVacacionesAdmin(
         Request $request,
-        FacultativosRepository $facultativosRepository,
-        VacacionesRepository $vacacionesRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -386,7 +363,6 @@ class VacacionesController extends AbstractController
     #[Route('/mostrarvacaciones', name: 'mostrarVacacionesFacultativo', methods: ['GET', 'POST'])]
     public function mostrarVacacionesFacultativo(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -450,8 +426,6 @@ class VacacionesController extends AbstractController
     #[Route('/altavacacionesfacultativo', name: 'altaFacultativoVacaciones', methods: ['GET', 'POST'])]
     public function altaFacultativoVacaciones(
         Request $request,
-        FacultativosRepository $facultativosRepository,
-        VacacionesRepository $vacacionesRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {

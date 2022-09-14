@@ -8,11 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Pacientes;
-use App\Repository\PacientesRepository;
 use App\Entity\Facultativos;
-use App\Repository\FacultativosRepository;
-use App\Entity\Usuarios;
-use App\Repository\UsuariosRepository;
 
 class DashboardController extends AbstractController
 {

@@ -2,38 +2,17 @@
 namespace App\Controller;
 
 use App\Entity\Turnos;
-use App\Form\TurnosType;
 use App\Repository\TurnosRepository;
-use App\Entity\Citas;
-use App\Form\CitasType;
-use App\Repository\CitasRepository;
-use App\Entity\CitasDisponibles;
-use App\Form\CitasDisponiblesType;
-use App\Repository\CitasDisponiblesRepository;
 use App\Entity\Facultativos;
-use App\Form\FacultativosType;
 use App\Repository\FacultativosRepository;
 use App\Entity\Especialidades;
-use App\Repository\EspecialidadesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-use App\Security\EmailVerifier;
-use App\Security\FisioterapiaAuthenticator;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
 
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\TimeType;
-
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 // Use necesario para usar las funciones de paginacion
 use Knp\Component\Pager\PaginatorInterface;
@@ -47,7 +26,6 @@ class TurnosController extends AbstractController
     #[Route('/buscarturnosfacultativo', name: 'buscarTurnosFacultativo', methods: ['GET', 'POST'])]
     public function buscarTurnosFacultativo(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -74,7 +52,6 @@ class TurnosController extends AbstractController
     #[Route('/buscarturnosfacultativoApellido', name: 'buscarTurnosFacultativoApellido', methods: ['GET', 'POST'])]
     public function buscarTurnosFacultativoApellido(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -111,7 +88,7 @@ class TurnosController extends AbstractController
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
 
         return $this->render('turnos/busquedaFacultativo.html.twig', [
-            'datosFacultativos' => $facultativos,
+            'datosFacultativos' => $datosFacultativosPaginados,
             'datosEspecialidades' => $especialidades,
         ]);
     }
@@ -120,7 +97,6 @@ class TurnosController extends AbstractController
     #[Route('/buscarturnosfacultativoTelefono', name: 'buscarTurnosFacultativoTelefono', methods: ['GET', 'POST'])]
     public function buscarTurnosFacultativoTelefono(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -166,7 +142,6 @@ class TurnosController extends AbstractController
     #[Route('/mostrarturnosfacultativo', name: 'mostrarTurnosFacultativoAdmin', methods: ['GET', 'POST'])]
     public function mostrarTurnosFacultativoAdmin(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em
     ) {
         // Recupero el Facultativo que me llega
@@ -198,8 +173,6 @@ class TurnosController extends AbstractController
     #[Route('/modificarfacultativo', name: 'modificarFacultativoTurnosAdmin', methods: ['GET', 'POST'])]
     public function modificarFacultativoAdmin(
         Request $request,
-        FacultativosRepository $facultativosRepository,
-        TurnosRepository $turnosRepository,
         EntityManagerInterface $em
     ) {
         $mensaje = null;

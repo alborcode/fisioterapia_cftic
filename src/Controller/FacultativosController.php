@@ -2,18 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Pacientes;
-use App\Form\PacientesType;
-use App\Repository\PacientesRepository;
 use App\Entity\Usuarios;
-use App\Form\RegistrationFormType;
-use App\Repository\UsuariosRepository;
 use App\Entity\Facultativos;
-use App\Form\FacultativosType;
 use App\Repository\FacultativosRepository;
 use App\Entity\Especialidades;
-use App\Form\EspecialidadesType;
-use App\Repository\EspecialidadesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,7 +22,6 @@ class FacultativosController extends AbstractController
     #[Route('/mostrarfacultativo', name: 'mostrarDatosFacultativo', methods: ['GET', 'POST'])]
     public function mostrarDatosFacultativo(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em
     ) {
         // Recupero las variables de sesion de usuario y facultativo
@@ -65,7 +56,6 @@ class FacultativosController extends AbstractController
     #[Route('/modificarfacultativo', name: 'modificarDatosFacultativo', methods: ['GET', 'POST'])]
     public function modificarFacultativoAdmin(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em
     ) {
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)

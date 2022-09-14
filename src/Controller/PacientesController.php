@@ -6,10 +6,7 @@ use App\Entity\Pacientes;
 use App\Form\PacientesType;
 use App\Repository\PacientesRepository;
 use App\Entity\Usuarios;
-use App\Repository\UsuariosRepository;
 use App\Entity\Provincias;
-use App\Form\ProvinciasType;
-use App\Repository\ProvinciasRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +23,6 @@ class PacientesController extends AbstractController
     #[Route('/alta', name: 'insertarPaciente', methods: ['GET', 'POST'])]
     public function insertarPaciente(
         Request $request,
-        PacientesRepository $pacientesRepository,
         EntityManagerInterface $em
     ) {
         // Recupero las variables de sesion
@@ -87,7 +83,6 @@ class PacientesController extends AbstractController
     #[Route('/buscardatospaciente', name: 'buscarDatosPaciente', methods: ['GET', 'POST'])]
     public function buscarPerfilPaciente(
         Request $request,
-        PacientesRepository $pacientesRepository,
         EntityManagerInterface $em
     ) {
         // Recupero las variables de sesion de usuario y paciente
@@ -118,7 +113,6 @@ class PacientesController extends AbstractController
     #[Route('/modificarpaciente', name: 'modificarDatosPaciente', methods: ['GET', 'POST'])]
     public function modificarPacienteAdmin(
         Request $request,
-        PacientesRepository $pacientesRepository,
         EntityManagerInterface $em
     ) {
         // Recupero las variables de sesion de usuario y paciente

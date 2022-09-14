@@ -72,7 +72,7 @@
                                                 <td scope="row">{{ Facultativo.Nombre | capitalize}} {{ Facultativo.Apellido1 | capitalize}} {{ Facultativo.Apellido2 | capitalize}}</td>
                                                 <td>{{ Facultativo.Telefono}}</td>
                                                 <td>
-                                                    <a class="btn btn-info" href="{{ path('buscarPacienteCitaAdmin', {idfacultativo: Facultativo.idfacultativo }) }}">Pedir Cita</a>
+                                                    <a class="btn btn-info" href="{{ path('buscarPacienteCitaAdmin', {idfacultativo: Facultativo.idfacultativo }) }}">Citas</a>
                                                 </td>
                                             </tr>
                                         {% endfor %}

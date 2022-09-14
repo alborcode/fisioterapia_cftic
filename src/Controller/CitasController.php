@@ -2,44 +2,30 @@
 namespace App\Controller;
 
 use App\Entity\Citas;
-use App\Form\CitasType;
 use App\Repository\CitasRepository;
 use App\Entity\CitasDisponibles;
-use App\Form\CitasDisponiblesType;
 use App\Repository\CitasDisponiblesRepository;
 use App\Entity\Facultativos;
-use App\Form\FacultativosType;
 use App\Repository\FacultativosRepository;
 use App\Entity\Especialidades;
-use App\Repository\EspecialidadesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Pacientes;
-use App\Form\PacientesType;
 use App\Repository\PacientesRepository;
-use App\Entity\Turnos;
-use App\Form\TurnosType;
 use App\Repository\TurnosRepository;
-use App\Entity\Vacaciones;
-use App\Form\VacacionesType;
 use App\Repository\VacacionesRepository;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\TimeType;
-
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
-
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 // Use necesario para usar las funciones de paginacion
 use Knp\Component\Pager\PaginatorInterface;
+
+// Espacios de Nombres de la Biblioteca Dompdf
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 #[Route('/citas')]
 class CitasController extends AbstractController
@@ -50,7 +36,6 @@ class CitasController extends AbstractController
     #[Route('/buscarfacultativo', name: 'buscarCitasFacultativoCitaAdmin', methods: ['GET', 'POST'])]
     public function buscarCitasFacultativoCitaAdmin(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -78,7 +63,6 @@ class CitasController extends AbstractController
     #[Route('/buscarfacultativoApellido', name: 'buscarFacultativoCitaApellidoAdmin', methods: ['GET', 'POST'])]
     public function buscarFacultativoCitaApellidoAdmin(
         Request $request,
-        PacientesRepository $pacientesRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -131,7 +115,6 @@ class CitasController extends AbstractController
     #[Route('/buscarfacultativoTelefono', name: 'buscarFacultativoCitaTelefonoAdmin', methods: ['GET', 'POST'])]
     public function buscarFacultativoCitaTelefonoAdmin(
         Request $request,
-        FacultativosRepository $facultativosRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -185,7 +168,6 @@ class CitasController extends AbstractController
     #[Route('/buscarpacientecita', name: 'buscarPacienteCitaAdmin', methods: ['GET', 'POST'])]
     public function buscarPacienteCitaAdmin(
         Request $request,
-        PacientesRepository $pacientesRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -226,7 +208,6 @@ class CitasController extends AbstractController
     #[Route('/buscarpacientecitaapellido', name: 'buscarPacienteCitaApellidoAdmin', methods: ['GET', 'POST'])]
     public function buscarPacienteCitaApellidoAdmin(
         Request $request,
-        PacientesRepository $pacientesRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -291,7 +272,6 @@ class CitasController extends AbstractController
     #[Route('/buscarpacientecitatelefono', name: 'buscarPacienteCitaTelefonoAdmin', methods: ['GET', 'POST'])]
     public function buscarPacienteCitaTelefonoAdmin(
         Request $request,
-        PacientesRepository $pacientesRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -357,11 +337,6 @@ class CitasController extends AbstractController
     #[Route('/mostrarcitasadmin', name: 'mostrarCitasAdmin', methods: ['GET', 'POST'])]
     public function mostrarCitasAdmin(
         Request $request,
-        FacultativosRepository $facultativosRepository,
-        PacientesRepository $pacientesRepository,
-        TurnosRepository $turnosRepository,
-        VacacionesRepository $vacacionesRepository,
-        CitasRepository $citasRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -517,11 +492,7 @@ class CitasController extends AbstractController
     #[Route('/seleccionhorascitaadmin', name: 'seleccionhoraCitasAdmin', methods: ['GET', 'POST'])]
     public function seleccionhoraCitasAdmin(
         Request $request,
-        FacultativosRepository $facultativosRepository,
-        PacientesRepository $pacientesRepository,
-        CitasDisponiblesRepository $citasDisponiblesRepository,
         EntityManagerInterface $em,
-        PaginatorInterface $paginator
     ) {
         // Recupero el Facultativo y el Paciente que me llega
         // $idfacultativo = $request->request->get('idfacultativo');
@@ -599,10 +570,6 @@ class CitasController extends AbstractController
     #[Route('/altacitasadmin', name: 'altaCitasAdmin', methods: ['GET', 'POST'])]
     public function altaCitasAdmin(
         Request $request,
-        FacultativosRepository $facultativosRepository,
-        PacientesRepository $pacientesRepository,
-        CitasRepository $citasRepository,
-        CitasDisponiblesRepository $citasdisponiblesRepository,
         EntityManagerInterface $em
     ) {
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
@@ -681,10 +648,6 @@ class CitasController extends AbstractController
     #[Route('/historialcitasadmin', name: 'historialCitasAdmin', methods: ['GET', 'POST'])]
     public function historialCitasAdmin(
         Request $request,
-        FacultativosRepository $facultativosRepository,
-        PacientesRepository $pacientesRepository,
-        CitasRepository $citasRepository,
-        CitasDisponiblesRepository $citasdisponiblesRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
@@ -738,13 +701,13 @@ class CitasController extends AbstractController
     #[Route('/bajacitaAdmin', name: 'bajaCitaAdmin', methods: ['GET', 'POST'])]
     public function bajaCitaAdmin(
         Request $request,
-        FacultativosRepository $facultativosRepository,
-        PacientesRepository $pacientesRepository,
-        CitasRepository $citasRepository,
-        CitasDisponiblesRepository $citasdisponiblesRepository,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
+        //Inicializamos mensajes
+        $mensaje = null;
+        $mensajewarning = null;
+
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idcita = $request->query->get('idcita');
         dump($idcita);
@@ -819,80 +782,80 @@ class CitasController extends AbstractController
     #[Route('/imprimirjustificanteAdmin', name: 'imprimirJustificanteAdmin', methods: ['GET', 'POST'])]
     public function imprimirJustificanteAdmin(
         Request $request,
-        FacultativosRepository $facultativosRepository,
-        PacientesRepository $pacientesRepository,
-        CitasRepository $citasRepository,
-        CitasDisponiblesRepository $citasdisponiblesRepository,
         EntityManagerInterface $em,
-        PaginatorInterface $paginator
     ) {
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idcita = $request->query->get('idcita');
         dump($idcita);
 
-        // Recupero la cita a dar de baja del Paciente
-        $citaborrar = $em->getRepository(Citas::class)->findOneBy([
+        // Recupero la cita a imprimir
+        $cita = $em->getRepository(Citas::class)->findOneBy([
             'idcita' => $idcita,
         ]);
-        dump($citaborrar);
-        // Recupero el idfacultativo y el idpaciente de la cita
-        $idfacultativo = $citaborrar->getIdfacultativo();
-        dump($idfacultativo);
-        $idpaciente = $citaborrar->getIdpciente();
+        dump($cita);
+
+        // Recupero el Id del Paciente de la cita
+        $idpaciente = $cita->getIdpaciente();
         dump($idpaciente);
+        // Recupero el Id del Facultativo de la cita
+        $idfacultativo = $cita->getIdfacultativo();
+        dump($idfacultativo);
 
-        // Si existe la cita se da de Baja
-        if ($citaborrar) {
-            // Realizamos Baja de la cita
-            $em->remove($citaborrar);
-            $em->flush();
+        // Recuperamos datos del Paciente de esa cita
+        $paciente = $em
+            ->getRepository(Pacientes::class)
+            ->findOneByIdpaciente($idpaciente);
+        dump($paciente);
 
-            $mensaje = 'Se ha dado de baja la cita';
-            // Si no existe la cita se manda mensaje
-        } else {
-            $mensajewarning =
-                'No existe la cita ' . $idcita . ' que se quiere dar de baja';
-        }
-
-        // Accedemos al objeto Facultativo para mandar values
+        // Recuperamos datos del Facultativo de esa cita
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
         dump($facultativo);
-
-        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
-        $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
-
-        // Accedemos al objeto Paciente para mandar values
-        $paciente = $em
-            ->getRepository(Facultativos::class)
-            ->findOneByIdpaciente($idpaciente);
-        dump($paciente);
+        // Recupero la Especialidad del Facultativo
+        $idespecialidad = $facultativo->getEspecialidad();
+        dump($idespecialidad);
+        // Recuperamos nombre especialidad Facultativo
+        $especialidad = $em
+            ->getRepository(Especialidades::class)
+            ->findOneByIdespecialidad($idespecialidad);
+        dump($especialidad);
+        // Recupero Nombre de la Especialidad
+        $nombreespecialidad = $especialidad->getEspecialidad();
+        dump($nombreespecialidad);
 
         // Recupero la Fecha del dia para enviarla a Vista
         $fechadia = date('Y-m-d');
 
-        // Recupero todas las citas del Paciente con Paginacion
-        $query = $em
-            ->getRepository(Citas::class)
-            ->findBy(['idpaciente' => $idpaciente]);
+        // Preparamos la página HTML para generar PDF generado un objeto renderview
+        $html = $this->renderView('citas/JustificantePDF.html.twig', 
+        [
+            'datosCita'  => $cita,
+            'datosPaciente'  => $paciente,
+            'datosFacultativo'  => $facultativo,
+            'datosEspecialidad'  => $nombreespecialidad,
+            'fechadia' => $fechadia
+        ]);
 
-        $datosCitasPaginados = $paginator->paginate(
-            $query, // Consulta que quiero paginar,
-            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
-            5 // Número de elementos por página
-        );
+        // Asignamos opciones de PDF
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+        // Crea una instancia de Dompdf con nuestras opciones
+        $dompdf = new Dompdf($pdfOptions);
 
-        // Envio a la vista de Historial de Citas, Datos Facultativo-Especialidades, Datos Pacientes, Citas Disponibles
-        return $this->render('citas/historialcitasAdmin.html.twig', [
-            'datosFacultativo' => $facultativo,
-            'datosEspecialidades' => $especialidades,
-            'datosPaciente' => $paciente,
-            'historialCitas' => $datosCitasPaginados,
-            'fechadia' => $fechadia,
-            'mensaje' => $mensaje,
-            'mensajewarning' => $mensajewarning,
+        // Cargamos la página HTML en Dompdf        
+        $html .= '<link type="text/css" href="/public/bootstrap/css/bootstrap.min.css" rel="stylesheet" />';
+        $dompdf->loadHtml($html);
+
+        // También podemos de forma opcional indicar el tamaño del papel y la orientación
+        $dompdf->setPaper('A4', 'portrait');
+ 
+        // Renderiza el HTML como PDF
+        $dompdf->render();
+
+        // Podemos generar el pdf y visualizarlo en el navegador si modificamos la propiedad Attachment al valor false.
+        $dompdf->stream("JustificanteCita.pdf", [
+            "Attachment" => false
         ]);
     }
 }
