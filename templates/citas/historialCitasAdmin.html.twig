@@ -49,7 +49,7 @@
                                 <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Código</th>
+                                        <th>Código Cita</th>
                                         <th>Fecha</th>
                                         <th>Hora</th>
                                     </tr>
@@ -63,8 +63,9 @@
                                                 <td>{{ Cita.Fecha |date('d-m-Y')}} </td>
                                                 <td>{{ Cita.Hora}}:00</td>
                                                 <td>
-                                                    <a class="btn btn-info" href="{{ path('imprimirJustificante', {idcita: Cita.idcita }) }}">Justificante</a>
-                                                    <span>  </span>
+                                                    {% if fechadia >= Cita.Fecha %}
+                                                        <a class="btn btn-info" href="{{ path('imprimirJustificante', {idcita: Cita.idcita }) }}" target="_blank">Justificante</a>
+                                                    {% endif %}
                                                     {# Mostramos el boton de baja solo si la cita es del dia de hoy o mayor #}
                                                     {% if fechadia <= Cita.fecha %}
                                                         <a class="btn btn-warning" href="{{ path('bajaCita', {idcita: Cita.idcita }) }}">Baja</a>

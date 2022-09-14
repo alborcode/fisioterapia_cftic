@@ -27,7 +27,7 @@ class CitasController extends AbstractController
     //**********************************************************************
     // Alta/Modificacion de Citas de Paciente por parte del Administrativo *
     //**********************************************************************
-    #[Route('/buscarfacultativo', name: 'buscarCitasFacultativoCitaAdmin', methods: ['GET', 'POST'])]
+    #[Route('/buscarfacultativoAdmin', name: 'buscarCitasFacultativoCitaAdmin', methods: ['GET', 'POST'])]
     public function buscarCitasFacultativoCitaAdmin(
         Request $request,
         EntityManagerInterface $em,
@@ -47,14 +47,14 @@ class CitasController extends AbstractController
         dump($especialidades);
 
         // Se envia a pagina enviando los datos de los facultativos para su seleccion
-        return $this->render('citas/busquedaFacultativo.html.twig', [
+        return $this->render('citas/busquedaFacultativoAdmin.html.twig', [
             'datosFacultativos' => $datosFacultativosPaginados,
             'datosEspecialidades' => $especialidades,
         ]);
     }
 
     // Buscar Facultativo por Apellido para seleccion Citas
-    #[Route('/buscarfacultativoApellido', name: 'buscarFacultativoCitaApellidoAdmin', methods: ['GET', 'POST'])]
+    #[Route('/buscarfacultativoapellidoAdmin', name: 'buscarFacultativoCitaApellidoAdmin', methods: ['GET', 'POST'])]
     public function buscarFacultativoCitaApellidoAdmin(
         Request $request,
         EntityManagerInterface $em,
@@ -99,14 +99,14 @@ class CitasController extends AbstractController
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
         dump($especialidades);
 
-        return $this->render('citas/busquedaFacultativo.html.twig', [
+        return $this->render('citas/busquedaFacultativoAdmin.html.twig', [
             'datosFacultativos' => $datosFacultativosPaginados,
             'datosEspecialidades' => $especialidades,
         ]);
     }
 
     // Buscar Facultativo por Telefono para seleccion Citas
-    #[Route('/buscarfacultativoTelefono', name: 'buscarFacultativoCitaTelefonoAdmin', methods: ['GET', 'POST'])]
+    #[Route('/buscarfacultativotelefonoAdmin', name: 'buscarFacultativoCitaTelefonoAdmin', methods: ['GET', 'POST'])]
     public function buscarFacultativoCitaTelefonoAdmin(
         Request $request,
         EntityManagerInterface $em,
@@ -152,20 +152,20 @@ class CitasController extends AbstractController
         dump($especialidades);
 
         // Enviamos a la pagina con los datos de Pacientes recuperados
-        return $this->render('citas/busquedaFacultativo.html.twig', [
+        return $this->render('citas/busquedaFacultativoAdmin.html.twig', [
             'datosFacultativos' => $datosFacultativosPaginados,
             'datosEspecialidades' => $especialidades,
         ]);
     }
 
     // Mostrar todos los Pacientes para seleccionar
-    #[Route('/buscarpacientecita', name: 'buscarPacienteCitaAdmin', methods: ['GET', 'POST'])]
+    #[Route('/buscarpacientecitaAdmin', name: 'buscarPacienteCitaAdmin', methods: ['GET', 'POST'])]
     public function buscarPacienteCitaAdmin(
         Request $request,
         EntityManagerInterface $em,
         PaginatorInterface $paginator
     ) {
-        // Recupero el Facultativo ue me llega
+        // Recupero el Facultativo que me llega
         // $idfacultativo = $request->request->get('idfacultativo');
         $idfacultativo = $request->query->get('idfacultativo');
         dump($idfacultativo);
@@ -191,7 +191,7 @@ class CitasController extends AbstractController
         );
 
         // Se envia a pagina enviando los datos de los pacientes
-        return $this->render('citas/busquedaPaciente.html.twig', [
+        return $this->render('citas/busquedaPacienteAdmin.html.twig', [
             'datosFacultativo' => $facultativo,
             'datosEspecialidades' => $especialidades,
             'datosPacientes' => $datosPacientesPaginados,
@@ -199,7 +199,7 @@ class CitasController extends AbstractController
     }
 
     // Buscar Paciente por Apellido para seleccion Citas
-    #[Route('/buscarpacientecitaapellido', name: 'buscarPacienteCitaApellidoAdmin', methods: ['GET', 'POST'])]
+    #[Route('/buscarpacientecitaapellidoAdmin', name: 'buscarPacienteCitaApellidoAdmin', methods: ['GET', 'POST'])]
     public function buscarPacienteCitaApellidoAdmin(
         Request $request,
         EntityManagerInterface $em,
@@ -255,7 +255,7 @@ class CitasController extends AbstractController
             );
         }
 
-        return $this->render('citas/busquedaPaciente.html.twig', [
+        return $this->render('citas/busquedaPacienteAdmin.html.twig', [
             'datosFacultativo' => $facultativo,
             'datosEspecialidades' => $especialidades,
             'datosPacientes' => $datosPacientesPaginados,
@@ -263,7 +263,7 @@ class CitasController extends AbstractController
     }
 
     // Buscar Paciente por Telefono para seleccion Citas
-    #[Route('/buscarpacientecitatelefono', name: 'buscarPacienteCitaTelefonoAdmin', methods: ['GET', 'POST'])]
+    #[Route('/buscarpacientecitatelefonoAdmin', name: 'buscarPacienteCitaTelefonoAdmin', methods: ['GET', 'POST'])]
     public function buscarPacienteCitaTelefonoAdmin(
         Request $request,
         EntityManagerInterface $em,
@@ -320,7 +320,7 @@ class CitasController extends AbstractController
         }
 
         // Enviamos a la pagina con los datos de Pacientes recuperados
-        return $this->render('citas/busquedaPaciente.html.twig', [
+        return $this->render('citas/busquedaPacienteAdmin.html.twig', [
             'datosFacultativo' => $facultativo,
             'datosEspecialidades' => $especialidades,
             'datosPacientes' => $datosPacientesPaginados,
@@ -627,10 +627,7 @@ class CitasController extends AbstractController
 
         // Creo mensaje de Alta de Cita
         $mensaje =
-            'Se ha creado cita para paciente ' .
-            $idpaciente .
-            ' con facultativo' .
-            $idfacultativo;
+            'Se ha creado cita de paciente ';
 
         // Devuelvo control a Pagina Inicio de Administrador mandando mensaje
         return $this->render('dashboard/dashboardAdministrativo.html.twig', [
@@ -669,6 +666,9 @@ class CitasController extends AbstractController
 
         // Recupero la Fecha del dia para enviarla a Vista
         $fechadia = date('Y-m-d');
+        dump($fechadia);
+        $diaconvertido = \DateTime::createFromFormat('Y-m-d', $fechadia);
+        dump($diaconvertido);
 
         // Recupero todas las citas del Paciente con Paginacion
         $query = $em
@@ -680,14 +680,15 @@ class CitasController extends AbstractController
             $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
             5 // Número de elementos por página
         );
+        dump($datosCitasPaginados);
 
         // Envio a la vista de Historial de Citas, Datos Facultativo-Especialidades, Datos Pacientes, Citas Disponibles
-        return $this->render('citas/historialcitas.html.twig', [
+        return $this->render('citas/historialcitasAdmin.html.twig', [
             'datosFacultativo' => $facultativo,
             'datosEspecialidades' => $especialidades,
             'datosPaciente' => $paciente,
             'historialCitas' => $datosCitasPaginados,
-            'fechadia' => $fechadia,
+            'fechadia' => $diaconvertido,
         ]);
     }
 
