@@ -30,9 +30,9 @@ use Dompdf\Options;
 #[Route('/citas')]
 class CitasController extends AbstractController
 {
-    //******************************************************************************
+    //**********************************************************************
     // Alta/Modificacion de Citas de Paciente por parte del Administrativo *
-    //******************************************************************************
+    //**********************************************************************
     #[Route('/buscarfacultativo', name: 'buscarCitasFacultativoCitaAdmin', methods: ['GET', 'POST'])]
     public function buscarCitasFacultativoCitaAdmin(
         Request $request,
@@ -856,6 +856,140 @@ class CitasController extends AbstractController
         // Podemos generar el pdf y visualizarlo en el navegador si modificamos la propiedad Attachment al valor false.
         $dompdf->stream("JustificanteCita.pdf", [
             "Attachment" => false
+        ]);
+    }
+
+    //****************************************************************
+    // Alta/Modificacion de Citas de Paciente por parte del Paciente *
+    //****************************************************************
+    #[Route('/buscarfacultativo', name: 'buscarCitasFacultativoCita', methods: ['GET', 'POST'])]
+    public function buscarCitasFacultativoCita(
+        Request $request,
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
+    ) {
+        // Recupero todos los Facultativos con Paginacion
+        // $em = $this->getDoctrine()->getManager();
+        $query = $em->getRepository(Facultativos::class)->findAll();
+        dump($query);
+        $datosFacultativosPaginados = $paginator->paginate(
+            $query, // Consulta que quiero paginar,
+            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+            5 // Número de elementos por página
+        );
+
+        $especialidades = $em->getRepository(Especialidades::class)->findAll();
+        dump($especialidades);
+
+        // Se envia a pagina enviando los datos de los facultativos para su seleccion
+        return $this->render('citas/busquedaFacultativo.html.twig', [
+            'datosFacultativos' => $datosFacultativosPaginados,
+            'datosEspecialidades' => $especialidades,
+        ]);
+    }
+
+    // Buscar Facultativo por Apellido para seleccion Citas
+    #[Route('/buscarfacultativoApellido', name: 'buscarFacultativoCitaApellido', methods: ['GET', 'POST'])]
+    public function buscarFacultativoCitaApellido(
+        Request $request,
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
+    ) {
+        // Recogemos datos de formulario con Get dado que es una busqueda
+        // $busquedaapellido = $request->request->get('txtApellido');
+        $busquedaapellido = $request->query->get('txtApellido');
+        dump($busquedaapellido);
+
+        // Si se ha rellenado la busqueda por Apellido
+        if ($busquedaapellido) {
+            // Recupero todos los Facultativos con Paginacion
+            // $em = $this->getDoctrine()->getManager();
+            $query = $em->createQuery(
+                'SELECT f FROM App\Entity\Facultativos f WHERE f.apellido1 like :parametro'
+            );
+            // Concateno la variable a buscar y el % del Like
+            $query->setParameter('parametro', $busquedaapellido . '%');
+            dump($query);
+            // Al hacer el getresult ejecuta la Query y obtiene los resultados
+            // $facultativos = $query->getResult();
+            // dump($facultativos);
+            $datosFacultativosPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
+        } else {
+            // Recupero todos los Facultativos con Paginacion
+            // $em = $this->getDoctrine()->getManager();
+            $query = $em->getRepository(Facultativos::class)->findAll();
+            dump($query);
+            $datosFacultativosPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
+        }
+
+        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
+        $especialidades = $em->getRepository(Especialidades::class)->findAll();
+        dump($especialidades);
+
+        return $this->render('citas/busquedaFacultativo.html.twig', [
+            'datosFacultativos' => $datosFacultativosPaginados,
+            'datosEspecialidades' => $especialidades,
+        ]);
+    }
+
+    // Buscar Facultativo por Telefono para seleccion Citas
+    #[Route('/buscarfacultativoTelefono', name: 'buscarFacultativoCitaTelefono', methods: ['GET', 'POST'])]
+    public function buscarFacultativoCitaTelefono(
+        Request $request,
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
+    ) {
+        // Recogemos datos de formulario con Get dado que es una busqueda
+        //$busquedatelefono = $request->request->get('txtTelefono');
+        $busquedatelefono = $request->query->get('txtTelefono');
+        dump($busquedatelefono);
+
+        // Si se ha rellenado busqueda telefono
+        if ($busquedatelefono) {
+            // Select de Pacientes con Where mandado por parametro con Paginacion
+            // $em = $this->getDoctrine()->getManager();
+            $query = $em->createQuery(
+                'SELECT f FROM App\Entity\Facultativos f WHERE f.telefono = :dato'
+            );
+            // Asigno valor del parametro dato
+            $query->setParameter('dato', $busquedatelefono);
+            dump($query);
+            // Al hacer el getresult ejecuta la Query y obtiene los resultados
+            // $facultativos = $query->getResult();
+            // dump($facultativos);
+            $datosFacultativosPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
+        } else {
+            // Recupero todos los Facultativos con Paginacion
+            // $em = $this->getDoctrine()->getManager();
+            $query = $em->getRepository(Facultativos::class)->findAll();
+            dump($query);
+            $datosFacultativosPaginados = $paginator->paginate(
+                $query, // Consulta que quiero paginar,
+                $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+                5 // Número de elementos por página
+            );
+        }
+
+        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
+        $especialidades = $em->getRepository(Especialidades::class)->findAll();
+        dump($especialidades);
+
+        // Enviamos a la pagina con los datos de Pacientes recuperados
+        return $this->render('citas/busquedaFacultativo.html.twig', [
+            'datosFacultativos' => $datosFacultativosPaginados,
+            'datosEspecialidades' => $especialidades,
         ]);
     }
 }
