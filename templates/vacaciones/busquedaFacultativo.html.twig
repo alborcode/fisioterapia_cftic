@@ -44,6 +44,24 @@
                             <div class="form-group row">
                                    
                             <HR/>
+                                {% if mensaje is defined %}
+                                    {% if mensaje is not null %}
+                                        <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
+                                            {{mensaje}}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                                {% if mensajewarning is defined %}        
+                                    {% if mensajewarning is not null %}
+                                        <div class="alert alert-warning d-flex align-items-center alert-dismissible fade show" role="alert">
+                                            {{mensajewarning}}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}     
+
+                            </div>
                             <table class="table">
                                 <thead>
                                     <tr>

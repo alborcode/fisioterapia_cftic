@@ -115,7 +115,7 @@ class FacultativosController extends AbstractController
         $mensaje = 'Se han modificado sus Datos';
 
         // Devuelvo control a Pagina Inicio de Administrador mandando mensaje
-        return $this->render('dashboard/dashboardAdministrativo.html.twig', [
+        return $this->render('dashboard/dashboardFacultativo.html.twig', [
             'mensaje' => $mensaje,
         ]);
     }

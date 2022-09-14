@@ -63,7 +63,7 @@
 
                                     <div class="row mb-2 mb-lg-2">
                                          <div class="col-sm-4">
-                                            <input type="text" class="form-control mb-lg-2 py-2" id="txFecha" name="txFecha" placeholder="AAAA/MM/DD" autocomplete="false" readonly="readonly">
+                                            <input type="text" class="form-control mb-lg-2 py-2" id="txFecha" name="txFecha" placeholder="AAAA/MM/DD" required="required">
                                         </div>
                                         {# <div class="col-sm-6">
                                             Seleccionar Rango Fechas
@@ -87,22 +87,6 @@
                                 </form>
                                 
                                 <HR>
-                                {% if mensaje is defined %}
-                                    {% if mensaje is not null %}
-                                        <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
-                                            {{mensaje}}
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-                                    {% endif %}
-                                {% endif %}
-                                {% if mensajewarning is defined %}        
-                                    {% if mensajewarning is not null %}
-                                        <div class="alert alert-warning d-flex align-items-center alert-dismissible fade show" role="alert">
-                                            {{mensajewarning}}
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-                                    {% endif %}
-                                {% endif %}      
                                 {# Muestro Tabla con Vacaciones existentes ya solicitadas #}
                                 <div class="row mb-2 mb-lg-2">
                                     <table class="table">
@@ -169,7 +153,8 @@
                 dateFormat: 'yy-mm-dd',
                 minDate: new Date(fechainicial),
                 maxDate: new Date(fechafinal),
-                showOn: "button",
+                showOn: "focus",
+                //showOn: "button",
                 //showOn: "both"
                 buttonText: "Calendario  ",
                 showAnim: "fold",

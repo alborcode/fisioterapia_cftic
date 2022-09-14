@@ -306,52 +306,21 @@ class VacacionesController extends AbstractController
             }
         }
 
-        // Recupero datos de facultativo para enviar los Values a Formulario
-        $facultativo = $em
-            ->getRepository(Facultativos::class)
-            ->findOneByIdfacultativo($idfacultativo);
+        // Se recuperan todos los Facultativos con Paginacion
+        $query = $em->getRepository(Facultativos::class)->findAll();
 
-        // Recupero vacaciones de facultativo ordenadas por fecha para enviar los Values con Paginacion
-        // $em = $this->getDoctrine()->getManager();
-        $query = $em
-            ->getRepository(Vacaciones::class)
-            ->findBy(['idfacultativo' => $idfacultativo], ['fecha' => 'ASC']);
-
-        $datosVacacionesPaginados = $paginator->paginate(
+        $datosFacultativosPaginados = $paginator->paginate(
             $query, // Consulta que quiero paginar,
-            $request->query->getInt('page', 10), // Definir el parámetro de la página recogida por GET
-            3 // Número de elementos por página
+            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+            10 // Número de elementos por página
         );
 
-        // Recuperar Año actual
-        $anio = date('Y');
-        $fechaini = $anio . '-01' . '-01';
-        $fechafin = $anio . '-12' . '-31';
-        // Recupero Fecha del Dia
-        $fechadia = date('Y-m-d');
-
-        // Recupero de API los Festivos de la Comunidad de Madrid (fecha_festivo dara las fechas en formato Y-m-d)
-        $datos = file_get_contents(
-            'https://datos.comunidad.madrid/catalogo/dataset/2f422c9b-47df-407f-902d-4a2f44dd435e/resource/453162e0-bd61-4f52-8699-7ed5f33168f6/download/festivos_regionales.json'
-        );
-        $datosjson = json_decode($datos, true);
-        // En el Array guardo los datos Json de data con los registros
-        $festivosregionales = $datosjson['data'];
-        // Recupero un Array solo de las Fechas de Festivos
-        $festivosarray = array_column($festivosregionales, 'fecha_festivo');
-
-        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
 
-        // Envio a la vista de Vacaciones, Datos Facultativo y Especialidades
-        return $this->render('vacaciones/altaVacacionesAdmin.html.twig', [
-            'datosFacultativo' => $facultativo,
+        // Se envia a pagina enviando los datos de los facultativos
+        return $this->render('vacaciones/busquedaFacultativo.html.twig', [
+            'datosFacultativos' => $datosFacultativosPaginados,
             'datosEspecialidades' => $especialidades,
-            'datosVacaciones' => $datosVacacionesPaginados,
-            'fechaini' => $fechaini,
-            'fechafin' => $fechafin,
-            'fechadia' => $fechadia,
-            'festivosregionales' => $festivosarray,
             'mensaje' => $mensaje,
             'mensajewarning' => $mensajewarning,
         ]);

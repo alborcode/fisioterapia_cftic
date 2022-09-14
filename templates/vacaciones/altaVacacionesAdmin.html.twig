@@ -15,8 +15,8 @@
                                     <h3 class="fw-bold">Añadir Vacaciones Facultativo</h3>
                             </div>
                             <div class="row mb-1 mb-lg-1">
-                                {# Incluimos Boton Volver #}
-                                {% include 'menuVolver.html.twig' %}
+                                {# Incluimos Boton Volver a Mostrar Facultativos #}
+                                {% include 'menuVolverFacultativo.html.twig' %}
                             </div>
                             <div class="form-group">
                                 {# Formulario Para Añadir/Modificar Turnos #}
@@ -63,13 +63,8 @@
 
                                     <div class="row mb-2 mb-lg-2">
                                          <div class="col-sm-4">
-                                            <input type="text" class="form-control mb-lg-2 py-2" id="txFecha" name="txFecha" placeholder="AAAA/MM/DD" autocomplete="false" readonly="readonly">
+                                            <input type="text" class="form-control mb-lg-2 py-2" id="txFecha" name="txFecha" placeholder="AAAA/MM/DD" required="required">
                                         </div>
-                                        {# <div class="col-sm-6">
-                                            Seleccionar Rango Fechas
-                                            <div id="select_rangedate">
-                                                <input type="hidden" name="select_rangedate_value" class="date_output" value="{{ fechadia }}">
-                                        </div> #} 
                                     </div> 
                                     <div class="row mb-1 mb-lg-1 py-1">
                                         <div class="col-sm-3 col-xl-3">
@@ -87,26 +82,6 @@
                                 </form>
 
                                 <HR>
-                                {% if mensaje is defined %}
-                                    {% if mensaje is not null %}
-                                        <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
-                                            {{mensaje}}
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-                                    {% endif %}
-                                {% endif %}
-                                {% if mensajewarning is defined %}        
-                                    {% if mensajewarning is not null %}
-                                        <div class="alert alert-warning d-flex align-items-center alert-dismissible fade show" role="alert">
-                                            {{mensajewarning}}
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-                                    {% endif %}
-                                {% endif %}     
-
-                                {# {{  dump (festivosregionales) }} #}
-                                {# Paso Array de Festivos Regionales en div para Jquery #}
-                                {# <div id="your-div" data-yourArray="{{ festivosregionales|json_encode| raw }}">  #}
                                 {# Muestro Tabla con Vacaciones existentes ya solicitadas #}
                                 <div class="row mb-2 mb-lg-2">
                                     <table class="table">
@@ -196,7 +171,8 @@
                 dateFormat: 'yy-mm-dd',
                 minDate: new Date(fechainicial),
                 maxDate: new Date(fechafinal),
-                showOn: "button",
+                showOn: "focus",
+                //showOn: "button",
                 //showOn: "both"
                 buttonText: "Calendario  ",
                 showAnim: "fold",

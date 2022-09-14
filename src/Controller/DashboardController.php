@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Usuarios;
 use App\Entity\Pacientes;
 use App\Entity\Facultativos;
 
@@ -23,12 +24,21 @@ class DashboardController extends AbstractController
         // Se recupera el id del usuario y rol de UserInterface para poder acceder a Pacientes y Facultativos
         $rol = $this->getUser()->getRoles()[0];
         //$idusuario = $this->getUser()->getIdUsuario();
-        $idusuario = $this->getUser()->getUserIdentifier();
+        // Cambia la version ya no recupera el Id de usuario, sino el identificador en este caso el email
+        $email = $this->getUser()->getUserIdentifier();
+        dump($email);
+        // Accedo con email para scar el id de usuario
+        $usuario = $em
+            ->getRepository(Usuarios::class)
+            ->findOneByEmail($email);
+        // Recupero el id de usuario    
+        $idusuario = $usuario->getIdusuario();
 
         // Recupero Identificador de sesion (Token) del usuario de la peticion
         $session = $request->getSession();
         // Guardo Usuario en Session
         $session->set('idusuario', $idusuario);
+        dump($idusuario);
         // Guardo Rol en Session
         $session->set('rol', $rol);
 
@@ -57,7 +67,7 @@ class DashboardController extends AbstractController
             $facultativo = $em
                 ->getRepository(Facultativos::class)
                 ->findOneByIdusuario($idusuario);
-
+            dump($facultativo);
             $idfacultativo = $facultativo->getIdfacultativo();
             // Guardo Facultativo en Session
             $session->set('idfacultativo', $idfacultativo);
