@@ -1,15 +1,28 @@
-<html>
-    <head>
-        <title>JUSTIFICANTE ASISTENCIA CITA</title>
-    </head>
-    <body>
-        <header>
-            <h1> JUSTIFICANTE ASISTENCIA MEDICA CLINICA FISIO SALUD</h1>
-        </header>
-        <main>
-            <h2> El paciente {{ datosPaciente.nombre | capitalize }} {{ datosPaciente.apellido1 | capitalize }} {{ datosPaciente.apellido2 | capitalize }} 
-            ha acudido a la Clinica Salud para cita con {{ datosEspecialidad | upper }} el día {{ datosCita.fecha | date("d/m/Y") }} a las {{ datosCita.horas}}:00</h2>
-            <h3> Para que asi conste se expide este justificante en Madrid a {{ fechadia | date("d/m/Y") }}
-        </main>
-    </body>
-</html>
+{% extends 'base.html.twig' %}
+
+{% block title %}Justificante Asistencia Cita Medica{% endblock %}
+
+{% block body %}
+
+   <section class="py-5 mt-5">
+        <div class="container py-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 col-xl-12">
+                    <div class="card">
+                        <div class="card-body text-center d-flex flex-column align-items-center">
+                            <div class="row mb-4 mb-lg-5">
+                                <p class="fw-bold mb-2"><h3>JUSTIFICANTE ASISTENCIA MEDICA CLINICA FISIO SALUD</h3></p>
+                                <p class="fw-bold mb-2">
+                                    El paciente <b>{{ datosPaciente.nombre | capitalize }} {{ datosPaciente.apellido1 | capitalize }} {{ datosPaciente.apellido2 | capitalize }}</b> ha acudido a la Clinica Salud para cita con <b>{{ datosEspecialidad | upper }}</b> el día <b>{{ datosCita.fecha | date("d/m/Y") }}</b> a las <b>{{ datosCita.hora}}:00</b> para sesión con duración de una hora.
+                                </p>
+                                <p class="fw-bold text-warning mb-2">
+                                    Para que asi conste se expide este justificante en Madrid a <b>{{ fechadia | date("d/m/Y") }}</b>
+                                </p>
+                            </div>                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -844,7 +844,7 @@ class CitasController extends AbstractController
         $dompdf = new Dompdf($pdfOptions);
 
         // Cargamos la página HTML en Dompdf        
-        $html .= '<link type="text/css" href="/public/bootstrap/css/bootstrap.min.css" rel="stylesheet" />';
+        // $html .= '<link type="text/css" href="/public/bootstrap/css/bootstrap.min.css" rel="stylesheet" />';
         $dompdf->loadHtml($html);
 
         // También podemos de forma opcional indicar el tamaño del papel y la orientación
