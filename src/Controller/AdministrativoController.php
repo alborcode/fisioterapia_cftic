@@ -224,7 +224,6 @@ class AdministrativoController extends AbstractController
             $usuario = $em
                 ->getRepository(Usuarios::class)
                 ->findOneByIdusuario($idusuario);
-            dump($usuario);
 
             // Guardo el usuario antes de guardar Facultativo con el objeto usuario
             $facultativo->setIdusuario($usuario);
@@ -345,7 +344,6 @@ class AdministrativoController extends AbstractController
     ) {
         // Recogemos datos de formulario con Get dado que es una busqueda
         $busquedaapellido = $request->query->get('txtApellido');
-        dump($busquedaapellido);
 
         // Si se ha rellenado la busqueda por Apellido
         if ($busquedaapellido) {
@@ -472,26 +470,17 @@ class AdministrativoController extends AbstractController
 
         /// Recogemos datos de formulario con Post
         $email = $request->request->get('txtEmail');
-        dump($email);
         $nombre = $request->request->get('txtNombre');
-        dump($nombre);
         $apellido1 = $request->request->get('txtApellido1');
-        dump($apellido1);
         $apellido2 = $request->request->get('txtApellido2');
-        dump($apellido2);
         $telefono = $request->request->get('txtTelefono');
-        dump($telefono);
         $direccion = $request->request->get('txtDireccion');
-        dump($direccion);
         $codigopostal = $request->request->get('txtCodigopostal');
-        dump($codigopostal);
-        if ($codigopostal == null){
+        if ($codigopostal == null) {
             $codigopostal = 0;
         }
         $poblacion = $request->request->get('txtLocalidad');
-        dump($poblacion);
         $idprovincia = $request->request->get('comboProvincia');
-        dump($idprovincia);
 
         // Recupero datos de objeto Provincia antes de guardar Paciente
         $provincia = $em
@@ -592,7 +581,7 @@ class AdministrativoController extends AbstractController
         } else {
             // Si no se relleno se recuperan todos los Facultativos con Paginacion
             $query = $em->getRepository(Facultativos::class)->findAll();
-            dump($query);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -699,17 +688,11 @@ class AdministrativoController extends AbstractController
 
         /// Recogemos datos de formulario con Post
         $email = $request->request->get('txtEmail');
-        dump($email);
         $nombre = $request->request->get('txtNombre');
-        dump($nombre);
         $apellido1 = $request->request->get('txtApellido1');
-        dump($apellido1);
         $apellido2 = $request->request->get('txtApellido2');
-        dump($apellido2);
         $telefono = $request->request->get('txtTelefono');
-        dump($telefono);
         $idespecialidad = $request->request->get('comboEspecialidad');
-        dump($idespecialidad);
 
         // Recupero datos de objeto Especialidad antes de guardar Facultativo
         $especialidad = $em

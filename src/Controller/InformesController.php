@@ -144,7 +144,6 @@ class InformesController extends AbstractController
         $paciente = $em
             ->getRepository(Pacientes::class)
             ->findOneByIdpaciente($idpaciente);
-        dump($paciente);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
@@ -268,10 +267,8 @@ class InformesController extends AbstractController
     // Mostrar Detalle de Informe de un Paciente *
     //********************************************
     #[Route('/detalleinforme', name: 'detalleInforme', methods: ['GET', 'POST'])]
-    public function detalleInforme(
-        Request $request,
-        EntityManagerInterface $em
-    ) {
+    public function detalleInforme(Request $request, EntityManagerInterface $em)
+    {
         // Recupero las variable de sesion de facultativo
         $idfacultativo = $request->getSession()->get('idfacultativo');
 
@@ -367,7 +364,6 @@ class InformesController extends AbstractController
         // Modificamos los valores del Informe con los datos del Formulario, el ID no se puede modificar es clave
         $modificarinforme->setTipoinforme($tipoinforme);
         $modificarinforme->setDetalle($observaciones);
-        dump($modificarinforme);
 
         // Modificamos el Informe
         $em->persist($modificarinforme);

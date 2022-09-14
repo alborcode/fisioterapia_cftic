@@ -86,7 +86,6 @@ class VacacionesController extends AbstractController
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         return $this->render('vacaciones/busquedaFacultativo.html.twig', [
             'datosFacultativos' => $datosFacultativosPaginados,
@@ -176,7 +175,6 @@ class VacacionesController extends AbstractController
         $fechafin = $anio . '-12' . '-31';
         // Recupero Fecha del Dia
         $fechadia = date('Y-m-d');
-        dump($fechadia);
 
         // Recupero de API los Festivos de la Comunidad de Madrid (fecha_festivo dara las fechas en formato Y-m-d)
         $datos = file_get_contents(

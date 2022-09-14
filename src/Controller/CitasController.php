@@ -36,7 +36,7 @@ class CitasController extends AbstractController
         // Recupero todos los Facultativos con Paginacion
         // $em = $this->getDoctrine()->getManager();
         $query = $em->getRepository(Facultativos::class)->findAll();
-        dump($query);
+
         $datosFacultativosPaginados = $paginator->paginate(
             $query, // Consulta que quiero paginar,
             $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -44,7 +44,6 @@ class CitasController extends AbstractController
         );
 
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Se envia a pagina enviando los datos de los facultativos para su seleccion
         return $this->render('citas/busquedaFacultativoAdmin.html.twig', [
@@ -61,23 +60,17 @@ class CitasController extends AbstractController
         PaginatorInterface $paginator
     ) {
         // Recogemos datos de formulario con Get dado que es una busqueda
-        // $busquedaapellido = $request->request->get('txtApellido');
         $busquedaapellido = $request->query->get('txtApellido');
-        dump($busquedaapellido);
 
         // Si se ha rellenado la busqueda por Apellido
         if ($busquedaapellido) {
             // Recupero todos los Facultativos con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT f FROM App\Entity\Facultativos f WHERE f.apellido1 like :parametro'
             );
             // Concateno la variable a buscar y el % del Like
             $query->setParameter('parametro', $busquedaapellido . '%');
-            dump($query);
-            // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            // $facultativos = $query->getResult();
-            // dump($facultativos);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -85,9 +78,8 @@ class CitasController extends AbstractController
             );
         } else {
             // Recupero todos los Facultativos con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->getRepository(Facultativos::class)->findAll();
-            dump($query);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -97,7 +89,6 @@ class CitasController extends AbstractController
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         return $this->render('citas/busquedaFacultativoAdmin.html.twig', [
             'datosFacultativos' => $datosFacultativosPaginados,
@@ -113,23 +104,17 @@ class CitasController extends AbstractController
         PaginatorInterface $paginator
     ) {
         // Recogemos datos de formulario con Get dado que es una busqueda
-        //$busquedatelefono = $request->request->get('txtTelefono');
         $busquedatelefono = $request->query->get('txtTelefono');
-        dump($busquedatelefono);
 
         // Si se ha rellenado busqueda telefono
         if ($busquedatelefono) {
             // Select de Pacientes con Where mandado por parametro con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT f FROM App\Entity\Facultativos f WHERE f.telefono = :dato'
             );
             // Asigno valor del parametro dato
             $query->setParameter('dato', $busquedatelefono);
-            dump($query);
-            // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            // $facultativos = $query->getResult();
-            // dump($facultativos);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -137,9 +122,8 @@ class CitasController extends AbstractController
             );
         } else {
             // Recupero todos los Facultativos con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->getRepository(Facultativos::class)->findAll();
-            dump($query);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -149,7 +133,6 @@ class CitasController extends AbstractController
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Enviamos a la pagina con los datos de Pacientes recuperados
         return $this->render('citas/busquedaFacultativoAdmin.html.twig', [
@@ -166,24 +149,19 @@ class CitasController extends AbstractController
         PaginatorInterface $paginator
     ) {
         // Recupero el Facultativo que me llega
-        // $idfacultativo = $request->request->get('idfacultativo');
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
 
         // Recupero datos de facultativo para enviar los Values a Formulario
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Recupero todos los Pacientes con Paginacion
-        // $em = $this->getDoctrine()->getManager();
         $query = $em->getRepository(Pacientes::class)->findAll();
-        dump($query);
+
         $datosPacientesPaginados = $paginator->paginate(
             $query, // Consulta que quiero paginar,
             $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -206,24 +184,19 @@ class CitasController extends AbstractController
         PaginatorInterface $paginator
     ) {
         // Recupero el Facultativo que me llega
-        // $idfacultativo = $request->request->get('idfacultativo');
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
 
         // Recupero datos de facultativo para enviar los Values a Formulario
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Recogemos datos de formulario con Get dado que es una busqueda
         // $busquedaapellido = $request->request->get('txtApellido');
         $busquedaapellido = $request->query->get('txtApellido');
-        dump($busquedaapellido);
 
         // Si se ha rellenado la busqueda por Apellido
         if ($busquedaapellido) {
@@ -234,10 +207,7 @@ class CitasController extends AbstractController
             );
             // Concateno la variable a buscar y el % del Like
             $query->setParameter('parametro', $busquedaapellido . '%');
-            dump($query);
-            // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            // $pacientes = $query->getResult();
-            // dump($pacientes);
+
             $datosPacientesPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -245,9 +215,8 @@ class CitasController extends AbstractController
             );
         } else {
             // Si no se relleno se recuperan todos los Pacientes con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->getRepository(Pacientes::class)->findAll();
-            dump($query);
+
             $datosPacientesPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -270,38 +239,28 @@ class CitasController extends AbstractController
         PaginatorInterface $paginator
     ) {
         // Recupero el Facultativo que me llega
-        // $idfacultativo = $request->request->get('idfacultativo');
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
 
         // Recupero datos de facultativo para enviar los Values a Formulario
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         /// Recogemos datos de formulario con Get dado que es una busqueda
-        //$busquedatelefono = $request->request->get('txtTelefono');
         $busquedatelefono = $request->query->get('txtTelefono');
-        dump($busquedatelefono);
 
         // Si se ha rellenado busqueda telefono
         if ($busquedatelefono) {
             // Si no se relleno se recuperan los Pacientes con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT p FROM App\Entity\Pacientes p WHERE p.telefono = :dato'
             );
             // Asigno valor del parametro dato
             $query->setParameter('dato', $busquedatelefono);
-            dump($query);
-            // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            // $pacientes = $query->getResult();
-            // dump($pacientes);
+
             $datosPacientesPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -309,9 +268,8 @@ class CitasController extends AbstractController
             );
         } else {
             // Si no se relleno se recuperan todos los Pacientes con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->getRepository(Pacientes::class)->findAll();
-            dump($query);
+
             $datosPacientesPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -335,11 +293,8 @@ class CitasController extends AbstractController
         PaginatorInterface $paginator
     ) {
         // Recupero el Facultativo y el Paciente que me llega
-        // $idfacultativo = $request->request->get('idfacultativo');
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
         $idpaciente = $request->query->get('idpaciente');
-        dump($idpaciente);
 
         // Recupero datos de facultativo para enviar los Values a Formulario
         $facultativo = $em
@@ -457,7 +412,7 @@ class CitasController extends AbstractController
                 $arrayvacaciones,
                 $arraynodisponible
             );
-            dump($arrayjuntarfechas);
+
             // Eliminamos Fechas Duplicadas
             $fechasnodisponibles = array_unique($arrayjuntarfechas);
             // Ordeno Array por Fechas
@@ -491,12 +446,10 @@ class CitasController extends AbstractController
         // Recupero el Facultativo y el Paciente que me llega
         // $idfacultativo = $request->request->get('idfacultativo');
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
         $idpaciente = $request->query->get('idpaciente');
-        dump($idpaciente);
+
         // Recupero Fecha Seleccionada de Cita
         $fechacita = $request->request->get('txFecha');
-        dump($fechacita);
 
         // Recupero datos de facultativo para enviar los Values a Formulario
         $facultativo = $em
@@ -513,7 +466,7 @@ class CitasController extends AbstractController
 
         // Transformo Fecha que llega a Datetime
         $diaconvertido = \DateTime::createFromFormat('Y-m-d', $fechacita);
-        dump($diaconvertido);
+
         // Recupero citas disponibles de ese facultativo en esa fecha
         $citasdisponiblesfacultativo = $em
             ->getRepository(CitasDisponibles::class)
@@ -568,31 +521,24 @@ class CitasController extends AbstractController
     ) {
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
         $idpaciente = $request->query->get('idpaciente');
-        dump($idpaciente);
         $horadisponible = $request->query->get('hora');
-        dump($horadisponible);
         $fechaseleccionada = $request->query->get('fecha');
-        dump($fechaseleccionada);
         // Convertimos fecha string a fecha DateTime
         $diaconvertido = \DateTime::createFromFormat(
             'Y-m-d',
             $fechaseleccionada
         );
-        dump($diaconvertido);
 
         // Accedemos al objeto Facultativo para guardarlo con el registro de citas
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
 
         // Accedemos al objeto Paciente para guardarlo con el registro de citas
         $paciente = $em
             ->getRepository(Pacientes::class)
             ->findOneByIdpaciente($idpaciente);
-        dump($paciente);
 
         // Creamos instancia de Citas
         $nuevacita = new Citas();
@@ -603,7 +549,6 @@ class CitasController extends AbstractController
         $nuevacita->setIdfacultativo($facultativo);
         // Añado el Paciente
         $nuevacita->setIdpaciente($paciente);
-        dump($nuevacita);
 
         // Inserto registro en la tabla de Citas
         $em->persist($nuevacita);
@@ -617,10 +562,8 @@ class CitasController extends AbstractController
                 'fecha' => $diaconvertido,
                 'hora' => $horadisponible,
             ]);
-        dump($citadisponible);
         // Modificamos el valor de disponible
         $citadisponible->setDisponible(false);
-        dump($citadisponible);
         // Modificamos el Registro
         $em->persist($citadisponible);
         $em->flush();
@@ -644,31 +587,24 @@ class CitasController extends AbstractController
     ) {
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
         $idpaciente = $request->query->get('idpaciente');
-        dump($idpaciente);
 
         // Accedemos al objeto Facultativo para mandar values
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Accedemos al objeto Paciente para mandar values
         $paciente = $em
             ->getRepository(Pacientes::class)
             ->findOneByIdpaciente($idpaciente);
-        dump($paciente);
 
         // Recupero la Fecha del dia para enviarla a Vista
         $fechadia = date('Y-m-d');
-        dump($fechadia);
         $diaconvertido = \DateTime::createFromFormat('Y-m-d', $fechadia);
-        dump($diaconvertido);
 
         // Recupero todas las citas del Paciente con Paginacion
         $query = $em
@@ -680,7 +616,6 @@ class CitasController extends AbstractController
             $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
             5 // Número de elementos por página
         );
-        dump($datosCitasPaginados);
 
         // Envio a la vista de Historial de Citas, Datos Facultativo-Especialidades, Datos Pacientes, Citas Disponibles
         return $this->render('citas/historialcitasAdmin.html.twig', [
@@ -705,18 +640,15 @@ class CitasController extends AbstractController
 
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idcita = $request->query->get('idcita');
-        dump($idcita);
 
         // Recupero la cita a dar de baja del Paciente
         $citaborrar = $em->getRepository(Citas::class)->findOneBy([
             'idcita' => $idcita,
         ]);
-        dump($citaborrar);
+
         // Recupero el idfacultativo y el idpaciente de la cita
         $idfacultativo = $citaborrar->getIdfacultativo();
-        dump($idfacultativo);
         $idpaciente = $citaborrar->getIdpaciente();
-        dump($idpaciente);
 
         // Si existe la cita se da de Baja
         if ($citaborrar) {
@@ -735,17 +667,14 @@ class CitasController extends AbstractController
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Accedemos al objeto Paciente para mandar values
         $paciente = $em
             ->getRepository(Pacientes::class)
             ->findOneByIdpaciente($idpaciente);
-        dump($paciente);
 
         // Recupero la Fecha del dia para enviarla a Vista
         $fechadia = date('Y-m-d');
@@ -781,43 +710,35 @@ class CitasController extends AbstractController
     ) {
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idcita = $request->query->get('idcita');
-        dump($idcita);
 
         // Recupero la cita a imprimir
         $cita = $em->getRepository(Citas::class)->findOneBy([
             'idcita' => $idcita,
         ]);
-        dump($cita);
 
         // Recupero el Id del Paciente de la cita
         $idpaciente = $cita->getIdpaciente();
-        dump($idpaciente);
         // Recupero el Id del Facultativo de la cita
         $idfacultativo = $cita->getIdfacultativo();
-        dump($idfacultativo);
 
         // Recuperamos datos del Paciente de esa cita
         $paciente = $em
             ->getRepository(Pacientes::class)
             ->findOneByIdpaciente($idpaciente);
-        dump($paciente);
 
         // Recuperamos datos del Facultativo de esa cita
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
         // Recupero la Especialidad del Facultativo
         $idespecialidad = $facultativo->getEspecialidad();
-        dump($idespecialidad);
+
         // Recuperamos nombre especialidad Facultativo
         $especialidad = $em
             ->getRepository(Especialidades::class)
             ->findOneByIdespecialidad($idespecialidad);
-        dump($especialidad);
         // Recupero Nombre de la Especialidad
         $nombreespecialidad = $especialidad->getEspecialidad();
-        dump($nombreespecialidad);
 
         // Recupero la Fecha del dia para enviarla a Vista
         $fechadia = date('Y-m-d');
@@ -866,7 +787,7 @@ class CitasController extends AbstractController
         // Recupero todos los Facultativos con Paginacion
         // $em = $this->getDoctrine()->getManager();
         $query = $em->getRepository(Facultativos::class)->findAll();
-        dump($query);
+
         $datosFacultativosPaginados = $paginator->paginate(
             $query, // Consulta que quiero paginar,
             $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -874,7 +795,6 @@ class CitasController extends AbstractController
         );
 
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Se envia a pagina enviando los datos de los facultativos para su seleccion
         return $this->render('citas/busquedaFacultativo.html.twig', [
@@ -891,23 +811,17 @@ class CitasController extends AbstractController
         PaginatorInterface $paginator
     ) {
         // Recogemos datos de formulario con Get dado que es una busqueda
-        // $busquedaapellido = $request->request->get('txtApellido');
         $busquedaapellido = $request->query->get('txtApellido');
-        dump($busquedaapellido);
 
         // Si se ha rellenado la busqueda por Apellido
         if ($busquedaapellido) {
             // Recupero todos los Facultativos con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT f FROM App\Entity\Facultativos f WHERE f.apellido1 like :parametro'
             );
             // Concateno la variable a buscar y el % del Like
             $query->setParameter('parametro', $busquedaapellido . '%');
-            dump($query);
-            // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            // $facultativos = $query->getResult();
-            // dump($facultativos);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -915,9 +829,8 @@ class CitasController extends AbstractController
             );
         } else {
             // Recupero todos los Facultativos con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->getRepository(Facultativos::class)->findAll();
-            dump($query);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -927,7 +840,6 @@ class CitasController extends AbstractController
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         return $this->render('citas/busquedaFacultativo.html.twig', [
             'datosFacultativos' => $datosFacultativosPaginados,
@@ -943,23 +855,17 @@ class CitasController extends AbstractController
         PaginatorInterface $paginator
     ) {
         // Recogemos datos de formulario con Get dado que es una busqueda
-        //$busquedatelefono = $request->request->get('txtTelefono');
         $busquedatelefono = $request->query->get('txtTelefono');
-        dump($busquedatelefono);
 
         // Si se ha rellenado busqueda telefono
         if ($busquedatelefono) {
             // Select de Pacientes con Where mandado por parametro con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT f FROM App\Entity\Facultativos f WHERE f.telefono = :dato'
             );
             // Asigno valor del parametro dato
             $query->setParameter('dato', $busquedatelefono);
-            dump($query);
-            // Al hacer el getresult ejecuta la Query y obtiene los resultados
-            // $facultativos = $query->getResult();
-            // dump($facultativos);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -967,9 +873,8 @@ class CitasController extends AbstractController
             );
         } else {
             // Recupero todos los Facultativos con Paginacion
-            // $em = $this->getDoctrine()->getManager();
             $query = $em->getRepository(Facultativos::class)->findAll();
-            dump($query);
+
             $datosFacultativosPaginados = $paginator->paginate(
                 $query, // Consulta que quiero paginar,
                 $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
@@ -979,7 +884,6 @@ class CitasController extends AbstractController
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Enviamos a la pagina con los datos de Pacientes recuperados
         return $this->render('citas/busquedaFacultativo.html.twig', [
@@ -1007,7 +911,6 @@ class CitasController extends AbstractController
         // Recupero el Facultativo que me llega
         // $idfacultativo = $request->request->get('idfacultativo');
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
 
         // Recupero datos de facultativo para enviar los Values a Formulario
         $facultativo = $em
@@ -1120,7 +1023,6 @@ class CitasController extends AbstractController
                 $arrayvacaciones,
                 $arraynodisponible
             );
-            dump($arrayjuntarfechas);
             // Eliminamos Fechas Duplicadas
             $fechasnodisponibles = array_unique($arrayjuntarfechas);
             // Ordeno Array por Fechas
@@ -1152,14 +1054,10 @@ class CitasController extends AbstractController
         EntityManagerInterface $em,
     ) {
         // Recupero el Facultativo y el Paciente que me llega
-        // $idfacultativo = $request->request->get('idfacultativo');
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
         $idpaciente = $request->query->get('idpaciente');
-        dump($idpaciente);
         // Recupero Fecha Seleccionada de Cita
         $fechacita = $request->request->get('txFecha');
-        dump($fechacita);
 
         // Recupero datos de facultativo para enviar los Values a Formulario
         $facultativo = $em
@@ -1176,7 +1074,6 @@ class CitasController extends AbstractController
 
         // Transformo Fecha que llega a Datetime
         $diaconvertido = \DateTime::createFromFormat('Y-m-d', $fechacita);
-        dump($diaconvertido);
         // Recupero citas disponibles de ese facultativo en esa fecha
         $citasdisponiblesfacultativo = $em
             ->getRepository(CitasDisponibles::class)
@@ -1231,31 +1128,24 @@ class CitasController extends AbstractController
     ) {
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
         $idpaciente = $request->query->get('idpaciente');
-        dump($idpaciente);
         $horadisponible = $request->query->get('hora');
-        dump($horadisponible);
         $fechaseleccionada = $request->query->get('fecha');
-        dump($fechaseleccionada);
         // Convertimos fecha string a fecha DateTime
         $diaconvertido = \DateTime::createFromFormat(
             'Y-m-d',
             $fechaseleccionada
         );
-        dump($diaconvertido);
 
         // Accedemos al objeto Facultativo para guardarlo con el registro de citas
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
 
         // Accedemos al objeto Paciente para guardarlo con el registro de citas
         $paciente = $em
             ->getRepository(Pacientes::class)
             ->findOneByIdpaciente($idpaciente);
-        dump($paciente);
 
         // Creamos instancia de Citas
         $nuevacita = new Citas();
@@ -1266,7 +1156,6 @@ class CitasController extends AbstractController
         $nuevacita->setIdfacultativo($facultativo);
         // Añado el Paciente
         $nuevacita->setIdpaciente($paciente);
-        dump($nuevacita);
 
         // Inserto registro en la tabla de Citas
         $em->persist($nuevacita);
@@ -1280,10 +1169,8 @@ class CitasController extends AbstractController
                 'fecha' => $diaconvertido,
                 'hora' => $horadisponible,
             ]);
-        dump($citadisponible);
         // Modificamos el valor de disponible
         $citadisponible->setDisponible(false);
-        dump($citadisponible);
         // Modificamos el Registro
         $em->persist($citadisponible);
         $em->flush();
@@ -1327,18 +1214,14 @@ class CitasController extends AbstractController
 
         // Recogemos los parametros enviados con get (query->get) no por post (request->get)
         $idfacultativo = $request->query->get('idfacultativo');
-        dump($idfacultativo);
 
         // Accedemos al objeto Facultativo para mandar values
         $facultativo = $em
             ->getRepository(Facultativos::class)
             ->findOneByIdfacultativo($idfacultativo);
-        dump($facultativo);
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
-
 
         // Recupero todas las citas del Paciente con Paginacion
         $query = $em

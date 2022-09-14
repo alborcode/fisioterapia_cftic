@@ -26,19 +26,15 @@ class DashboardController extends AbstractController
         //$idusuario = $this->getUser()->getIdUsuario();
         // Cambia la version ya no recupera el Id de usuario, sino el identificador en este caso el email
         $email = $this->getUser()->getUserIdentifier();
-        dump($email);
         // Accedo con email para scar el id de usuario
-        $usuario = $em
-            ->getRepository(Usuarios::class)
-            ->findOneByEmail($email);
-        // Recupero el id de usuario    
+        $usuario = $em->getRepository(Usuarios::class)->findOneByEmail($email);
+        // Recupero el id de usuario
         $idusuario = $usuario->getIdusuario();
 
         // Recupero Identificador de sesion (Token) del usuario de la peticion
         $session = $request->getSession();
         // Guardo Usuario en Session
         $session->set('idusuario', $idusuario);
-        dump($idusuario);
         // Guardo Rol en Session
         $session->set('rol', $rol);
 
@@ -67,7 +63,6 @@ class DashboardController extends AbstractController
             $facultativo = $em
                 ->getRepository(Facultativos::class)
                 ->findOneByIdusuario($idusuario);
-            dump($facultativo);
             $idfacultativo = $facultativo->getIdfacultativo();
             // Guardo Facultativo en Session
             $session->set('idfacultativo', $idfacultativo);
@@ -78,7 +73,6 @@ class DashboardController extends AbstractController
         if ($rol == 'ROLE_ADMINISTRATIVO') {
             // Si es administrativo se habrá dado de alta manualmente
             $paginainicio = 'dashboard/dashboardAdministrativo.html.twig';
-            dump($paginainicio);
         }
 
         // Devuelve pagina a la que ir tras login
