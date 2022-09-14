@@ -2,17 +2,11 @@
 namespace App\Controller;
 
 use App\Entity\Citas;
-use App\Repository\CitasRepository;
 use App\Entity\CitasDisponibles;
-use App\Repository\CitasDisponiblesRepository;
 use App\Entity\Facultativos;
-use App\Repository\FacultativosRepository;
 use App\Entity\Especialidades;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Pacientes;
-use App\Repository\PacientesRepository;
-use App\Repository\TurnosRepository;
-use App\Repository\VacacionesRepository;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -334,7 +328,7 @@ class CitasController extends AbstractController
     }
 
     // Formulario para mostrar Citas si existen junto a datos de Facultativos y de Pacientes y Formulario para añadir/modificar
-    #[Route('/mostrarcitasadmin', name: 'mostrarCitasAdmin', methods: ['GET', 'POST'])]
+    #[Route('/mostrarcitasAdmin', name: 'mostrarCitasAdmin', methods: ['GET', 'POST'])]
     public function mostrarCitasAdmin(
         Request $request,
         EntityManagerInterface $em,
@@ -489,7 +483,7 @@ class CitasController extends AbstractController
     }
 
     // Formulario para mostrar Citas disponibles junto a fecha seleccionada y datos de Facultativos y de Pacientes
-    #[Route('/seleccionhorascitaadmin', name: 'seleccionhoraCitasAdmin', methods: ['GET', 'POST'])]
+    #[Route('/seleccionhorascitasAdmin', name: 'seleccionhoraCitasAdmin', methods: ['GET', 'POST'])]
     public function seleccionhoraCitasAdmin(
         Request $request,
         EntityManagerInterface $em,
@@ -645,7 +639,7 @@ class CitasController extends AbstractController
     }
 
     // Alta de Cita enviando el iddefacultativo, idpaciente, fecha y hora
-    #[Route('/historialcitasadmin', name: 'historialCitasAdmin', methods: ['GET', 'POST'])]
+    #[Route('/historialcitasAdmin', name: 'historialCitasAdmin', methods: ['GET', 'POST'])]
     public function historialCitasAdmin(
         Request $request,
         EntityManagerInterface $em,
@@ -688,7 +682,7 @@ class CitasController extends AbstractController
         );
 
         // Envio a la vista de Historial de Citas, Datos Facultativo-Especialidades, Datos Pacientes, Citas Disponibles
-        return $this->render('citas/historialcitasAdmin.html.twig', [
+        return $this->render('citas/historialcitas.html.twig', [
             'datosFacultativo' => $facultativo,
             'datosEspecialidades' => $especialidades,
             'datosPaciente' => $paciente,
@@ -697,8 +691,8 @@ class CitasController extends AbstractController
         ]);
     }
 
-    // Alta de Cita enviando el iddefacultativo, idpaciente, fecha y hora
-    #[Route('/bajacitaAdmin', name: 'bajaCitaAdmin', methods: ['GET', 'POST'])]
+    // Baja de Cita enviando el iddefacultativo, idpaciente, fecha y hora
+    #[Route('/bajacita', name: 'bajaCita', methods: ['GET', 'POST'])]
     public function bajaCitaAdmin(
         Request $request,
         EntityManagerInterface $em,
@@ -767,7 +761,7 @@ class CitasController extends AbstractController
         );
 
         // Envio a la vista de Historial de Citas, Datos Facultativo-Especialidades, Datos Pacientes, Citas Disponibles
-        return $this->render('citas/historialcitasAdmin.html.twig', [
+        return $this->render('citas/historialcitas.html.twig', [
             'datosFacultativo' => $facultativo,
             'datosEspecialidades' => $especialidades,
             'datosPaciente' => $paciente,
@@ -779,7 +773,7 @@ class CitasController extends AbstractController
     }
 
     // Imprimir Justificante de Cita
-    #[Route('/imprimirjustificanteAdmin', name: 'imprimirJustificanteAdmin', methods: ['GET', 'POST'])]
+    #[Route('/imprimirjustificante', name: 'imprimirJustificante', methods: ['GET', 'POST'])]
     public function imprimirJustificanteAdmin(
         Request $request,
         EntityManagerInterface $em,
@@ -992,4 +986,380 @@ class CitasController extends AbstractController
             'datosEspecialidades' => $especialidades,
         ]);
     }
+
+    // Formulario para mostrar Citas si existen junto a datos de Facultativos y de Paciente conectado para añadir/modificar
+    #[Route('/mostrarcitas', name: 'mostrarCitas', methods: ['GET', 'POST'])]
+    public function mostrarCitas(
+        Request $request,
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
+    ) {
+        // Recupero la variables de sesion de usuario conectado
+        $idusuario = $request->getSession()->get('idusuario');
+        // Recupero el paciente a partir del usuario conectado
+        $paciente = $em
+            ->getRepository(Pacientes::class)
+            ->findOneByIdusuario($idusuario);
+        // Recupero el identificador de Paciente
+        $idpaciente = $paciente->getIdpaciente();    
+
+        // Recupero el Facultativo que me llega
+        // $idfacultativo = $request->request->get('idfacultativo');
+        $idfacultativo = $request->query->get('idfacultativo');
+        dump($idfacultativo);
+
+        // Recupero datos de facultativo para enviar los Values a Formulario
+        $facultativo = $em
+            ->getRepository(Facultativos::class)
+            ->findOneByIdfacultativo($idfacultativo);
+
+        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
+        $especialidades = $em->getRepository(Especialidades::class)->findAll();
+
+        // Se recuperan todas las Citas del Paciente con Paginacion
+        $query = $em
+            ->getRepository(Citas::class)
+            ->findBy(['idpaciente' => $idpaciente], ['fecha' => 'ASC']);
+        $datosCitasPaginados = $paginator->paginate(
+            $query, // Consulta que quiero paginar,
+            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+            5 // Número de elementos por página
+        );
+
+        // Recupero vacaciones de facultativo para tratamiento fechas disponibles
+        $query = $em->createQuery(
+            'SELECT v.fecha FROM App\Entity\Vacaciones v WHERE v.idfacultativo =:parametro'
+        );
+        // Defino el parametro
+        $query->setParameter('parametro', $idfacultativo);
+        $vacacionesfacultativo = $query->getResult();
+
+        // Recupero citas disponibles de facultativo para ver si existen o se da error
+        $citasdisponiblesfacultativo = $em
+            ->getRepository(CitasDisponibles::class)
+            ->findBy([
+                'idfacultativo' => $idfacultativo,
+            ]);
+
+        // Si no existen citas disponibles se manda warning
+        if (!$citasdisponiblesfacultativo) {
+            $mensajewarning =
+                'No se han creado citas disponibles para este facultativo';
+        }
+        // Si existen citas disponibles se recorre bucle para mandar fechas disponibles si quedan citas
+        else {
+            // Recupero Fecha del Dia y Fecha en un mes
+            $fechaini = date('Y-m-d');
+            $fechafin = date('Y-m-d', strtotime($fechaini . '+ 1 month'));
+            $fechaactual = $fechaini;
+            $fechafintramo = $fechafin;
+            $arraynodisponible = [];
+            while ($fechaactual <= $fechafintramo):
+                // Transformo Fecha a DateTime para acceso a Entidad
+                $diaconvertido = \DateTime::createFromFormat(
+                    'Y-m-d',
+                    $fechaactual
+                );
+                // Recupero dia de la semana de la fecha
+                $diasemana = date('l', strtotime($fechaactual));
+                // Si dia de bucle es laborable
+                if ($diasemana != 'Sunday' && $diasemana != 'Saturday') {
+                    // Recupero citas disponibles de ese ese facultativo que esten disponibles para el dia del bucle
+                    $citasdisponiblesbucle = $em
+                        ->getRepository(CitasDisponibles::class)
+                        ->findBy([
+                            'idfacultativo' => $idfacultativo,
+                            'fecha' => $diaconvertido,
+                            'disponible' => true,
+                        ]);
+                    // Si no se encuentran citas disponibles para ese dia se añade fecha al Array no disponible
+                    if (!$citasdisponiblesbucle) {
+                        $fechaarray = date('Y-m-d', strtotime($fechaactual));
+                        array_push($arraynodisponible, $fechaarray);
+                    }
+                }
+                // Añadimos los fines de semana como dias No Disponibles
+                else {
+                    $fechaarray = date('Y-m-d', strtotime($fechaactual));
+                    array_push($arraynodisponible, $fechaarray);
+                }
+
+                // Sumo un dia a la Fecha del bucle
+                $fechaactual = date(
+                    'Y-m-d',
+                    strtotime($fechaactual . '+ 1 days')
+                );
+            endwhile;
+
+            // Recupero en Array solo las Fechas de Vacaciones
+            $vacacionesarray = array_column($vacacionesfacultativo, 'fecha');
+
+            // Convierto array de Fechas de Vacaciones formato DateTime a Array fechas formato 'AAAA-MM-DD'
+            $arrayvacaciones = [];
+            foreach ($vacacionesarray as $valor) {
+                $fechaarray = $valor->format('Y-m-d');
+                array_push($arrayvacaciones, $fechaarray);
+            }
+
+            // Recupero de API los Festivos de la Comunidad de Madrid (fecha_festivo dara las fechas en formato Y-m-d)
+            $datos = file_get_contents(
+                'https://datos.comunidad.madrid/catalogo/dataset/2f422c9b-47df-407f-902d-4a2f44dd435e/resource/453162e0-bd61-4f52-8699-7ed5f33168f6/download/festivos_regionales.json'
+            );
+            $datosjson = json_decode($datos, true);
+
+            // En el Array guardo los datos Json de data con los registros
+            $festivosregionales = $datosjson['data'];
+
+            // Recupero en Array solo de las Fechas de Festivos
+            $festivosarray = array_column($festivosregionales, 'fecha_festivo');
+
+            // Junto arrays de festivos con Array de Vacaciones con fechas no disponibles para enviar fechas no disponibles
+            $arrayjuntarfechas = array_merge(
+                $festivosarray,
+                $arrayvacaciones,
+                $arraynodisponible
+            );
+            dump($arrayjuntarfechas);
+            // Eliminamos Fechas Duplicadas
+            $fechasnodisponibles = array_unique($arrayjuntarfechas);
+            // Ordeno Array por Fechas
+            sort($fechasnodisponibles);
+
+            // Envio a la vista de Citas, Datos Facultativo y Especialidades, Datos Pacientes, Citas y Fechas no disponibles
+            return $this->render('citas/mostrarCitas.html.twig', [
+                'datosFacultativo' => $facultativo,
+                'datosEspecialidades' => $especialidades,
+                'datosPaciente' => $paciente,
+                'datosCitas' => $datosCitasPaginados,
+                'fechaini' => $fechaini,
+                'fechafin' => $fechafin,
+                'fechadia' => $fechaini,
+                'fechasnodisponibles' => $fechasnodisponibles,
+            ]);
+        }
+
+        // Devuelvo control a Pagina Inicio de Paciente mandando mensaje
+        return $this->render('dashboard/dashboardPaciente.html.twig', [
+            'mensaje' => $mensajewarning,
+        ]);
+    }
+
+    // Formulario para mostrar Citas disponibles junto a fecha seleccionada y datos de Facultativos y de Pacientes
+    #[Route('/seleccionhorascita', name: 'seleccionhoraCitas', methods: ['GET', 'POST'])]
+    public function seleccionhoraCitas(
+        Request $request,
+        EntityManagerInterface $em,
+    ) {
+        // Recupero el Facultativo y el Paciente que me llega
+        // $idfacultativo = $request->request->get('idfacultativo');
+        $idfacultativo = $request->query->get('idfacultativo');
+        dump($idfacultativo);
+        $idpaciente = $request->query->get('idpaciente');
+        dump($idpaciente);
+        // Recupero Fecha Seleccionada de Cita
+        $fechacita = $request->request->get('txFecha');
+        dump($fechacita);
+
+        // Recupero datos de facultativo para enviar los Values a Formulario
+        $facultativo = $em
+            ->getRepository(Facultativos::class)
+            ->findOneByIdfacultativo($idfacultativo);
+
+        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
+        $especialidades = $em->getRepository(Especialidades::class)->findAll();
+
+        // Recupero datos de paciente para enviar los Values a Formulario
+        $paciente = $em
+            ->getRepository(Pacientes::class)
+            ->findOneByIdpaciente($idpaciente);
+
+        // Transformo Fecha que llega a Datetime
+        $diaconvertido = \DateTime::createFromFormat('Y-m-d', $fechacita);
+        dump($diaconvertido);
+        // Recupero citas disponibles de ese facultativo en esa fecha
+        $citasdisponiblesfacultativo = $em
+            ->getRepository(CitasDisponibles::class)
+            ->findBy([
+                'idfacultativo' => $idfacultativo,
+                'fecha' => $diaconvertido,
+                'disponible' => 'true',
+            ]);
+
+        // Recupero dia de la semana de la fecha seleccionada
+        $diasemana = date('l', strtotime($fechacita));
+        switch ($diasemana) {
+            case 'Sunday':
+                $diasemanaformat = 'DOMINGO';
+                break;
+            case 'Monday':
+                $diasemanaformat = 'LUNES';
+                break;
+            case 'Tuesday':
+                $diasemanaformat = 'MARTES';
+                break;
+            case 'Wednesday':
+                $diasemanaformat = 'MIERCOLES';
+                break;
+            case 'Thursday':
+                $diasemanaformat = 'JUEVES';
+                break;
+            case 'Friday':
+                $diasemanaformat = 'VIERNES';
+                break;
+            case 'Saturday':
+                $diasemanaformat = 'SABADO';
+                break;
+        }
+
+        // Envio a la vista de Seleccion de Horas, Datos Facultativo-Especialidades, Datos Pacientes, Citas Disponibles
+        return $this->render('citas/seleccionhoracitas.html.twig', [
+            'datosFacultativo' => $facultativo,
+            'datosEspecialidades' => $especialidades,
+            'datosPaciente' => $paciente,
+            'fechaseleccionada' => $fechacita,
+            'diadelasemana' => $diasemanaformat,
+            'citasDisponibles' => $citasdisponiblesfacultativo,
+        ]);
+    }
+
+    // Alta de Cita enviando el idfacultativo, idpaciente, fecha y hora
+    #[Route('/altacitas', name: 'altaCitas', methods: ['GET', 'POST'])]
+    public function altaCitas(
+        Request $request,
+        EntityManagerInterface $em
+    ) {
+        // Recogemos los parametros enviados con get (query->get) no por post (request->get)
+        $idfacultativo = $request->query->get('idfacultativo');
+        dump($idfacultativo);
+        $idpaciente = $request->query->get('idpaciente');
+        dump($idpaciente);
+        $horadisponible = $request->query->get('hora');
+        dump($horadisponible);
+        $fechaseleccionada = $request->query->get('fecha');
+        dump($fechaseleccionada);
+        // Convertimos fecha string a fecha DateTime
+        $diaconvertido = \DateTime::createFromFormat(
+            'Y-m-d',
+            $fechaseleccionada
+        );
+        dump($diaconvertido);
+
+        // Accedemos al objeto Facultativo para guardarlo con el registro de citas
+        $facultativo = $em
+            ->getRepository(Facultativos::class)
+            ->findOneByIdfacultativo($idfacultativo);
+        dump($facultativo);
+
+        // Accedemos al objeto Paciente para guardarlo con el registro de citas
+        $paciente = $em
+            ->getRepository(Pacientes::class)
+            ->findOneByIdpaciente($idpaciente);
+        dump($paciente);
+
+        // Creamos instancia de Citas
+        $nuevacita = new Citas();
+        // Añado campos
+        $nuevacita->setFecha($diaconvertido);
+        $nuevacita->setHora($horadisponible);
+        // Añado el Facultativo
+        $nuevacita->setIdfacultativo($facultativo);
+        // Añado el Paciente
+        $nuevacita->setIdpaciente($paciente);
+        dump($nuevacita);
+
+        // Inserto registro en la tabla de Citas
+        $em->persist($nuevacita);
+        $em->flush();
+
+        // Actualizo cita disponible a no disponible
+        $citadisponible = $em
+            ->getRepository(CitasDisponibles::class)
+            ->findOneBy([
+                'idfacultativo' => $idfacultativo,
+                'fecha' => $diaconvertido,
+                'hora' => $horadisponible,
+            ]);
+        dump($citadisponible);
+        // Modificamos el valor de disponible
+        $citadisponible->setDisponible(false);
+        dump($citadisponible);
+        // Modificamos el Registro
+        $em->persist($citadisponible);
+        $em->flush();
+
+        // Creo mensaje de Alta de Cita
+        $mensaje =
+            'Se ha creado cita para el paciente con el facultativo' .
+            $idfacultativo;
+            
+        // Devuelvo control a Pagina Inicio de Administrador mandando mensaje
+        return $this->render('dashboard/dashboardPaciente.html.twig', [
+            'mensaje' => $mensaje,
+        ]);
+    }
+
+    // Alta de Cita enviando el iddefacultativo, idpaciente, fecha y hora
+    #[Route('/historialcitas', name: 'historialCitas', methods: ['GET', 'POST'])]
+    public function historialCitas(
+        Request $request,
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator
+    ) {
+        // Recupero la variable de sesion de usuario conectado
+        $idusuario = $request->getSession()->get('idusuario');
+        // Recupero el paciente a partir del usuario conectado
+        $paciente = $em
+            ->getRepository(Pacientes::class)
+            ->findOneByIdusuario($idusuario);
+        // Recupero el identificador de Paciente
+        $idpaciente = $paciente->getIdpaciente();    
+
+        // Recupero la Fecha del dia para enviarla a Vista
+        $fechadia = date('Y-m-d');
+
+        // Recupero todas las citas del Paciente con Paginacion
+        $citas = $em
+            ->getRepository(Citas::class)
+            ->findBy(['idpaciente' => $idpaciente]);
+        //***
+        // Recorro en Bucle cada una de las citas para recuperar el nombre del facultativo y la especialidad    
+
+        // Recogemos los parametros enviados con get (query->get) no por post (request->get)
+        $idfacultativo = $request->query->get('idfacultativo');
+        dump($idfacultativo);
+
+        // Accedemos al objeto Facultativo para mandar values
+        $facultativo = $em
+            ->getRepository(Facultativos::class)
+            ->findOneByIdfacultativo($idfacultativo);
+        dump($facultativo);
+
+        // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
+        $especialidades = $em->getRepository(Especialidades::class)->findAll();
+        dump($especialidades);
+
+
+        // Recupero todas las citas del Paciente con Paginacion
+        $query = $em
+            ->getRepository(Citas::class)
+            ->findBy(['idpaciente' => $idpaciente]);
+
+        $datosCitasPaginados = $paginator->paginate(
+            $query, // Consulta que quiero paginar,
+            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
+            5 // Número de elementos por página
+        );
+
+        // Envio a la vista de Historial de Citas, Datos Facultativo-Especialidades, Datos Pacientes, Citas Disponibles
+        return $this->render('citas/historialcitas.html.twig', [
+            'datosFacultativo' => $facultativo,
+            'datosEspecialidades' => $especialidades,
+            'datosPaciente' => $paciente,
+            'historialCitas' => $datosCitasPaginados,
+            'fechadia' => $fechadia,
+        ]);
+    }
+
+    // Los metodos Justificante de Cita y Baja de Cita son comunes a Administrativo y Paciente
+
 }

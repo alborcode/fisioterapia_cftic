@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Seleccionar Horas de Cita{% endblock %}
+{% block title %}Seleccionar Fecha Citas{% endblock %}
 
 {% block body %}
 
@@ -10,9 +10,9 @@
                 <div class="col-md-6 col-xl-12">
                     <div class="card">
                         <div class="card-body text-center d-flex flex-column align-items-center">
-                            <div class="row mb-1 mb-lg-1">
-                                <p class="fw-bold text-success mb-2">Intranet - Menu Administrativo</p>
-                                <h3 class="fw-bold">Seleccionar Hora Cita</h3>
+                            <div class="row mb-4 mb-lg-5">
+                                <p class="fw-bold text-success mb-2">Intranet - Menu Paciente</p>
+                                <h3 class="fw-bold">Seleccionar Fecha Cita</h3>
                             </div>
                             <div class="row mb-4 mb-lg-2">
                                 {# Incluimos Boton Volver #}
@@ -20,7 +20,7 @@
                             </div>
                             <div class="form-group col-sm-8">
                                 {# Formulario Para Añadir/Modificar Turnos #}
-                                <form method="POST" action="{{ path('altaCitasAdmin', { idfacultativo: datosFacultativo.idfacultativo }) }}"> 
+                                <form method="POST" action="{{ path('seleccionhoraCitas', { idfacultativo: datosFacultativo.idfacultativo, idpaciente: datosPaciente.idpaciente }) }}"> 
                                     <div class="row mb-2 mb-lg-2">
                                         <div class="col-sm-4">  
                                             <select name="comboEspecialidad" class="form-control" id="comboEspecialidad" readonly="readonly" disabled="disabled">
@@ -35,13 +35,13 @@
                                             </select>
                                         </div>
                                         <div class="col-sm-8">
-                                            <input type="text" name="txtNombre" value="{{datosFacultativo.nombre}} {{datosFacultativo.apellido1}} {{datosFacultativo.apellido2}}" readonly="readonly" disabled="disabled" class="form-control" id="txtNombre">
+                                            <input type="text" name="txtNombreF" value="{{datosFacultativo.nombre}} {{datosFacultativo.apellido1}} {{datosFacultativo.apellido2}}" readonly="readonly" disabled="disabled" class="form-control" id="txtNombreF">
                                         </div>
                                     </div>  
                                     <div class="row mb-2 mb-lg-2">
                                         <div class="col-sm-9">
                                             Paciente
-                                            <input type="text" name="txtNombre" value="{{datosPaciente.nombre}} {{datosPaciente.apellido1}} {{datosPaciente.apellido2}}" class="form-control" readonly="readonly" disabled="disabled" id="txtNombre">
+                                            <input type="text" name="txtNombreP" value="{{datosPaciente.nombre}} {{datosPaciente.apellido1}} {{datosPaciente.apellido2}}" readonly="readonly" disabled="disabled" class="form-control" id="txtNombreP">
                                         </div>
                                         <div class="col-sm-3">
                                             Teléfono
@@ -50,17 +50,17 @@
                                     </div>  
  
                                     <div class="row mb-2 mb-lg-2">
-                                        <div class="col-sm-3">
-                                            {{diadelasemana}}
-                                            <input type="date" class="form-control" id="txFecha" name="txFecha" value="{{fechaseleccionada}}" readonly="readonly" disabled="disabled" >
+                                         <div class="col-sm-3">
+                                            <input type="text" class="form-control mb-lg-2 py-2" id="txFecha" name="txFecha" placeholder="AAAA/MM/DD" required="required">
                                         </div>
-                                        <div class="col-sm-6">
-                                            {# Incluimos Boton Volver #}
-                                            {% include 'menuVolverOtraFechaAdmin.html.twig' %}
+                                        <div class="col-sm-4">
+                                            <button type="submit" class="btn btn-primary" name="operacion" value="insertar">
+                                                <i class="fa fa-chevron-circle-down" aria-hidden="true"></i> Seleccion Horas Disponibles
+                                            </button>
                                         </div>
-                                    </div> 
+                                    </div>    
                                 </form>
-                                <HR>
+
                                 {% if mensaje is defined %}
                                     {% if mensaje is not null %}
                                         <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
@@ -78,39 +78,70 @@
                                     {% endif %}
                                 {% endif %}     
 
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Hora Disponible</th>
-                                            <th>Accion</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <div id="swup">
-                                            {# Si esta definida la variable muestra los datos de las citas disponibles del facultativo #}
-                                            {% if citasDisponibles is defined %}
-                                                {% for horadisponible in citasDisponibles %}
-                                                    <tr>
-                                                        <td scope="row">
-                                                            <select name="comboEspecialidad" class="form-control mb-3" id="comboEspecialidad" readonly="readonly" disabled="disabled">
-                                                                <option value="{{ horadisponible.hora }}"> De {{ horadisponible.hora }}:00 a {{ horadisponible.hora + 1 }}:00</option>
-                                                            </select>
-                                                        </td> 
-                                                        <td>
-                                                            <a class="btn btn-info" href="{{ path('altaCitasAdmin', {idfacultativo: datosFacultativo.idfacultativo, idpaciente: datosPaciente.idpaciente, hora: horadisponible.hora, fecha: fechaseleccionada }) }}">Pedir Cita</a>
-                                                        </td>
-                                                    </tr>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </div>
-                                    </tbody>
-                                </table>
-                            </div>       
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <script>
+        const fechainicial = "{{ fechaini }}";
+        console.log(fechainicial)
+        const fechafinal = "{{ fechafin }}";
+        console.log(fechafinal)
+        const fechaactual = "{{ fechadia }}";
+        console.log(fechaactual)
+        const fechasfestivos = JSON.parse('{{ fechasnodisponibles | json_encode | raw }}');
+        console.log(fechasfestivos)
+
+        //var dates = ["2022-09-20", "2022-09-21"];
+        // Funcion que desactiva Festivos
+        function desactivarFechas(date) {
+            var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+            return [fechasfestivos.indexOf(string) == -1];
+        }
+
+        // // Funcion que desactiva Festivos fines de semana y fechas no disponibles
+        // function noDisponibles(date) {
+        //     var noWeekend = $.datepicker.noWeekends(date);
+        //     if (noWeekend[0]) {
+        //         var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+        //         return [fechasfestivos.indexOf(string) == -1];
+        //     } else {
+        //         return noWeekend;
+        //     }
+        // }
+
+        $(function() {
+            $.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
+            $("#txFecha").datepicker({
+                firstDay: 1,
+                //beforeShowDay: $.datepicker.noWeekends,
+                //beforeShowDay: noDisponibles,
+                beforeShowDay: desactivarFechas,
+                autoSize: true,
+                changeYear: true,
+                changeMonth:true,
+                numberOfMonths:2,
+                dateFormat: 'yy-mm-dd',
+                minDate: new Date(fechainicial),
+                maxDate: new Date(fechafinal),
+                show: "true",
+                //showOn: "button",
+                showOn: "focus",
+                //showOn: "both"
+                buttonText: "Calendario  ",
+                showAnim: "fold",
+                showButtonPanel: true,
+                //buttonImage: "/images/datepicker.gif"
+                //buttonImageOnly: true
+            }).next('button').append('<i class="fa fa-calendar"></i>');
+            
+            //$.datepicker.parseDate('dd-mm-yy', '22/04/2010');
+            // $( "#txFecha" ).datepicker("show");
+        });    
+    </script>
     
 {% endblock %}

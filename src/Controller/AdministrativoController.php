@@ -485,6 +485,9 @@ class AdministrativoController extends AbstractController
         dump($direccion);
         $codigopostal = $request->request->get('txtCodigopostal');
         dump($codigopostal);
+        if ($codigopostal == null){
+            $codigopostal = 0;
+        }
         $poblacion = $request->request->get('txtLocalidad');
         dump($poblacion);
         $idprovincia = $request->request->get('comboProvincia');
