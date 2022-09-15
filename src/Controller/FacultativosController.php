@@ -64,17 +64,11 @@ class FacultativosController extends AbstractController
 
         // Recogemos datos de formulario con Post
         $email = $request->request->get('txtEmail');
-        dump($email);
         $nombre = $request->request->get('txtNombre');
-        dump($nombre);
         $apellido1 = $request->request->get('txtApellido1');
-        dump($apellido1);
         $apellido2 = $request->request->get('txtApellido2');
-        dump($apellido2);
         $telefono = $request->request->get('txtTelefono');
-        dump($telefono);
         $idespecialidad = $request->request->get('comboEspecialidad');
-        dump($idespecialidad);
 
         // Recupero datos de objeto Especialidad antes de guardar Facultativo
         $especialidad = $em

@@ -57,7 +57,6 @@ class TurnosController extends AbstractController
     ) {
         // Recogemos datos de formulario con Get dado que es una busqueda
         $busquedaapellido = $request->query->get('txtApellido');
-        dump($busquedaapellido);
 
         // Si se ha rellenado la busqueda por Apellido
         if ($busquedaapellido) {

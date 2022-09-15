@@ -60,7 +60,6 @@ class CitasDisponiblesController extends AbstractController
     ) {
         // Recogemos datos de formulario con Get dado que es una busqueda
         $busquedaapellido = $request->query->get('txtApellido');
-        dump($busquedaapellido);
 
         // Si se ha rellenado la busqueda por Apellido
         if ($busquedaapellido) {
@@ -89,7 +88,6 @@ class CitasDisponiblesController extends AbstractController
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         return $this->render(
             'citasdisponibles/busquedacitasfacultativo.html.twig',
@@ -137,7 +135,6 @@ class CitasDisponiblesController extends AbstractController
 
         // Recupero todas las Especialidades para combo Seleccion (Recupera Array)
         $especialidades = $em->getRepository(Especialidades::class)->findAll();
-        dump($especialidades);
 
         // Enviamos a la pagina con los datos de Pacientes recuperados
         return $this->render(
@@ -236,8 +233,6 @@ class CitasDisponiblesController extends AbstractController
         // Recuperar Año actual
         $anio = date('Y');
         $fechafin = $anio . '-12' . '-31';
-        dump($fechadia);
-        dump($fechafin);
 
         // Inicializo variables a usar en bucles
         $horainicio = null;
@@ -253,7 +248,6 @@ class CitasDisponiblesController extends AbstractController
             'idfacultativo' => $idfacultativo,
             'diasemana' => 'LUNES',
         ]);
-        dump($turnoslunesfacultativo);
         if (!$turnoslunesfacultativo) {
             $horainiciolunes = null;
             $horafinlunes = null;
@@ -421,7 +415,6 @@ class CitasDisponiblesController extends AbstractController
                     // Sumo una hora a la hora del bucle a tratar
                     //$horainiciolunes->modify('+ 1 hour');
                     $horaactual = $horaactual + 1;
-                    dump($horaactual);
                 endwhile;
             }
 

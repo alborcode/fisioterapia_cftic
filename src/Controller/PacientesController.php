@@ -42,9 +42,6 @@ class PacientesController extends AbstractController
             $formularioPaciente->isSubmitted() &&
             $formularioPaciente->isValid()
         ) {
-            dump($paciente);
-            dump($formularioPaciente);
-
             // Se accede al objeto usuario para guardarlo en Tabla Pacientes
             $usuario = $em->getRepository(Usuarios::class)->find($idusuario);
 
@@ -121,26 +118,17 @@ class PacientesController extends AbstractController
 
         // Recogemos datos de formulario con Post
         $email = $request->request->get('txtEmail');
-        dump($email);
         $nombre = $request->request->get('txtNombre');
-        dump($nombre);
         $apellido1 = $request->request->get('txtApellido1');
-        dump($apellido1);
         $apellido2 = $request->request->get('txtApellido2');
-        dump($apellido2);
         $telefono = $request->request->get('txtTelefono');
-        dump($telefono);
         $direccion = $request->request->get('txtDireccion');
-        dump($direccion);
         $codigopostal = $request->request->get('txtCodigopostal');
-        dump($codigopostal);
-        if ($codigopostal == null){
+        if ($codigopostal == null) {
             $codigopostal = 0;
         }
         $poblacion = $request->request->get('txtLocalidad');
-        dump($poblacion);
         $idprovincia = $request->request->get('comboProvincia');
-        dump($idprovincia);
 
         // Recupero datos de objeto Provincia antes de guardar Paciente
         $provincia = $em
