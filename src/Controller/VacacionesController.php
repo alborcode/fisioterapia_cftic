@@ -489,21 +489,8 @@ class VacacionesController extends AbstractController
             }
         }
 
-        // Se recuperan todos los Facultativos con Paginacion
-        $query = $em->getRepository(Facultativos::class)->findAll();
-
-        $datosFacultativosPaginados = $paginator->paginate(
-            $query, // Consulta que quiero paginar,
-            $request->query->getInt('page', 1), // Definir el parámetro de la página recogida por GET
-            10 // Número de elementos por página
-        );
-
-        $especialidades = $em->getRepository(Especialidades::class)->findAll();
-
-        // Se envia a pagina enviando los datos de los facultativos
-        return $this->render('vacaciones/busquedaFacultativo.html.twig', [
-            'datosFacultativos' => $datosFacultativosPaginados,
-            'datosEspecialidades' => $especialidades,
+        // Devuelvo control a Pagina Inicio de Facultativo mandando mensajes por cada dia
+        return $this->render('dashboard/dashboardFacultativo.html.twig', [
             'mensaje' => $mensaje,
             'mensajewarning' => $mensajewarning,
         ]);
